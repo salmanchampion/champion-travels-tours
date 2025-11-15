@@ -19,39 +19,34 @@ const chairman = {
 
 const talentedEmployees = [
   {
-    name: 'MD TAMIMUL ISLAM SUJON',
-    role: 'ACCOUNTS',
-    imageUrl: 'https://i.postimg.cc/L5v8vjVj/md-tamimul-islam-sujon.png',
+    name: 'মোঃ মুছা',
+    role: 'Executive',
+    imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop',
   },
   {
-    name: 'MD.NAYEMUL ISLAM',
-    role: 'OFFICE ASSISTANCE',
-    imageUrl: 'https://i.postimg.cc/3J9y1v1J/md-nayemul-islam.png',
+    name: 'সাদ্দাম হোসেম',
+    role: 'Manager',
+    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop',
   },
   {
-    name: 'NURUL ALAM',
-    role: 'MAKKA & MEDINA REPRESENTATIVE',
-    imageUrl: 'https://i.postimg.cc/pT45rKkM/nurul-alam.png',
+    name: 'লোকমান হোসাইন',
+    role: 'Executive',
+    imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop',
   },
   {
-    name: 'MOHAMMAD SAYEDUL ALAM',
-    role: 'BANGLADESHI MOALLEM',
-    imageUrl: 'https://i.postimg.cc/J0vH5TzY/mohammad-sayedul-alam.png',
+    name: 'মোহাম্মদ নূরে আলম ডালিম',
+    role: 'General Manager',
+    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
   },
   {
-    name: 'MD MOSTAHASAN BILLAH',
-    role: 'BANGLADESHI MOALLEM',
-    imageUrl: 'https://i.postimg.cc/Xv9k2s7L/md-mostahasan-billah.png',
+    name: 'মোঃ আলী আকবর',
+    role: 'Accounts',
+    imageUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=300&auto=format&fit=crop',
   },
   {
-    name: 'MD ABDUL HADI',
-    role: 'MAKKA MOALLEM',
-    imageUrl: 'https://i.postimg.cc/8CKYJbYx/md-abdul-hadi.png',
-  },
-  {
-    name: 'MD IDDRIS',
-    role: 'MEDINA MOALLEM',
-    imageUrl: 'https://i.postimg.cc/pr0Tz1gG/md-iddris.png',
+    name: 'Salman sharif',
+    role: 'New Joined',
+    imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png',
   },
 ];
 
