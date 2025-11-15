@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DataContext } from '../contexts/DataContext';
 
 // Helper component for consistent buttons
 const CtaButton: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
@@ -23,8 +24,11 @@ const ServiceListItem: React.FC<{ children: React.ReactNode }> = ({ children }) 
 );
 
 const WhyChooseUs: React.FC = () => {
+  const { appData } = useContext(DataContext);
+  const { whyChooseUs } = appData.pages;
+
   return (
-    <div className="bg-[#FBF9F5]" style={{ backgroundImage: "url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png')" }}>
+    <div className="bg-[#FBF9F5]" style={{ backgroundImage: `url('${whyChooseUs.backgroundImage}')` }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-gray-800">
 
         {/* Section 1: Expert Umrah Guides */}
@@ -41,17 +45,17 @@ const WhyChooseUs: React.FC = () => {
             </p>
             <CtaButton href="#packages">Available Umrah Packages</CtaButton>
           </div>
-          <div className="lg:w-1/2 w-full flex justify-center items-center min-h-[24rem]">
-            <div className="relative w-full h-96 max-w-lg">
+          <div className="lg:w-1/2 w-full flex justify-center items-center min-h-[20rem] sm:min-h-[24rem]">
+            <div className="relative w-full h-80 sm:h-96 max-w-lg">
               <img 
-                src="https://i.postimg.cc/FHFRwHxn/gg.jpg" 
+                src={whyChooseUs.guides.mainImage}
                 alt="Pilgrims at Kaaba" 
-                className="absolute top-0 left-0 w-[80%] h-[80%] object-cover rounded-2xl shadow-2xl z-10 transform hover:scale-105 transition-transform duration-300" 
+                className="absolute top-0 left-0 w-[70%] sm:w-[80%] h-[70%] sm:h-[80%] object-cover rounded-2xl shadow-2xl z-10 transform hover:scale-105 transition-transform duration-300" 
               />
               <img 
-                src="https://i.postimg.cc/x1gn4TDd/ad.jpg" 
+                src={whyChooseUs.guides.secondaryImage}
                 alt="Prophet's Mosque" 
-                className="absolute bottom-0 right-0 w-[60%] h-[60%] object-cover rounded-2xl shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-300"
+                className="absolute bottom-0 right-0 w-[55%] sm:w-[60%] h-[55%] sm:h-[60%] object-cover rounded-2xl shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/20 rounded-full -z-10"></div>
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-secondary/20 rounded-lg transform rotate-12 -z-10"></div>
@@ -61,7 +65,7 @@ const WhyChooseUs: React.FC = () => {
 
         {/* Section 2: Board of Director */}
         <section className="flex flex-col md:flex-row-reverse items-center gap-12 mb-24 relative">
-            <img src="https://i.postimg.cc/L5K4p8xT/star-lantern.png" alt="star" className="absolute top-10 right-20 w-14 opacity-30 hidden md:block" />
+            <img src={whyChooseUs.directors.decorativeImage} alt="star" className="absolute top-10 right-20 w-14 opacity-30 hidden md:block" />
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-4">Board of Director</h2>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
@@ -70,10 +74,10 @@ const WhyChooseUs: React.FC = () => {
             <CtaButton href="#team">All Shariah Consultants</CtaButton>
           </div>
           <div className="md:w-1/2 flex justify-center">
-            <div className="relative w-80 h-80">
-                <img src="https://i.postimg.cc/rwn0QTMc/image.png" alt="C.E.O & Chairman" className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"/>
-                <img src="https://i.postimg.cc/G3MgC8cQ/image-(2).png" alt="Team Member" className="absolute bottom-0 left-0 w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg"/>
-                <img src="https://i.postimg.cc/0jmsLpT9/image-(1).png" alt="Team Member" className="absolute bottom-0 right-0 w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"/>
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80">
+                <img src={whyChooseUs.directors.mainImage} alt="C.E.O & Chairman" className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-[50%] rounded-full object-cover border-4 border-white shadow-lg"/>
+                <img src={whyChooseUs.directors.secondaryImage1} alt="Team Member" className="absolute bottom-0 left-0 w-[60%] h-[60%] rounded-full object-cover border-4 border-white shadow-lg"/>
+                <img src={whyChooseUs.directors.secondaryImage2} alt="Team Member" className="absolute bottom-0 right-0 w-[45%] h-[45%] rounded-full object-cover border-4 border-white shadow-lg"/>
             </div>
           </div>
         </section>
@@ -92,7 +96,7 @@ const WhyChooseUs: React.FC = () => {
             <CtaButton href="#contact?subject=Booking Inquiry: Umrah">Book Your Umrah</CtaButton>
           </div>
           <div className="md:w-1/2 flex justify-center">
-            <img src="https://i.postimg.cc/4xHMfzwH/champion-travels-tours2.png" alt="Services Offered" className="max-w-md w-full" />
+            <img src={whyChooseUs.services.image} alt="Services Offered" className="max-w-md w-full" />
           </div>
         </section>
 
@@ -100,7 +104,7 @@ const WhyChooseUs: React.FC = () => {
         <section className="text-center py-16">
             <div className="flex justify-center mb-8">
                 <img 
-                    src="https://i.postimg.cc/FHFRwHxn/gg.jpg" 
+                    src={whyChooseUs.cta.image}
                     alt="Pilgrims at the Kaaba" 
                     className="rounded-xl shadow-lg w-full max-w-lg object-cover"
                 />
@@ -115,7 +119,7 @@ const WhyChooseUs: React.FC = () => {
       </div>
       
       {/* Mosque Silhouette Footer */}
-      <footer className="h-40 bg-center bg-repeat-x" style={{ backgroundImage: "url('https://i.postimg.cc/MHfn961Y/ds.jpg')" }}>
+      <footer className="h-40 bg-center bg-repeat-x" style={{ backgroundImage: `url('${whyChooseUs.footerImage}')` }}>
       </footer>
     </div>
   );

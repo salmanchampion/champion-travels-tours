@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react';
-
-const images = [
-  'https://i.postimg.cc/x1gn4TDd/ad.jpg',
-  'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg',
-  'https://i.postimg.cc/Y2z4HFFK/ah.jpg',
-];
+import React, { useState, useEffect, useContext } from 'react';
+import { DataContext } from '../contexts/DataContext';
 
 const Hero: React.FC = () => {
+  const { appData } = useContext(DataContext);
+  const { hero } = appData;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    if (hero.images.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % hero.images.length);
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(timer); // Cleanup interval on component unmount
-  }, []);
+  }, [hero.images]);
 
   return (
-    <section className="relative h-screen flex items-center justify-center text-center text-white">
+    <section className="relative min-h-screen flex items-center justify-center text-center text-white">
       <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
       
-      {images.map((src, index) => (
+      {hero.images.map((src, index) => (
         <div
           key={src}
           className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
@@ -33,16 +31,16 @@ const Hero: React.FC = () => {
 
       <div className="relative z-20 container mx-auto px-4">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-wide mb-2">
-          Champion Travels & Tours
+          {hero.title}
         </h1>
         <p className="text-base md:text-lg font-sans text-secondary mb-6">
-          Bangladesh Govt. Approved hajj License No.-1432 & Umrah License no.-515
+          {hero.licenseInfo}
         </p>
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-primary mb-6">
-          Hajj Umrah & Air Ticketing
+          {hero.subtitle}
         </h2>
         <p className="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-light-text">
-          Embark on your spiritual journey with peace of mind. We provide exceptional services to make your pilgrimage a memorable experience.
+          {hero.description}
         </p>
         <a
           href="#packages"

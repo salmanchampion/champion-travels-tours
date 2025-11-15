@@ -15,7 +15,7 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description:
 const ProcessStep: React.FC<{ icon: React.ReactNode; title: string; description: string; step: number; }> = ({ icon, title, description, step }) => (
     <div className="flex flex-col items-center text-center">
         <div className="relative mb-4">
-            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-primary text-white text-3xl font-bold border-4 border-light-bg shadow-lg">
+            <div className="flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-primary text-white text-3xl font-bold border-4 border-light-bg shadow-lg">
                 {icon}
             </div>
             <div className="absolute -top-2 -right-2 flex items-center justify-center h-8 w-8 rounded-full bg-secondary text-dark-bg font-bold text-sm">

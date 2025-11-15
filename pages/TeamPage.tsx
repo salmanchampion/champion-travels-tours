@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PageBanner from '../components/PageBanner';
 import TeamMemberCard from '../components/TeamMemberCard';
+import { DataContext } from '../contexts/DataContext';
 
 const DecorativeLine: React.FC = () => (
     <div className="flex justify-center items-center my-4">
@@ -10,52 +11,10 @@ const DecorativeLine: React.FC = () => (
     </div>
 );
 
-const chairman = {
-  name: 'Abdul Mannan',
-  role: 'C.E.O & Chairman',
-  imageUrl: 'https://i.postimg.cc/rwn0QTMc/image.png',
-  title: '',
-};
-
-const talentedEmployees = [
-  {
-    name: 'মোঃ মুছা',
-    role: 'Executive',
-    imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop',
-  },
-  {
-    name: 'সাদ্দাম হোসেম',
-    role: 'Manager',
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop',
-  },
-  {
-    name: 'লোকমান হোসাইন',
-    role: 'Executive',
-    imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop',
-  },
-  {
-    name: 'মোহাম্মদ নূরে আলম ডালিম',
-    role: 'General Manager',
-    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
-  },
-  {
-    name: 'মোঃ আলী আকবর',
-    role: 'Accounts',
-    imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png',
-  },
-  {
-    name: 'Salman sharif',
-    role: 'New Joined',
-    imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png',
-  },
-  {
-    name: 'MD Kawsar Ahmed',
-    role: 'Ticketing',
-    imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop',
-  },
-];
 
 const TeamPage: React.FC = () => {
+    const { appData } = useContext(DataContext);
+    const { chairman, talentedEmployees } = appData.pages.team;
   return (
     <div className="pt-20 bg-dark-bg">
         <PageBanner

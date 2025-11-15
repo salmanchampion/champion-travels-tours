@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
+import { DataContext } from '../contexts/DataContext';
 
 // --- Icon Components ---
 const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 002 2h5a2 2 0 012 2v5a2 2 0 01-2 2h-5a2 2 0 01-2-2v-5a2 2 0 00-2-2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>;
@@ -9,21 +10,6 @@ const FoodIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 const SpecialIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.293 2.293a1 1 0 010 1.414L10 16l-4 1 1-4 6.293-6.293a1 1 0 011.414 0z" /></svg>;
 const NoteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>;
 const DateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
-
-
-// --- Data ---
-const hajjPackages = [
-    { name: 'Economy', price: '9510000', duration: '40-45 Days', hotelMakkah: '1500-1600 Meter', hotelMadinah: 'Apx. 600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/R0N8Mv8X/as.jpg' },
-    { name: 'Executive', price: '9580000', duration: '40-45 Days', hotelMakkah: '1000 Meter', hotelMadinah: '500-600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg' },
-    { name: 'Executive Royal', price: '9670000', duration: '40-45 Days', hotelMakkah: '700 Meter', hotelMadinah: '200 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/Bb92VfRP/ag.webp' },
-    { name: 'Vip Gold', price: '12900000', duration: '18-21 Days', hotelMakkah: '5 Star | 1-7 Meter', hotelMadinah: '4 Star | 1 Minute Walk', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch, Evening snacks & Dinner (From our catering service)', special: 'VIP, Special Train, Ziyara + Guide + Da\'e', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/Y2z4HFFK/ah.jpg' },
-];
-
-const umrahPackages = [
-    { name: 'Standard Umrah Package', price: '170000', date: 'Sept/Oct (14 Days)', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE', flightsUp: 'Direct - SV/BG/BS', flightsDown: 'Direct - SV/BG/BS', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want VIP train you need to pay extra 5000/-', image: 'https://i.postimg.cc/CL6k3832/ak.jpg', buttonText: 'Select Standard Package' },
-    { name: 'Economy Umrah Package', price: '160000', date: 'Sept/Oct (14 Days)', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE (3 Star)', flightsUp: 'Transit - Air Arabia/Gulf Air', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/VkQL0LnX/al.webp', buttonText: 'Choose Economy Package' },
-    { name: 'VIP Umrah Package', price: '270000', date: 'Sept/Oct (10 Days)', hotelMakkah: 'HILTON/MAKKA TOWER/ ELAF KINDA DISTANCE - 0 MITRE (5 Star)', hotelMadinah: 'MARJAN GOLDEN DISTANCE-100-200 MITRE (3 Star)', flightsUp: 'BG/SV', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 15000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/R01mH74z/aj.webp', buttonText: 'Book Super Saver Now' },
-];
 
 // --- Skeleton Card for Loading State ---
 const SkeletonCard: React.FC = () => (
@@ -60,7 +46,7 @@ const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: string;
 
 
 // --- Hajj Package Card Component ---
-const HajjPackageCard: React.FC<{ pkg: typeof hajjPackages[0] }> = ({ pkg }) => (
+const HajjPackageCard: React.FC<{ pkg: any }> = ({ pkg }) => (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 flex flex-col h-full text-gray-800 overflow-hidden">
         <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
         <div className="bg-gray-100 p-4 text-center">
@@ -86,58 +72,70 @@ const HajjPackageCard: React.FC<{ pkg: typeof hajjPackages[0] }> = ({ pkg }) => 
 );
 
 // --- Hajj Pre-Registration Card ---
-const HajjPreRegistrationCard = () => (
-    <div className="bg-[#fdf9f0] rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-200 text-gray-800 col-span-1 md:col-span-2 lg:col-span-1">
-      <div className="relative bg-white h-48 flex items-center justify-center p-4">
-        <img 
-          src="https://i.postimg.cc/PJS59Bqw/champion-logo-1.png"
-          alt="Hajj Pre Registration" 
-          className="max-w-full max-h-full object-contain"
-        />
-      </div>
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-2xl font-bold text-green-600 mb-3 font-display">Hajj Pre Registration 2026-2027</h3>
-        <p className="text-base text-[#5d4037] mb-2 leading-relaxed">
-          Embark on a sacred pilgrimage with peace of mind. Pre-register for Hajj and ensure your place in this spiritually significant journey.
-        </p>
-        <p className="text-base text-[#5d4037] mb-4 leading-relaxed flex-grow">
-          Champion Travels & Tours is here to guide you through the process, offering seamless pre-registration services. Prepare for an experience of a lifetime – start your Hajj pre-registration today.
-        </p>
-        <a href="#contact?subject=Inquiry: Hajj Pre-Registration 2026-2027" className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
-          Apply For Pre-Register
-        </a>
-      </div>
-    </div>
-);
+const HajjPreRegistrationCard: React.FC = () => {
+    const { appData } = useContext(DataContext);
+    const { hajjPreRegistration } = appData.pages.packages;
 
+    return (
+        <div className="bg-[#fdf9f0] rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-200 text-gray-800 col-span-1 md:col-span-2 lg:col-span-1">
+          <div className="relative bg-white h-48 flex items-center justify-center p-4">
+            <img 
+              src={hajjPreRegistration.image}
+              alt="Hajj Pre Registration" 
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+          <div className="p-6 flex flex-col flex-grow">
+            <h3 className="text-2xl font-bold text-green-600 mb-3 font-display">{hajjPreRegistration.title}</h3>
+            <p className="text-base text-[#5d4037] mb-2 leading-relaxed">
+              {hajjPreRegistration.description}
+            </p>
+            <p className="text-base text-[#5d4037] mb-4 leading-relaxed flex-grow">
+             {hajjPreRegistration.subDescription}
+            </p>
+            <a href={`#contact?subject=${encodeURIComponent(hajjPreRegistration.inquirySubject)}`} className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
+              Apply For Pre-Register
+            </a>
+          </div>
+        </div>
+    );
+}
 
-const KeyHighlights = () => (
+const KeyHighlights: React.FC = () => {
+    const { appData } = useContext(DataContext);
+    const { keyHighlights } = appData.pages.packages;
+    return (
     <div className="bg-light-bg rounded-xl p-6 md:p-10 mt-16 shadow-inner">
         <div className="text-center">
-            <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-10">Key Highlights of Champion Travels and Tours</h3>
+            <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-10">{keyHighlights.title}</h3>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
                 <div className="flex flex-col items-center text-center max-w-xs">
                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
-                    <p className="text-4xl font-bold text-primary">20,000+</p>
-                    <p className="text-muted-text mt-1">Umrah Packages Provided in the Last 10 Years</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-primary">{keyHighlights.umrahStat}</p>
+                    <p className="text-muted-text mt-1">{keyHighlights.umrahStatLabel}</p>
                 </div>
                 <div className="flex flex-col items-center text-center max-w-xs">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
-                    <p className="text-4xl font-bold text-primary">15,000+</p>
-                    <p className="text-muted-text mt-1">Hajj Pilgrims Successfully Served</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-primary">{keyHighlights.hajjStat}</p>
+                    <p className="text-muted-text mt-1">{keyHighlights.hajjStatLabel}</p>
                 </div>
             </div>
         </div>
     </div>
-);
+    )
+};
 
 
 // --- Umrah Package Card Component ---
-const UmrahPackageCard: React.FC<{ pkg: typeof umrahPackages[0] }> = ({ pkg }) => (
+const UmrahPackageCard: React.FC<{ pkg: any }> = ({ pkg }) => {
+    const { appData } = useContext(DataContext);
+    const logo = appData.site.logoUrl || 'https://i.postimg.cc/PJS59Bqw/champion-logo-1.png';
+
+    return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200 flex flex-col h-full text-gray-800 overflow-hidden">
         <div className="bg-gray-100 p-4 flex items-center justify-between">
             <h3 className="font-bold text-lg font-display text-primary">{pkg.name}</h3>
-            <img src='https://i.postimg.cc/PJS59Bqw/champion-logo-1.png' alt='Champion Travels & Tours Logo' className="h-10 w-auto" />
+            <img src={logo} alt='Champion Travels & Tours Logo' className="h-10 w-auto" />
         </div>
         <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
         <div className="p-4 flex-grow">
@@ -157,29 +155,21 @@ const UmrahPackageCard: React.FC<{ pkg: typeof umrahPackages[0] }> = ({ pkg }) =
             </a>
         </div>
     </div>
-);
+    )
+};
 
 // --- Gallery Component ---
 const Gallery: React.FC = () => {
-  const images = [
-    { src: 'https://i.postimg.cc/R01mH74z/aj.webp', alt: 'The Prophet\'s Mosque illuminated at night' },
-    { src: 'https://i.postimg.cc/Y2z4HFFK/ah.jpg', alt: 'A close-up view of the Kaaba surrounded by pilgrims' },
-    { src: 'https://i.postimg.cc/Bb92VfRP/ag.webp', alt: 'The Kaaba during prayers with beautiful lighting' },
-    { src: 'https://i.postimg.cc/R0N8Mv8X/as.jpg', alt: 'Aerial view of the Kaaba and the Grand Mosque during the day' },
-    { src: 'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg', alt: 'The Grand Mosque in Mecca during a vibrant sunset' },
-    { src: 'https://i.postimg.cc/x1gn4TDd/ad.jpg', alt: 'The serene courtyard of the Prophet\'s Mosque in Medina' },
-    { src: 'https://i.postimg.cc/CL6k3832/ak.jpg', alt: 'The Makkah Royal Clock Tower overlooking the Kaaba' },
-    { src: 'https://i.postimg.cc/VkQL0LnX/al.webp', alt: 'A wide-angle view of the Grand Mosque bustling with pilgrims' },
-  ];
-
+    const { appData } = useContext(DataContext);
+    const { gallery } = appData.pages.packages;
   return (
     <div className="bg-light-bg rounded-xl p-6 md:p-10 mt-16 shadow-inner">
       <div className="text-center mb-12">
-        <h3 className="text-3xl md:text-4xl font-display font-bold text-white">Explore Our Gallery</h3>
-        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">A glimpse into the spiritual journeys and beautiful destinations we offer.</p>
+        <h3 className="text-3xl md:text-4xl font-display font-bold text-white">{gallery.title}</h3>
+        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{gallery.description}</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {images.map((image, index) => (
+        {gallery.images.map((image, index) => (
           <div key={index} className="overflow-hidden rounded-lg shadow-lg group aspect-square">
             <img
               src={image.src}
@@ -245,7 +235,7 @@ const usePackageFilters = <T extends { name: string; price: string; }>(
     const packageTypes = useMemo(() => [...new Set(initialPackages.map(p => p.name))], [initialPackages]);
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     
-    const parsePrice = (priceStr: string) => Number(priceStr.replace(/,/g, ''));
+    const parsePrice = (priceStr: string) => Number(String(priceStr).replace(/,/g, ''));
 
     const handleTypeChange = (typeName: string) => {
         setSelectedTypes(prev =>
@@ -301,6 +291,8 @@ interface FeaturedPackagesProps {
 // --- Main Component ---
 const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = false, showUmrahFilters = false, showTitle = true }) => {
     const [loading, setLoading] = useState(true);
+    const { appData } = useContext(DataContext);
+    const { hajjPackages, umrahPackages } = appData;
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -315,7 +307,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         return match ? parseInt(match[0], 10) : 0;
     };
     
-    const parseUmrahDuration = (pkg: (typeof umrahPackages)[0] & { flightType: string; hotelProximity: string; }) => {
+    const parseUmrahDuration = (pkg: any) => {
         const match = pkg.date.match(/\((\d+)\s*Days\)/);
         return match ? parseInt(match[1], 10) : 0;
     };
@@ -344,7 +336,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
             }
             return { ...pkg, flightType, hotelProximity };
         });
-    }, []);
+    }, [umrahPackages]);
 
     const {
         sort: umrahSort, setSort: setUmrahSort,

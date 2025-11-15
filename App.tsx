@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -8,10 +8,16 @@ import VisaProcessingPage from './pages/VisaProcessingPage';
 import TeamPage from './pages/TeamPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
+import LoginPage from './pages/LoginPage';
+import AdminPage from './pages/AdminPage';
+import { AuthProvider, AuthContext } from './contexts/AuthContext';
+import { DataProvider } from './contexts/DataContext';
 
-const App: React.FC = () => {
+
+const AppContent: React.FC = () => {
   const [page, setPage] = useState('');
   const [contactSubject, setContactSubject] = useState('');
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -46,6 +52,12 @@ const App: React.FC = () => {
     if (currentPage === '#book-now') {
       currentPage = '#contact';
     }
+    
+    // Protected admin route
+    if (currentPage === '#admin' && !isAuthenticated) {
+      window.location.hash = '#login';
+      return <LoginPage />;
+    }
 
     switch (currentPage) {
       case '#services':
@@ -60,6 +72,10 @@ const App: React.FC = () => {
         return <TestimonialsPage />;
       case '#contact':
         return <ContactPage defaultSubject={contactSubject} />;
+      case '#login':
+        return <LoginPage />;
+      case '#admin':
+        return <AdminPage />;
       case '#home':
       default:
         return <HomePage />;
@@ -76,5 +92,16 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <DataProvider>
+        <AppContent />
+      </DataProvider>
+    </AuthProvider>
+  )
+}
 
 export default App;
