@@ -8,6 +8,7 @@ import VisaProcessingPage from './pages/VisaProcessingPage';
 import WhyUsPage from './pages/WhyUsPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
+import Chatbot from './components/Chatbot';
 
 const App: React.FC = () => {
   // Use window.location.hash for simple client-side routing
@@ -57,6 +58,7 @@ const App: React.FC = () => {
         {renderPage()}
       </main>
       <Footer />
+      <Chatbot />
     </div>
   );
 };
