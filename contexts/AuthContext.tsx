@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = (email: string, pass: string): boolean => {
     // IMPORTANT: This is a simulation. In a real app, this would be a secure API call.
-    if (email === 'mohammadsalmansharif37@gmail.com' && pass === 'admin123') {
+    if (email === 'mhammadsalmansharif37@gmail.com' && pass === 'snsf10') {
       setIsAuthenticated(true);
       window.location.hash = '#admin';
       return true;
