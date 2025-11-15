@@ -3,7 +3,7 @@ import { DataContext } from '../contexts/DataContext';
 
 const Hero: React.FC = () => {
   const { appData } = useContext(DataContext);
-  const { hero } = appData;
+  const { hero } = appData.pages.home;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
           href="#packages"
           className="bg-primary text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-primary-dark transition-transform duration-300 hover:scale-105 inline-block"
         >
-          Explore Our Packages
+          {hero.buttonText}
         </a>
       </div>
     </section>

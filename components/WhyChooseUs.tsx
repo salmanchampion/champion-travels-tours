@@ -34,16 +34,16 @@ const WhyChooseUs: React.FC = () => {
         {/* Section 1: Expert Umrah Guides */}
         <section className="flex flex-col lg:flex-row items-center gap-12 mb-24">
           <div className="lg:w-1/2 text-center lg:text-left">
-            <span className="text-secondary font-bold uppercase tracking-wider">Your Spiritual Journey</span>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mt-2 mb-4">Expert Umrah Guides</h2>
+            <span className="text-secondary font-bold uppercase tracking-wider">{whyChooseUs.guides.tagline}</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mt-2 mb-4">{whyChooseUs.guides.title}</h2>
             <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-              Our Umrah guides ensure a meaningful & enriching journey for every pilgrim, and committed to assisting you at every step, from pre-departure preparations to on-site guidance in the holy cities of Makkah & Madinah.
+              {whyChooseUs.guides.description}
             </p>
-            <h3 className="text-2xl font-bold text-dark-bg mb-6">Dedicated Bangla-Speaking Muallim</h3>
+            <h3 className="text-2xl font-bold text-dark-bg mb-6">{whyChooseUs.guides.subheading}</h3>
             <p className="text-gray-600 mb-8">
-              Satisfaction. Join us on this sacred journey, knowing that you are in the capable hands of our dedicated management board.
+              {whyChooseUs.guides.subDescription}
             </p>
-            <CtaButton href="#packages">Available Umrah Packages</CtaButton>
+            <CtaButton href="#packages">{whyChooseUs.guides.buttonText}</CtaButton>
           </div>
           <div className="lg:w-1/2 w-full flex justify-center items-center min-h-[20rem] sm:min-h-[24rem]">
             <div className="relative w-full h-80 sm:h-96 max-w-lg">
@@ -67,11 +67,11 @@ const WhyChooseUs: React.FC = () => {
         <section className="flex flex-col md:flex-row-reverse items-center gap-12 mb-24 relative">
             <img src={whyChooseUs.directors.decorativeImage} alt="star" className="absolute top-10 right-20 w-14 opacity-30 hidden md:block" />
           <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-4">Board of Director</h2>
-            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-              Champion Travels & Tours in Bangladesh was established in 2005. Aiming to provide a <span className="font-semibold">comprehensive and all-in-one experience</span> for individuals undertaking the holy pilgrimage of Hajj and Umrah from any city in Bangladesh.
-            </p>
-            <CtaButton href="#team">All Shariah Consultants</CtaButton>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-4">{whyChooseUs.directors.title}</h2>
+            <p className="text-lg text-gray-600 mb-6 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: whyChooseUs.directors.description.replace(/comprehensive and all-in-one experience/g, '<span class="font-semibold">comprehensive and all-in-one experience</span>')}}
+            />
+            <CtaButton href="#team">{whyChooseUs.directors.buttonText}</CtaButton>
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="relative w-64 h-64 sm:w-80 sm:h-80">
@@ -85,15 +85,13 @@ const WhyChooseUs: React.FC = () => {
         {/* Section 3: Services Offer */}
         <section className="flex flex-col md:flex-row items-center gap-12 mb-24">
           <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-6">Services offer by Champion Travels & Tours</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-6">{whyChooseUs.services.title}</h2>
             <ul className="space-y-4 mb-8 text-lg">
-                <ServiceListItem>Umrah Visa Processing</ServiceListItem>
-                <ServiceListItem>Hotel Booking</ServiceListItem>
-                <ServiceListItem>Ziyarat Tours</ServiceListItem>
-                <ServiceListItem>Flights</ServiceListItem>
-                <ServiceListItem>Umrah Training</ServiceListItem>
+                {whyChooseUs.services.list.map((item, index) => (
+                    <ServiceListItem key={index}>{item}</ServiceListItem>
+                ))}
             </ul>
-            <CtaButton href="#contact?subject=Booking Inquiry: Umrah">Book Your Umrah</CtaButton>
+            <CtaButton href="#contact?subject=Booking Inquiry: Umrah">{whyChooseUs.services.buttonText}</CtaButton>
           </div>
           <div className="md:w-1/2 flex justify-center">
             <img src={whyChooseUs.services.image} alt="Services Offered" className="max-w-md w-full" />
@@ -110,10 +108,10 @@ const WhyChooseUs: React.FC = () => {
                 />
             </div>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-dark-bg max-w-3xl mx-auto leading-tight">
-                Apply for an Umrah visa and experience the hassle-free journey to the city of Makkah and Madina
+                {whyChooseUs.cta.title}
             </h2>
             <div className="mt-8">
-                <CtaButton href="#contact?subject=Request for Umrah Booking Online">Request for Umrah Booking Online</CtaButton>
+                <CtaButton href="#contact?subject=Request for Umrah Booking Online">{whyChooseUs.cta.buttonText}</CtaButton>
             </div>
         </section>
       </div>

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import VisaProcessing from '../components/VisaProcessing';
 import PageBanner from '../components/PageBanner';
+import { DataContext } from '../contexts/DataContext';
 
 const VisaProcessingPage: React.FC = () => {
+  const { appData } = useContext(DataContext);
+  const { pageBanner } = appData.pages.visaProcessing;
+
   return (
     <div className="pt-20">
       <PageBanner 
-        title="Visa Processing Services"
-        subtitle="Navigating the complexities of visa applications can be daunting. Our dedicated team is here to provide you with seamless, reliable, and efficient visa processing services for various countries."
+        title={pageBanner.title}
+        subtitle={pageBanner.subtitle}
       />
       <VisaProcessing showTitle={false} />
     </div>

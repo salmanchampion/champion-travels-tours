@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DataContext } from '../contexts/DataContext';
 
 interface TestimonialCardProps {
   quote: string;
@@ -41,34 +42,16 @@ interface TestimonialsProps {
 }
 
 const Testimonials: React.FC<TestimonialsProps> = ({ showTitle = true }) => {
-  const testimonials = [
-    {
-      quote: 'The service from Champion Travels was exceptional. Every detail of our Umrah trip was perfectly managed. Highly recommended!',
-      name: 'Abdullah Al Mahmud',
-      title: 'Umrah Pilgrim, 2023',
-      avatar: 'https://images.unsplash.com/photo-1615109398623-88346a601842?q=80&w=100&auto=format&fit=crop',
-    },
-    {
-      quote: 'My Hajj journey was a dream come true, thanks to the amazing team at Champion. They were supportive and professional throughout.',
-      name: 'Fatima Begum',
-      title: 'Hajj Pilgrim, 2023',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=100&auto=format&fit=crop',
-    },
-    {
-      quote: 'From visa processing to hotel bookings, everything was seamless. Their attention to detail and customer care is top-notch.',
-      name: 'Hasan Chowdhury',
-      title: 'Family Tour, 2024',
-      avatar: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=100&auto=format&fit=crop',
-    },
-  ];
+  const { appData } = useContext(DataContext);
+  const { pageBanner, list: testimonials } = appData.pages.testimonials;
 
   return (
     <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-light-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {showTitle && (
             <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Words From Our Clients</h2>
-            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">We are proud to have served thousands of satisfied pilgrims and travelers.</p>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{pageBanner.title}</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">{pageBanner.subtitle}</p>
             </div>
         )}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -9,10 +9,10 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Hero />
-      <Services />
-      <FeaturedPackages showHajjFilters={true} />
+      <Services showTitle={true} />
+      <FeaturedPackages showHajjFilters={true} showTitle={true} />
       <WhyChooseUs />
-      <Contact />
+      <Contact showTitle={true} />
     </>
   );
 };

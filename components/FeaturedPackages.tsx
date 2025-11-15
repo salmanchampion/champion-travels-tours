@@ -94,7 +94,7 @@ const HajjPreRegistrationCard: React.FC = () => {
              {hajjPreRegistration.subDescription}
             </p>
             <a href={`#contact?subject=${encodeURIComponent(hajjPreRegistration.inquirySubject)}`} className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
-              Apply For Pre-Register
+              {hajjPreRegistration.buttonText}
             </a>
           </div>
         </div>
@@ -293,6 +293,8 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
     const [loading, setLoading] = useState(true);
     const { appData } = useContext(DataContext);
     const { hajjPackages, umrahPackages } = appData;
+    const packagesPageData = appData.pages.packages;
+    const homePageData = appData.pages.home.packages;
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -373,8 +375,8 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {showTitle && (
             <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Our Hajj & Umrah Packages</h2>
-            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">Explore our diverse range of Hajj and Umrah packages. Each is thoughtfully crafted to provide a spiritually rewarding, comfortable, and seamless pilgrimage experience.</p>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{homePageData.title}</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{homePageData.subtitle}</p>
             </div>
         )}
 
@@ -427,10 +429,10 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         {/* --- Umrah Packages Section --- */}
         <div className="bg-[#EBF5F0] rounded-xl p-6 md:p-10 shadow-inner">
            <div className="text-center mb-12">
-             <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-800">Upcoming Umrah Packages</h3>
-             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Plan your Umrah and Ziyarah. Our upcoming Umrah packages will encompass a range of options, including economy and premium packages, designed to accommodate various budgets and preferences.</p>
+             <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-800">{packagesPageData.umrahSection.title}</h3>
+             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">{packagesPageData.umrahSection.subtitle}</p>
              <a href="#packages" className="mt-6 inline-block bg-secondary text-dark-bg font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-colors">
-                View All Packages
+                {packagesPageData.umrahSection.buttonText}
              </a>
            </div>
           {showUmrahFilters && (

@@ -14,12 +14,13 @@ const DecorativeLine: React.FC = () => (
 
 const TeamPage: React.FC = () => {
     const { appData } = useContext(DataContext);
-    const { chairman, talentedEmployees } = appData.pages.team;
+    const { pageBanner, chairman, talentedEmployees, chairmanTitle, employeesTitle, employeesSubtitle } = appData.pages.team;
+
   return (
     <div className="pt-20 bg-dark-bg">
         <PageBanner
-            title="Meet Our Team"
-            subtitle="The dedicated professionals behind our success. We are committed to providing you with the best travel experiences."
+            title={pageBanner.title}
+            subtitle={pageBanner.subtitle}
         />
 
         <section className="py-20 bg-dark-bg">
@@ -27,7 +28,7 @@ const TeamPage: React.FC = () => {
                 
                 {/* Honourable Chairman */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">Our Honourable C.E.O & Chairman</h2>
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{chairmanTitle}</h2>
                     <DecorativeLine />
                 </div>
                 <div className="max-w-xs mx-auto mb-20">
@@ -36,8 +37,8 @@ const TeamPage: React.FC = () => {
 
                 {/* Talented Employees */}
                 <div id="talented-employee" className="text-center mb-16 scroll-mt-20">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">Our Talented Employee</h2>
-                     <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">At The Heart Of Our Commitment To Providing Exceptional Immigration Solutions Stands We Provide Experts Create Great Value For Visa Categories</p>
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{employeesTitle}</h2>
+                     <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{employeesSubtitle}</p>
                     <DecorativeLine />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import FeaturedPackages from '../components/FeaturedPackages';
 import PageBanner from '../components/PageBanner';
+import { DataContext } from '../contexts/DataContext';
 
 const PackagesPage: React.FC = () => {
+  const { appData } = useContext(DataContext);
+  const { pageBanner } = appData.pages.packages;
+
   return (
     <div className="pt-20">
       <PageBanner 
-          title="Hajj & Umrah Packages" 
-          subtitle="Explore our diverse range of Hajj and Umrah packages. Each is thoughtfully crafted to provide a spiritually rewarding, comfortable, and seamless pilgrimage experience."
+          title={pageBanner.title} 
+          subtitle={pageBanner.subtitle}
       />
       <FeaturedPackages showHajjFilters={true} showUmrahFilters={true} showTitle={false} />
     </div>

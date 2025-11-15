@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DataContext } from '../contexts/DataContext';
 
 const SocialIcon: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className="text-muted-text hover:text-primary transition-colors duration-300">
@@ -7,6 +8,9 @@ const SocialIcon: React.FC<{ href: string; children: React.ReactNode }> = ({ hre
 );
 
 const Footer: React.FC = () => {
+  const { appData } = useContext(DataContext);
+  const { footer } = appData;
+
   return (
     <footer className="bg-light-bg text-light-text">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,41 +19,39 @@ const Footer: React.FC = () => {
           <div className="md:col-span-2 lg:col-span-1">
              <a href="#home" className="block mb-4">
                 <span className="font-display text-3xl font-bold tracking-tight">
-                    <span className="text-light-text">Champion</span>
-                    <span className="text-primary"> Travels & Tours</span>
+                    <span className="text-light-text">{footer.about.title[0]}</span>
+                    <span className="text-primary"> {footer.about.title[1]}</span>
                 </span>
             </a>
             <p className="text-muted-text">
-              Your trusted partner for Hajj, Umrah, and worldwide travel. We are committed to providing exceptional service and unforgettable experiences.
+              {footer.about.description}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-xl font-display font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="text-xl font-display font-semibold text-white mb-4">{footer.quickLinks.title}</h3>
             <ul className="space-y-2">
-              <li><a href="#services" className="text-muted-text hover:text-primary transition-colors">Services</a></li>
-              <li><a href="#packages" className="text-muted-text hover:text-primary transition-colors">Packages</a></li>
-              <li><a href="#team" className="text-muted-text hover:text-primary transition-colors">Our Team</a></li>
-              <li><a href="#contact" className="text-muted-text hover:text-primary transition-colors">Contact</a></li>
+              {footer.quickLinks.links.map(link => (
+                  <li key={link.href}><a href={link.href} className="text-muted-text hover:text-primary transition-colors">{link.label}</a></li>
+              ))}
             </ul>
           </div>
 
           {/* Main Services */}
           <div>
-            <h3 className="text-xl font-display font-semibold text-white mb-4">Main Services</h3>
+            <h3 className="text-xl font-display font-semibold text-white mb-4">{footer.mainServices.title}</h3>
             <ul className="space-y-2">
-              <li><a href="#packages" className="text-muted-text hover:text-primary transition-colors">Hajj Packages</a></li>
-              <li><a href="#packages" className="text-muted-text hover:text-primary transition-colors">Umrah Packages</a></li>
-              <li><a href="#visa-processing" className="text-muted-text hover:text-primary transition-colors">Visa Processing</a></li>
-              <li><a href="#contact?subject=Inquiry about Air Ticketing" className="text-muted-text hover:text-primary transition-colors">Air Ticketing</a></li>
+              {footer.mainServices.links.map(link => (
+                <li key={link.href}><a href={link.href} className="text-muted-text hover:text-primary transition-colors">{link.label}</a></li>
+              ))}
             </ul>
           </div>
 
           {/* Follow Us */}
           <div>
-            <h3 className="text-xl font-display font-semibold text-white mb-4">Follow Us</h3>
-            <p className="text-muted-text mb-4">Stay connected with us on social media for the latest updates and offers.</p>
+            <h3 className="text-xl font-display font-semibold text-white mb-4">{footer.followUs.title}</h3>
+            <p className="text-muted-text mb-4">{footer.followUs.description}</p>
             <div className="flex space-x-4">
                 <SocialIcon href="https://facebook.com">
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.59 0 0 .59 0 1.325v21.35C0 23.41.59 24 1.325 24H12.82v-9.29H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.735 0 1.325-.59 1.325-1.325V1.325C24 .59 23.41 0 22.675 0z"/></svg>
@@ -66,7 +68,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="bg-dark-bg border-t border-gray-700 py-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-text">
-          <p>&copy; {new Date().getFullYear()} Champion Travels & Tours. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {footer.copyrightText}</p>
         </div>
       </div>
     </footer>

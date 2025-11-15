@@ -8,7 +8,9 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true }) => {
   const { appData } = useContext(DataContext);
-  const { contactInfo, accreditationsImage } = appData.pages.contact;
+  const homeData = appData.pages.home.contact;
+  const contactPageData = appData.pages.contact;
+  const data = showTitle ? homeData : contactPageData.pageBanner;
   
   const [formData, setFormData] = useState({
     name: '',
@@ -34,7 +36,7 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
     setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
   
-  const addressInfo = contactInfo.find(info => info.label === 'Address');
+  const addressInfo = contactPageData.contactInfo.find(info => info.label === 'Address');
   const googleMapsUrl = addressInfo ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressInfo.value)}` : '#';
 
   return (
@@ -42,19 +44,19 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {showTitle && (
             <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Get In Touch</h2>
-            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">Have questions or ready to book your next journey? Contact us today!</p>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{data.title}</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">{data.subtitle}</p>
             </div>
         )}
         <div className="flex flex-col lg:flex-row gap-12 bg-light-bg p-4 sm:p-8 md:p-12 rounded-lg shadow-2xl">
           <div className="lg:w-1/2">
-            <h3 className="text-3xl font-display font-semibold text-white mb-6">Contact Information</h3>
-            <p className="text-muted-text mb-8">Feel free to reach out to us through any of the following methods. Our team is ready to assist you.</p>
+            <h3 className="text-3xl font-display font-semibold text-white mb-6">{contactPageData.infoTitle}</h3>
+            <p className="text-muted-text mb-8">{contactPageData.infoSubtitle}</p>
 
             <div className="mb-8">
               <div 
                 className="relative h-48 sm:h-64 w-full rounded-lg shadow-md border-2 border-gray-700 bg-dark-bg flex items-center justify-center bg-cover bg-center"
-                style={{backgroundImage: `url('https://www.google.com/maps/d/thumbnail?mid=1_Eigadx_tF92wH3uh5B_z3460_M&hl=en')`}}
+                style={{backgroundImage: `url('${contactPageData.mapUrl}')`}}
               >
                   <div className="absolute inset-0 bg-black/50"></div>
                   <a
@@ -72,7 +74,7 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
             </div>
 
             <div className="space-y-6">
-              {contactInfo.map((info, index) => (
+              {contactPageData.contactInfo.map((info, index) => (
                 <div key={index} className="flex items-start">
                   <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" dangerouslySetInnerHTML={{ __html: info.icon }} />
@@ -109,13 +111,13 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
             </div>
 
             <div className="mt-8 pt-8 border-t border-gray-700">
-                <h4 className="text-xl font-display font-semibold text-white mb-4">Our Accreditations</h4>
-                <img src={accreditationsImage} alt='Accreditations from IATA, ATAB, TOAB, and more.' className="w-full h-auto rounded-lg bg-white p-2" />
+                <h4 className="text-xl font-display font-semibold text-white mb-4">{contactPageData.accreditationsTitle}</h4>
+                <img src={contactPageData.accreditationsImage} alt='Accreditations from IATA, ATAB, TOAB, and more.' className="w-full h-auto rounded-lg bg-white p-2" />
             </div>
 
           </div>
           <div className="lg:w-1/2">
-            <h3 className="text-3xl font-display font-semibold text-white mb-6">Send Us a Message</h3>
+            <h3 className="text-3xl font-display font-semibold text-white mb-6">{contactPageData.formTitle}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
               <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
@@ -123,7 +125,7 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
               <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
               <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" rows={5} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
               <button type="submit" className="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                Send Message
+                {contactPageData.formButtonText}
               </button>
             </form>
           </div>

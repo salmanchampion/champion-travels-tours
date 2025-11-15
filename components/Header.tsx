@@ -22,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
   
   const { isAuthenticated, logout } = useContext(AuthContext);
   const { appData } = useContext(DataContext);
+  const { header, site } = appData;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,22 +34,6 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
     };
   }, []);
 
-  const navLinks: NavLink[] = [
-    { href: '#home', label: 'Home' },
-    { 
-      label: 'Services', 
-      href: '#services',
-      subLinks: [
-        { href: '#services', label: 'All Services' },
-        { href: '#packages', label: 'Hajj & Umrah Packages' },
-        { href: '#visa-processing', label: 'Visa Processing' },
-      ]
-    },
-    { href: '#team', label: 'Our Team' },
-    { href: '#testimonials', label: 'Testimonials' },
-    { href: '#contact', label: 'Contact' },
-  ];
-  
   const adminLinks: NavLink[] = isAuthenticated
     ? [{ href: '#admin', label: 'Admin Panel' }]
     : [{ href: '#login', label: 'Login' }];
@@ -65,8 +50,8 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <a href="#home" className="flex items-center">
-             {appData.site.logoUrl ? (
-                <img src={appData.site.logoUrl} alt="Champion Travels & Tours Logo" className="h-12 w-auto" />
+             {site.logoUrl ? (
+                <img src={site.logoUrl} alt="Champion Travels & Tours Logo" className="h-12 w-auto" />
               ) : (
                 <span className="font-display text-2xl md:text-3xl font-bold tracking-tight">
                     <span className="text-light-text">Champion</span>
@@ -76,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
           </a>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
+            {header.navLinks.map((link) => (
               link.subLinks ? (
                 <div 
                   key={link.label}
@@ -130,8 +115,8 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
              {isAuthenticated && <button onClick={logout} className="hover:text-secondary transition-colors duration-300 font-medium text-light-text">(Logout)</button>}
           </nav>
           
-          <a href="#contact?subject=General Booking Inquiry" className="hidden md:inline-block bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
-            Book Now
+          <a href={header.bookNowButton.href} className="hidden md:inline-block bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
+            {header.bookNowButton.text}
           </a>
 
           <div className="md:hidden">
@@ -150,7 +135,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-light-bg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
-            {[...navLinks, ...adminLinks].map((link) => (
+            {[...header.navLinks, ...adminLinks].map((link) => (
               link.subLinks ? (
                 <div key={link.label} className="w-full text-center">
                   <div className="flex w-full items-center justify-center">
@@ -204,8 +189,8 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
               )
             ))}
              {isAuthenticated && <button onClick={() => { logout(); setIsMenuOpen(false); }} className="hover:text-secondary block px-3 py-2 rounded-md text-base font-medium text-light-text">(Logout)</button>}
-            <a href="#contact?subject=General Booking Inquiry" onClick={() => setIsMenuOpen(false)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
-              Book Now
+            <a href={header.bookNowButton.href} onClick={() => setIsMenuOpen(false)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
+              {header.bookNowButton.text}
             </a>
           </div>
         </div>
