@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
         { href: '#visa-processing', label: 'Visa Processing' },
       ]
     },
-    { href: '#why-us', label: 'Why Us' },
+    { href: '#team', label: 'Our Team' },
     { href: '#testimonials', label: 'Testimonials' },
     { href: '#contact', label: 'Contact' },
   ];

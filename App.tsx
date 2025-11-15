@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
 import PackagesPage from './pages/PackagesPage';
 import VisaProcessingPage from './pages/VisaProcessingPage';
-import WhyUsPage from './pages/WhyUsPage';
+import TeamPage from './pages/TeamPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
 
@@ -54,8 +54,8 @@ const App: React.FC = () => {
         return <PackagesPage />;
       case '#visa-processing':
         return <VisaProcessingPage />;
-      case '#why-us':
-        return <WhyUsPage />;
+      case '#team':
+        return <TeamPage />;
       case '#testimonials':
         return <TestimonialsPage />;
       case '#contact':
