@@ -36,7 +36,11 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, name, title, a
   </div>
 );
 
-const Testimonials: React.FC = () => {
+interface TestimonialsProps {
+  showTitle?: boolean;
+}
+
+const Testimonials: React.FC<TestimonialsProps> = ({ showTitle = true }) => {
   const testimonials = [
     {
       quote: 'The service from Champion Travels was exceptional. Every detail of our Umrah trip was perfectly managed. Highly recommended!',
@@ -59,12 +63,14 @@ const Testimonials: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-light-bg">
+    <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-light-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Words From Our Clients</h2>
-          <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">We are proud to have served thousands of satisfied pilgrims and travelers.</p>
-        </div>
+        {showTitle && (
+            <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Words From Our Clients</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">We are proud to have served thousands of satisfied pilgrims and travelers.</p>
+            </div>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} {...testimonial} />

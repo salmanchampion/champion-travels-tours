@@ -56,7 +56,7 @@ const HajjPackageCard: React.FC<{ pkg: typeof hajjPackages[0] }> = ({ pkg }) => 
             <DetailRow icon={<NoteIcon />} label="Note" value={pkg.note} />
         </div>
         <div className="p-4 mt-auto">
-             <a href="#contact" className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
+             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Hajj - ${pkg.name}`)}`} className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
                 Book Your Hajj Journey
             </a>
         </div>
@@ -81,7 +81,7 @@ const HajjPreRegistrationCard = () => (
         <p className="text-base text-[#5d4037] mb-4 leading-relaxed flex-grow">
           Champion Travels & Tours is here to guide you through the process, offering seamless pre-registration services. Prepare for an experience of a lifetime – start your Hajj pre-registration today.
         </p>
-        <a href="#contact" className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
+        <a href="#contact?subject=Inquiry: Hajj Pre-Registration 2026-2027" className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
           Apply For Pre-Register
         </a>
       </div>
@@ -96,12 +96,12 @@ const KeyHighlights = () => (
             <div className="flex flex-col items-center">
                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
                 <p className="text-2xl font-bold">20000+</p>
-                <p className="text-muted-text">Umrah packages last 10 year</p>
+                <p className="text-gray-600">Umrah packages last 10 year</p>
             </div>
             <div className="flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
                 <p className="text-2xl font-bold">15000+</p>
-                <p className="text-muted-text">Hajj Pilgrimage</p>
+                <p className="text-gray-600">Hajj Pilgrimage</p>
             </div>
         </div>
     </div>
@@ -128,7 +128,7 @@ const UmrahPackageCard: React.FC<{ pkg: typeof umrahPackages[0] }> = ({ pkg }) =
             <DetailRow icon={<NoteIcon />} label="Note" value={pkg.note} />
         </div>
         <div className="p-4 mt-auto">
-             <a href="#contact" className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
+             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Umrah - ${pkg.name}`)}`} className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
                 {pkg.buttonText}
             </a>
         </div>
@@ -271,16 +271,22 @@ const usePackageFilters = <T extends { name: string; price: string; }>(
 interface FeaturedPackagesProps {
   showHajjFilters?: boolean;
   showUmrahFilters?: boolean;
+  showTitle?: boolean;
 }
 
 // --- Main Component ---
-const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = false, showUmrahFilters = false }) => {
+const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = false, showUmrahFilters = false, showTitle = true }) => {
     // --- Duration parsing functions ---
     const parseHajjDuration = (pkg: typeof hajjPackages[0]) => {
         const match = pkg.duration.match(/\d+/);
         return match ? parseInt(match[0], 10) : 0;
     };
-    const parseUmrahDuration = (pkg: typeof umrahPackages[0]) => {
+    
+// FIX: Updated the `pkg` parameter type to guide TypeScript's generic type inference.
+// The original type caused the `usePackageFilters` hook to infer a base type for Umrah packages,
+// which was missing the `flightType` and `hotelProximity` properties needed for filtering.
+// This more specific type ensures the correct, enhanced type is inferred throughout the hook.
+    const parseUmrahDuration = (pkg: (typeof umrahPackages)[0] & { flightType: string; hotelProximity: string; }) => {
         const match = pkg.date.match(/\((\d+)\s*Days\)/);
         return match ? parseInt(match[1], 10) : 0;
     };
@@ -342,12 +348,14 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
 
 
   return (
-    <section className="py-20 bg-dark-bg">
+    <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-dark-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Our Hajj & Umrah Packages</h2>
-          <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">Explore our diverse range of Hajj and Umrah packages. Each is thoughtfully crafted to provide a spiritually rewarding, comfortable, and seamless pilgrimage experience.</p>
-        </div>
+        {showTitle && (
+            <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Our Hajj & Umrah Packages</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">Explore our diverse range of Hajj and Umrah packages. Each is thoughtfully crafted to provide a spiritually rewarding, comfortable, and seamless pilgrimage experience.</p>
+            </div>
+        )}
 
         {/* --- Hajj Packages Section --- */}
         <div className="bg-gray-100 rounded-xl p-6 md:p-10 mb-16 shadow-inner">

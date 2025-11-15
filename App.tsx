@@ -10,18 +10,29 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
 
 const App: React.FC = () => {
-  // Use window.location.hash for simple client-side routing
-  const [page, setPage] = useState(window.location.hash || '#home');
+  const [page, setPage] = useState('');
+  const [contactSubject, setContactSubject] = useState('');
 
   useEffect(() => {
     const handleHashChange = () => {
-      setPage(window.location.hash || '#home');
+      const hash = window.location.hash || '#home';
+      const [path, queryString] = hash.split('?');
+      
+      setPage(path);
       window.scrollTo(0, 0); // Scroll to top on page change
+
+      if (path === '#contact' || path === '#book-now') {
+        const params = new URLSearchParams(queryString || '');
+        const subject = params.get('subject') || '';
+        setContactSubject(subject);
+      } else {
+        setContactSubject(''); // Clear subject for other pages
+      }
     };
 
     window.addEventListener('hashchange', handleHashChange);
     
-    // Set initial page on load
+    // Set initial page and subject on load
     handleHashChange();
 
     return () => {
@@ -30,7 +41,13 @@ const App: React.FC = () => {
   }, []);
 
   const renderPage = () => {
-    switch (page) {
+    let currentPage = page;
+    // Unify #book-now to #contact for rendering
+    if (currentPage === '#book-now') {
+      currentPage = '#contact';
+    }
+
+    switch (currentPage) {
       case '#services':
         return <ServicesPage />;
       case '#packages':
@@ -42,8 +59,7 @@ const App: React.FC = () => {
       case '#testimonials':
         return <TestimonialsPage />;
       case '#contact':
-      case '#book-now': // Both contact and book now lead to the contact page
-        return <ContactPage />;
+        return <ContactPage defaultSubject={contactSubject} />;
       case '#home':
       default:
         return <HomePage />;
@@ -52,7 +68,7 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-dark-bg">
-      <Header />
+      <Header activePage={page} />
       <main>
         {renderPage()}
       </main>

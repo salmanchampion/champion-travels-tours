@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
     <div className="bg-light-bg p-6 rounded-lg flex items-start space-x-4">
@@ -27,8 +27,60 @@ const ProcessStep: React.FC<{ icon: React.ReactNode; title: string; description:
     </div>
 );
 
+const VisaInquiryForm: React.FC = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        destination: '',
+        visaType: 'Tourist Visa',
+        question: '',
+    });
 
-const VisaProcessing: React.FC = () => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        alert('Thank you for your visa inquiry! We will get back to you soon.');
+        setFormData({ name: '', email: '', phone: '', destination: '', visaType: 'Tourist Visa', question: '' });
+    };
+
+    return (
+        <div className="mt-16">
+            <h3 className="text-3xl font-display font-semibold text-white mb-6 text-center">Visa Inquiry Form</h3>
+            <p className="text-muted-text mb-8 text-center max-w-2xl mx-auto">Have a specific question about your visa application? Fill out the form below, and our experts will get in touch with you.</p>
+            <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                </div>
+                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone (Optional)" className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" name="destination" value={formData.destination} onChange={handleChange} placeholder="Destination Country" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                    <select name="visaType" value={formData.visaType} onChange={handleChange} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition">
+                        <option>Tourist Visa</option>
+                        <option>Business Visa</option>
+                        <option>Student Visa</option>
+                        <option>Medical Visa</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <textarea name="question" value={formData.question} onChange={handleChange} placeholder="Your Specific Question" rows={5} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
+                <button type="submit" className="w-full bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105">
+                    Submit Inquiry
+                </button>
+            </form>
+        </div>
+    );
+};
+
+interface VisaProcessingProps {
+    showTitle?: boolean;
+}
+
+const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => {
     const services = [
         { icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>, title: 'Tourist Visa', description: 'Explore new destinations with our hassle-free tourist visa services.' },
         { icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>, title: 'Business Visa', description: 'Facilitating your international business travel needs with efficient processing.' },
@@ -61,12 +113,14 @@ const VisaProcessing: React.FC = () => {
 
     return (
         <div className="bg-dark-bg">
-            <section className="py-20">
+            <section className={`${showTitle ? 'py-20' : 'pb-20'}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h1 className="text-4xl md:text-5xl font-display font-bold text-primary">Visa Processing Services</h1>
-                        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">Navigating the complexities of visa applications can be daunting. Our dedicated team is here to provide you with seamless, reliable, and efficient visa processing services for various countries.</p>
-                    </div>
+                    {showTitle && (
+                        <div className="text-center mb-16">
+                            <h1 className="text-4xl md:text-5xl font-display font-bold text-primary">Visa Processing Services</h1>
+                            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">Navigating the complexities of visa applications can be daunting. Our dedicated team is here to provide you with seamless, reliable, and efficient visa processing services for various countries.</p>
+                        </div>
+                    )}
 
                     {/* What We Offer Section */}
                     <div className="mb-20">
@@ -90,11 +144,7 @@ const VisaProcessing: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {whyUsFeatures.map(feature => <FeatureCard key={feature.title} {...feature} />)}
                         </div>
-                         <div className="text-center mt-12">
-                            <a href="#contact" className="bg-secondary text-dark-bg font-bold py-4 px-10 rounded-full text-lg hover:bg-amber-600 transition-transform duration-300 hover:scale-105 inline-block">
-                                Inquire Now
-                            </a>
-                        </div>
+                         <VisaInquiryForm />
                     </div>
                 </div>
             </section>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  activePage: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ activePage }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesMenuOpen, setServicesMenuOpen] = useState(false);
@@ -27,11 +31,12 @@ const Header: React.FC = () => {
         { href: '#visa-processing', label: 'Visa Processing' },
       ]
     },
-    { href: '#packages', label: 'Packages' },
     { href: '#why-us', label: 'Why Us' },
     { href: '#testimonials', label: 'Testimonials' },
     { href: '#contact', label: 'Contact' },
   ];
+
+  const isServicesSectionActive = ['#services', '#packages', '#visa-processing'].includes(activePage);
 
   return (
     <header
@@ -56,7 +61,9 @@ const Header: React.FC = () => {
                 >
                   <a
                     href={link.href}
-                    className="flex items-center text-light-text hover:text-primary transition-colors duration-300 font-medium"
+                    className={`flex items-center hover:text-primary transition-colors duration-300 font-medium ${
+                      isServicesSectionActive ? 'text-primary' : 'text-light-text'
+                    }`}
                   >
                     {link.label}
                     <svg className={`w-4 h-4 ml-1 transition-transform ${isServicesMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -67,7 +74,9 @@ const Header: React.FC = () => {
                         <a
                           key={subLink.href}
                           href={subLink.href}
-                          className="block px-4 py-2 text-sm text-light-text hover:bg-dark-bg hover:text-primary"
+                          className={`block px-4 py-2 text-sm hover:bg-dark-bg hover:text-primary ${
+                            activePage === subLink.href ? 'text-primary' : 'text-light-text'
+                          }`}
                         >
                           {subLink.label}
                         </a>
@@ -79,7 +88,9 @@ const Header: React.FC = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-light-text hover:text-primary transition-colors duration-300 font-medium"
+                  className={`hover:text-primary transition-colors duration-300 font-medium ${
+                    activePage === link.href ? 'text-primary' : 'text-light-text'
+                  }`}
                 >
                   {link.label}
                 </a>
@@ -87,7 +98,7 @@ const Header: React.FC = () => {
             ))}
           </nav>
           
-          <a href="#book-now" className="hidden md:inline-block bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
+          <a href="#contact?subject=General Booking Inquiry" className="hidden md:inline-block bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
             Book Now
           </a>
 
@@ -110,13 +121,26 @@ const Header: React.FC = () => {
             {navLinks.map((link) => (
               link.subLinks ? (
                 <div key={link.label} className="w-full text-center">
-                  <button
-                    onClick={() => setMobileServicesMenuOpen(!isMobileServicesMenuOpen)}
-                    className="w-full flex justify-center items-center text-light-text hover:text-primary px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    {link.label}
-                    <svg className={`w-4 h-4 ml-1 transition-transform ${isMobileServicesMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </button>
+                  <div className="flex w-full items-center justify-center">
+                    <a
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`hover:text-primary px-3 py-2 rounded-md text-base font-medium ${
+                        isServicesSectionActive ? 'text-primary' : 'text-light-text'
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                    <button
+                      onClick={() => setMobileServicesMenuOpen(!isMobileServicesMenuOpen)}
+                      className={`ml-1 p-1 ${
+                        isServicesSectionActive ? 'text-primary' : 'text-light-text'
+                      } hover:text-primary`}
+                      aria-label="Toggle services submenu"
+                    >
+                      <svg className={`w-4 h-4 transition-transform ${isMobileServicesMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                  </div>
                   {isMobileServicesMenuOpen && (
                     <div className="pl-4 bg-dark-bg rounded-md">
                       {link.subLinks.map(subLink => (
@@ -124,7 +148,9 @@ const Header: React.FC = () => {
                           key={subLink.href}
                           href={subLink.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className="block text-light-text hover:text-primary px-3 py-2 rounded-md text-base font-medium"
+                          className={`block hover:text-primary px-3 py-2 rounded-md text-base font-medium ${
+                            activePage === subLink.href ? 'text-primary' : 'text-light-text'
+                          }`}
                         >
                           {subLink.label}
                         </a>
@@ -137,13 +163,15 @@ const Header: React.FC = () => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-light-text hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  className={`hover:text-primary block px-3 py-2 rounded-md text-base font-medium ${
+                    activePage === link.href ? 'text-primary' : 'text-light-text'
+                  }`}
                 >
                   {link.label}
                 </a>
               )
             ))}
-            <a href="#book-now" onClick={() => setIsMenuOpen(false)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
+            <a href="#contact?subject=General Booking Inquiry" onClick={() => setIsMenuOpen(false)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
               Book Now
             </a>
           </div>

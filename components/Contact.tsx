@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  defaultSubject?: string;
+  showTitle?: boolean;
+}
+
+const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
+    subject: defaultSubject,
     message: '',
   });
+
+  useEffect(() => {
+    setFormData(prevData => ({ ...prevData, subject: defaultSubject }));
+  }, [defaultSubject]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +32,7 @@ const Contact: React.FC = () => {
 
   const contactInfo = [
     {
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+      icon: <svg xmlns="http://www.w.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
       label: 'Address',
       value: 'Paltan China Town, Level #10, East Building, Room No.# E-11-07.67/1 Naya Paltan, VIP Road, Dhaka-1000',
     },
@@ -38,17 +48,40 @@ const Contact: React.FC = () => {
     },
   ];
 
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo[0].value)}`;
+
   return (
-    <section className="py-20 bg-dark-bg">
+    <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-dark-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Get In Touch</h2>
-          <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">Have questions or ready to book your next journey? Contact us today!</p>
-        </div>
+        {showTitle && (
+            <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Get In Touch</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">Have questions or ready to book your next journey? Contact us today!</p>
+            </div>
+        )}
         <div className="flex flex-col lg:flex-row gap-12 bg-light-bg p-8 md:p-12 rounded-lg shadow-2xl">
           <div className="lg:w-1/2">
             <h3 className="text-3xl font-display font-semibold text-white mb-6">Contact Information</h3>
             <p className="text-muted-text mb-8">Feel free to reach out to us through any of the following methods. Our team is ready to assist you.</p>
+
+            <div className="mb-8">
+              <div 
+                className="relative h-64 w-full rounded-lg shadow-md border-2 border-gray-700 bg-dark-bg flex items-center justify-center"
+              >
+                  <a
+                    href={googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-primary text-white font-bold py-3 px-6 rounded-full hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <span>View on Google Maps</span>
+                  </a>
+              </div>
+            </div>
+
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
                 <div key={index} className="flex items-start">
@@ -57,11 +90,37 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-bold text-white">{info.label}</h4>
-                    <p className="text-muted-text">{info.value}</p>
+                    {info.label === 'Address' ? (
+                      <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-muted-text hover:text-primary transition-colors break-words">
+                        {info.value}
+                      </a>
+                    ) : info.label === 'Phone' ? (
+                      <p className="text-muted-text break-words">
+                        {info.value.split(/(\+\d+)/g).filter(Boolean).map((part, i) => 
+                          part.startsWith('+') ? (
+                            <a key={i} href={`tel:${part}`} className="hover:text-primary transition-colors">{part}</a>
+                          ) : (
+                            <span key={i}>{part}</span>
+                          )
+                        )}
+                      </p>
+                    ) : info.label === 'Email' ? (
+                       <a href={`mailto:${info.value}`} className="text-muted-text hover:text-primary transition-colors break-words">
+                        {info.value}
+                      </a>
+                    ) : (
+                      <p className="text-muted-text break-words">{info.value}</p>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+
+            <div className="mt-8 pt-8 border-t border-gray-700">
+                <h4 className="text-xl font-display font-semibold text-white mb-4">Our Accreditations</h4>
+                <img src='https://i.postimg.cc/CxskNw84/dd.png' alt='Accreditations from IATA, ATAB, TOAB, and more.' className="w-full h-auto rounded-lg bg-white p-2" />
+            </div>
+
           </div>
           <div className="lg:w-1/2">
             <h3 className="text-3xl font-display font-semibold text-white mb-6">Send Us a Message</h3>

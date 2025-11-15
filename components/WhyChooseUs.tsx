@@ -1,6 +1,10 @@
 import React from 'react';
 
-const WhyChooseUs: React.FC = () => {
+interface WhyChooseUsProps {
+  showTitle?: boolean;
+}
+
+const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ showTitle = true }) => {
   const features = [
     {
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
@@ -25,12 +29,14 @@ const WhyChooseUs: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-light-bg">
+    <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-light-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Why Choose Us?</h2>
-          <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">Your journey is sacred. We ensure it's seamless, comfortable, and spiritually fulfilling.</p>
-        </div>
+        {showTitle && (
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">Why Choose Us?</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">Your journey is sacred. We ensure it's seamless, comfortable, and spiritually fulfilling.</p>
+          </div>
+        )}
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/2">
             <img 
