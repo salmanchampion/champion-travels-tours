@@ -49,9 +49,9 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ name, role, imageUrl, t
       </div>
       <div className="bg-white p-3">
         <div className="flex justify-center space-x-3">
-          <SocialLink href="#!" bgColor="bg-blue-600" icon={<FacebookIcon />} name="Facebook" />
-          <SocialLink href="#!" bgColor="bg-blue-500" icon={<PhoneIcon />} name="Phone" />
-          <SocialLink href="#!" bgColor="bg-green-500" icon={<WhatsAppIcon />} name="WhatsApp" />
+          <SocialLink href="https://facebook.com" bgColor="bg-blue-600" icon={<FacebookIcon />} name="Facebook" />
+          <SocialLink href="tel:+8801718425042" bgColor="bg-blue-500" icon={<PhoneIcon />} name="Phone" />
+          <SocialLink href="https://wa.me/8801718425042" bgColor="bg-green-500" icon={<WhatsAppIcon />} name="WhatsApp" />
         </div>
       </div>
     </div>

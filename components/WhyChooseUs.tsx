@@ -28,11 +28,10 @@ const WhyChooseUs: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-gray-800">
 
         {/* Section 1: Expert Umrah Guides */}
-        <section className="flex flex-col md:flex-row items-center gap-12 mb-24 relative">
-            <img src="https://i.postimg.cc/L5K4p8xT/star-lantern.png" alt="star" className="absolute top-0 left-10 w-16 opacity-30 hidden md:block" />
-            <img src="https://i.postimg.cc/L5K4p8xT/star-lantern.png" alt="star" className="absolute top-20 left-40 w-12 opacity-30 hidden md:block" />
-          <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-4">Expert Umrah Guides</h2>
+        <section className="flex flex-col lg:flex-row items-center gap-12 mb-24">
+          <div className="lg:w-1/2 text-center lg:text-left">
+            <span className="text-secondary font-bold uppercase tracking-wider">Your Spiritual Journey</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mt-2 mb-4">Expert Umrah Guides</h2>
             <p className="text-lg text-gray-600 mb-4 leading-relaxed">
               Our Umrah guides ensure a meaningful & enriching journey for every pilgrim, and committed to assisting you at every step, from pre-departure preparations to on-site guidance in the holy cities of Makkah & Madinah.
             </p>
@@ -42,9 +41,20 @@ const WhyChooseUs: React.FC = () => {
             </p>
             <CtaButton href="#packages">Available Umrah Packages</CtaButton>
           </div>
-          <div className="md:w-1/2 flex justify-center">
-            <div className="w-full max-w-md p-4 bg-white rounded-2xl shadow-2xl">
-                <img src="https://i.postimg.cc/k4JqRzK6/kaaba.jpg" alt="Expert Umrah Guides" className="rounded-xl object-cover w-full h-auto" />
+          <div className="lg:w-1/2 w-full flex justify-center items-center min-h-[24rem]">
+            <div className="relative w-full h-96 max-w-lg">
+              <img 
+                src="https://i.postimg.cc/FHFRwHxn/gg.jpg" 
+                alt="Pilgrims at Kaaba" 
+                className="absolute top-0 left-0 w-[80%] h-[80%] object-cover rounded-2xl shadow-2xl z-10 transform hover:scale-105 transition-transform duration-300" 
+              />
+              <img 
+                src="https://i.postimg.cc/x1gn4TDd/ad.jpg" 
+                alt="Prophet's Mosque" 
+                className="absolute bottom-0 right-0 w-[60%] h-[60%] object-cover rounded-2xl shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/20 rounded-full -z-10"></div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-secondary/20 rounded-lg transform rotate-12 -z-10"></div>
             </div>
           </div>
         </section>
@@ -61,9 +71,9 @@ const WhyChooseUs: React.FC = () => {
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="relative w-80 h-80">
-                <img src="https://i.postimg.cc/52q1C1Zg/director1.jpg" alt="Director 1" className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"/>
-                <img src="https://i.postimg.cc/kXy0bHp1/director2.jpg" alt="Director 2" className="absolute bottom-0 left-0 w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg"/>
-                <img src="https://i.postimg.cc/8cLSgSgJ/director3.jpg" alt="Director 3" className="absolute bottom-0 right-0 w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"/>
+                <img src="https://i.postimg.cc/rwn0QTMc/image.png" alt="C.E.O & Chairman" className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"/>
+                <img src="https://i.postimg.cc/G3MgC8cQ/image-(2).png" alt="Team Member" className="absolute bottom-0 left-0 w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg"/>
+                <img src="https://i.postimg.cc/0jmsLpT9/image-(1).png" alt="Team Member" className="absolute bottom-0 right-0 w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"/>
             </div>
           </div>
         </section>
@@ -82,12 +92,19 @@ const WhyChooseUs: React.FC = () => {
             <CtaButton href="#contact?subject=Booking Inquiry: Umrah">Book Your Umrah</CtaButton>
           </div>
           <div className="md:w-1/2 flex justify-center">
-            <img src="https://i.postimg.cc/d1hKk4jq/services-graphic.png" alt="Services Offered" className="max-w-md w-full" />
+            <img src="https://i.postimg.cc/4xHMfzwH/champion-travels-tours2.png" alt="Services Offered" className="max-w-md w-full" />
           </div>
         </section>
 
         {/* Section 4: Final CTA */}
         <section className="text-center py-16">
+            <div className="flex justify-center mb-8">
+                <img 
+                    src="https://i.postimg.cc/FHFRwHxn/gg.jpg" 
+                    alt="Pilgrims at the Kaaba" 
+                    className="rounded-xl shadow-lg w-full max-w-lg object-cover"
+                />
+            </div>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-dark-bg max-w-3xl mx-auto leading-tight">
                 Apply for an Umrah visa and experience the hassle-free journey to the city of Makkah and Madina
             </h2>
@@ -98,7 +115,7 @@ const WhyChooseUs: React.FC = () => {
       </div>
       
       {/* Mosque Silhouette Footer */}
-      <footer className="h-40 bg-center bg-repeat-x" style={{ backgroundImage: "url('https://i.postimg.cc/4NqJmFz9/mosque-silhouette.png')" }}>
+      <footer className="h-40 bg-center bg-repeat-x" style={{ backgroundImage: "url('https://i.postimg.cc/MHfn961Y/ds.jpg')" }}>
       </footer>
     </div>
   );
