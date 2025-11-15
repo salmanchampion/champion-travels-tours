@@ -32,9 +32,12 @@ const Hero: React.FC = () => {
       ))}
 
       <div className="relative z-20 container mx-auto px-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-wide mb-4">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-wide mb-2">
           Champion Travels & Tours
         </h1>
+        <p className="text-base md:text-lg font-sans text-secondary mb-6">
+          Bangladesh Govt. Approved hajj License No.-1432 & Umrah License no.-515
+        </p>
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-primary mb-6">
           Hajj Umrah & Air Ticketing
         </h2>

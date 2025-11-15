@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 // --- Icon Components ---
 const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 002 2h5a2 2 0 012 2v5a2 2 0 01-2 2h-5a2 2 0 01-2-2v-5a2 2 0 00-2-2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>;
@@ -24,6 +24,28 @@ const umrahPackages = [
     { name: 'Economy Umrah Package', price: '160000', date: 'Sept/Oct (14 Days)', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE (3 Star)', flightsUp: 'Transit - Air Arabia/Gulf Air', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/VkQL0LnX/al.webp', buttonText: 'Choose Economy Package' },
     { name: 'VIP Umrah Package', price: '270000', date: 'Sept/Oct (10 Days)', hotelMakkah: 'HILTON/MAKKA TOWER/ ELAF KINDA DISTANCE - 0 MITRE (5 Star)', hotelMadinah: 'MARJAN GOLDEN DISTANCE-100-200 MITRE (3 Star)', flightsUp: 'BG/SV', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 15000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/R01mH74z/aj.webp', buttonText: 'Book Super Saver Now' },
 ];
+
+// --- Skeleton Card for Loading State ---
+const SkeletonCard: React.FC = () => (
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 flex flex-col h-full overflow-hidden">
+        <div className="bg-gray-300 h-48 w-full animate-pulse"></div>
+        <div className="bg-gray-100 p-4">
+            <div className="bg-gray-300 h-6 w-3/4 mx-auto rounded animate-pulse"></div>
+        </div>
+        <div className="p-4 flex-grow space-y-4">
+            {[...Array(5)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                    <div className="bg-gray-300 h-4 w-1/4 rounded animate-pulse"></div>
+                    <div className="bg-gray-300 h-4 w-3/4 rounded animate-pulse"></div>
+                </div>
+            ))}
+        </div>
+        <div className="p-4 mt-auto">
+            <div className="bg-gray-300 h-12 w-full rounded-lg animate-pulse"></div>
+        </div>
+    </div>
+);
+
 
 // --- Hajj Card Detail Row Component ---
 const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
@@ -278,16 +300,21 @@ interface FeaturedPackagesProps {
 
 // --- Main Component ---
 const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = false, showUmrahFilters = false, showTitle = true }) => {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1500); // Simulate network delay
+        return () => clearTimeout(timer);
+    }, []);
+
     // --- Duration parsing functions ---
     const parseHajjDuration = (pkg: typeof hajjPackages[0]) => {
         const match = pkg.duration.match(/\d+/);
         return match ? parseInt(match[0], 10) : 0;
     };
     
-// FIX: Updated the `pkg` parameter type to guide TypeScript's generic type inference.
-// The original type caused the `usePackageFilters` hook to infer a base type for Umrah packages,
-// which was missing the `flightType` and `hotelProximity` properties needed for filtering.
-// This more specific type ensures the correct, enhanced type is inferred throughout the hook.
     const parseUmrahDuration = (pkg: (typeof umrahPackages)[0] & { flightType: string; hotelProximity: string; }) => {
         const match = pkg.date.match(/\((\d+)\s*Days\)/);
         return match ? parseInt(match[1], 10) : 0;
@@ -389,7 +416,9 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
               </div>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
-                {filteredHajjPackages.length > 0 ? (
+                {loading ? (
+                    [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+                ) : filteredHajjPackages.length > 0 ? (
                     <>
                         {filteredHajjPackages.map((pkg) => <HajjPackageCard key={pkg.name} pkg={pkg} />)}
                         <HajjPreRegistrationCard />
@@ -450,7 +479,9 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
               </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             {filteredUmrahPackages.length > 0 ? (
+             {loading ? (
+                [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
+             ) : filteredUmrahPackages.length > 0 ? (
                 filteredUmrahPackages.map((pkg) => <UmrahPackageCard key={pkg.name} pkg={pkg} />)
              ) : (
                 <div className="col-span-full text-center py-16 text-gray-500">

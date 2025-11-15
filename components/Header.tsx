@@ -47,7 +47,10 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <a href="#home" className="flex items-center">
-            <img src='https://i.postimg.cc/PJS59Bqw/champion-logo-1.png' alt='Champion Travels & Tours Logo' className="h-12 w-auto" />
+            <span className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                <span className="text-light-text">Champion</span>
+                <span className="text-primary"> Travels & Tours</span>
+            </span>
           </a>
 
           <nav className="hidden md:flex items-center space-x-8">

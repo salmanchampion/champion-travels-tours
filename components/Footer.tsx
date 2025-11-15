@@ -14,7 +14,10 @@ const Footer: React.FC = () => {
           {/* About Section */}
           <div className="md:col-span-2 lg:col-span-1">
              <a href="#home" className="block mb-4">
-                <img src='https://i.postimg.cc/PJS59Bqw/champion-logo-1.png' alt='Champion Travels & Tours Logo' className="h-12 w-auto" />
+                <span className="font-display text-3xl font-bold tracking-tight">
+                    <span className="text-light-text">Champion</span>
+                    <span className="text-primary"> Travels & Tours</span>
+                </span>
             </a>
             <p className="text-muted-text">
               Your trusted partner for Hajj, Umrah, and worldwide travel. We are committed to providing exceptional service and unforgettable experiences.
