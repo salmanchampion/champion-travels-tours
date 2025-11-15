@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { DataContext } from '../contexts/DataContext';
+import { HajjPackage, UmrahPackage } from '../data';
 
 // --- Icon Components ---
 const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 002 2h5a2 2 0 012 2v5a2 2 0 01-2 2h-5a2 2 0 01-2-2v-5a2 2 0 00-2-2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>;
@@ -10,6 +11,12 @@ const FoodIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 const SpecialIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.293 2.293a1 1 0 010 1.414L10 16l-4 1 1-4 6.293-6.293a1 1 0 011.414 0z" /></svg>;
 const NoteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>;
 const DateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+
+// --- Type Extensions for Filtering ---
+interface EnhancedUmrahPackage extends UmrahPackage {
+    flightType: string;
+    hotelProximity: string;
+}
 
 // --- Skeleton Card for Loading State ---
 const SkeletonCard: React.FC = () => (
@@ -46,7 +53,7 @@ const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: string;
 
 
 // --- Hajj Package Card Component ---
-const HajjPackageCard: React.FC<{ pkg: any }> = ({ pkg }) => (
+const HajjPackageCard: React.FC<{ pkg: HajjPackage }> = ({ pkg }) => (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 flex flex-col h-full text-gray-800 overflow-hidden">
         <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
         <div className="bg-gray-100 p-4 text-center">
@@ -127,7 +134,7 @@ const KeyHighlights: React.FC = () => {
 
 
 // --- Umrah Package Card Component ---
-const UmrahPackageCard: React.FC<{ pkg: any }> = ({ pkg }) => {
+const UmrahPackageCard: React.FC<{ pkg: EnhancedUmrahPackage }> = ({ pkg }) => {
     const { appData } = useContext(DataContext);
     const logo = appData.site.logoUrl || 'https://i.postimg.cc/PJS59Bqw/champion-logo-1.png';
 
@@ -304,12 +311,12 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
     }, []);
 
     // --- Duration parsing functions ---
-    const parseHajjDuration = (pkg: typeof hajjPackages[0]) => {
+    const parseHajjDuration = (pkg: HajjPackage) => {
         const match = pkg.duration.match(/\d+/);
         return match ? parseInt(match[0], 10) : 0;
     };
     
-    const parseUmrahDuration = (pkg: any) => {
+    const parseUmrahDuration = (pkg: UmrahPackage) => {
         const match = pkg.date.match(/\((\d+)\s*Days\)/);
         return match ? parseInt(match[1], 10) : 0;
     };
@@ -325,10 +332,10 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         selectedTypes: hajjSelectedTypes, handleTypeChange: handleHajjTypeChange,
         resetFilters: resetHajjFilters,
         filteredPackages: filteredHajjPackages
-    } = usePackageFilters(hajjPackages, parseHajjDuration);
+    } = usePackageFilters<HajjPackage>(hajjPackages, parseHajjDuration);
     
     // --- Enhance Umrah packages with filterable properties ---
-    const enhancedUmrahPackages = useMemo(() => {
+    const enhancedUmrahPackages = useMemo((): EnhancedUmrahPackage[] => {
         return umrahPackages.map(pkg => {
             const flightType = (pkg.flightsUp.toLowerCase().includes('transit') || pkg.flightsDown.toLowerCase().includes('transit')) ? 'Transit' : 'Direct';
             const hotelInfo = `${pkg.hotelMakkah} ${pkg.hotelMadinah}`.toLowerCase();
@@ -350,7 +357,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         selectedTypes: umrahSelectedTypes, handleTypeChange: handleUmrahTypeChange,
         resetFilters: resetUmrahFiltersFromHook,
         filteredPackages: filteredUmrahPackagesFromHook
-    } = usePackageFilters(enhancedUmrahPackages, parseUmrahDuration);
+    } = usePackageFilters<EnhancedUmrahPackage>(enhancedUmrahPackages, parseUmrahDuration);
 
     const [flightType, setFlightType] = useState('any');
     const [hotelProximity, setHotelProximity] = useState('any');

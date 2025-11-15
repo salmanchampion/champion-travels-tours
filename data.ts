@@ -64,6 +64,11 @@ export interface TeamMember {
     role: string;
     imageUrl: string;
     title?: string;
+    socials?: {
+        facebook?: string;
+        phone?: string;
+        whatsapp?: string;
+    };
 }
 
 export interface GalleryImage {
@@ -255,6 +260,7 @@ export const defaultData: AppData = {
                 { href: '#visa-processing', label: 'Visa Processing' },
               ]
             },
+            { href: '#why-us', label: 'Why Us' },
             { href: '#team', label: 'Our Team' },
             { href: '#testimonials', label: 'Testimonials' },
             { href: '#contact', label: 'Contact' },
@@ -468,17 +474,22 @@ export const defaultData: AppData = {
                 role: 'C.E.O & Chairman',
                 imageUrl: 'https://i.postimg.cc/rwn0QTMc/image.png',
                 title: '',
+                socials: {
+                    facebook: 'https://www.facebook.com',
+                    phone: '+8801718425042',
+                    whatsapp: '8801718425042'
+                }
             },
             employeesTitle: 'Our Talented Employee',
             employeesSubtitle: 'At The Heart Of Our Commitment To Providing Exceptional Immigration Solutions Stands We Provide Experts Create Great Value For Visa Categories',
             talentedEmployees: [
-                { name: 'মোঃ মুছা', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop' },
-                { name: 'সাদ্দام হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop' },
-                { name: 'লোকমান হোসাইন', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop' },
-                { name: 'মোহাম্মদ নূরে আলম ডালিম', role: 'General Manager', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop' },
-                { name: 'মোঃ আলী আকবর', role: 'Accounts', imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png' },
-                { name: 'Salman sharif', role: 'New Joined', imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png' },
-                { name: 'MD Kawsar Ahmed', role: 'Ticketing', imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop' },
+                { name: 'মোঃ মুছা', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'সাদ্দام হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'লোকমান হোসাইন', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'মোহাম্মদ নূরে আলম ডালিম', role: 'General Manager', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'মোঃ আলী আকবর', role: 'Accounts', imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'Salman sharif', role: 'New Joined', imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'MD Kawsar Ahmed', role: 'Ticketing', imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
             ]
         },
         testimonials: {

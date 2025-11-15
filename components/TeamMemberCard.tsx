@@ -34,9 +34,14 @@ interface TeamMemberCardProps {
   role: string;
   imageUrl: string;
   title?: string;
+  socials?: {
+      facebook?: string;
+      phone?: string;
+      whatsapp?: string;
+  };
 }
 
-const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ name, role, imageUrl, title }) => {
+const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ name, role, imageUrl, title, socials }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden text-center transform hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full">
       <div className="flex-shrink-0">
@@ -49,9 +54,9 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ name, role, imageUrl, t
       </div>
       <div className="bg-white p-3">
         <div className="flex justify-center space-x-3">
-          <SocialLink href="https://facebook.com" bgColor="bg-blue-600" icon={<FacebookIcon />} name="Facebook" />
-          <SocialLink href="tel:+8801718425042" bgColor="bg-blue-500" icon={<PhoneIcon />} name="Phone" />
-          <SocialLink href="https://wa.me/8801718425042" bgColor="bg-green-500" icon={<WhatsAppIcon />} name="WhatsApp" />
+          {socials?.facebook && <SocialLink href={socials.facebook} bgColor="bg-blue-600" icon={<FacebookIcon />} name="Facebook" />}
+          {socials?.phone && <SocialLink href={`tel:${socials.phone}`} bgColor="bg-blue-500" icon={<PhoneIcon />} name="Phone" />}
+          {socials?.whatsapp && <SocialLink href={`https://wa.me/${socials.whatsapp.replace(/\+/g, '')}`} bgColor="bg-green-500" icon={<WhatsAppIcon />} name="WhatsApp" />}
         </div>
       </div>
     </div>

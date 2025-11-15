@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
+import WhyUsPage from './pages/WhyUsPage';
 
 
 const AppContent: React.FC = () => {
@@ -66,6 +67,8 @@ const AppContent: React.FC = () => {
         return <PackagesPage />;
       case '#visa-processing':
         return <VisaProcessingPage />;
+      case '#why-us':
+        return <WhyUsPage />;
       case '#team':
         return <TeamPage />;
       case '#testimonials':

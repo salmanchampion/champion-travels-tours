@@ -6,8 +6,7 @@ interface HeaderProps {
   activePage: string;
 }
 
-// FIX: Define a common interface for navigation links to ensure type safety.
-// This makes `subLinks` an optional property, resolving TypeScript errors when mapping over combined link arrays.
+// A common interface for navigation links to ensure type safety.
 interface NavLink {
   href: string;
   label: string;
