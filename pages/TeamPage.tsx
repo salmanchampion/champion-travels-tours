@@ -41,7 +41,7 @@ const talentedEmployees = [
   {
     name: 'মোঃ আলী আকবর',
     role: 'Accounts',
-    imageUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=300&auto=format&fit=crop',
+    imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png',
   },
   {
     name: 'Salman sharif',
