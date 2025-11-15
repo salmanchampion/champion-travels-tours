@@ -175,7 +175,7 @@ const Gallery: React.FC = () => {
         <h3 className="text-3xl md:text-4xl font-display font-bold text-white">{gallery.title}</h3>
         <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{gallery.description}</p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {gallery.images.map((image, index) => (
           <div key={index} className="overflow-hidden rounded-lg shadow-lg group aspect-square">
             <img
