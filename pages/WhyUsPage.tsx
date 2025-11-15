@@ -1,15 +1,11 @@
 import React from 'react';
 import WhyChooseUs from '../components/WhyChooseUs';
-import PageBanner from '../components/PageBanner';
 
 const WhyUsPage: React.FC = () => {
   return (
     <div className="pt-20">
-      <PageBanner 
-        title="Why Choose Us"
-        subtitle="Your journey is sacred. We ensure it's seamless, comfortable, and spiritually fulfilling."
-      />
-      <WhyChooseUs showTitle={false} />
+      {/* The new WhyChooseUs component is a full-page design, so the banner is no longer needed here. */}
+      <WhyChooseUs />
     </div>
   );
 };
