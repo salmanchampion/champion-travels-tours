@@ -90,18 +90,20 @@ const HajjPreRegistrationCard = () => (
 
 
 const KeyHighlights = () => (
-     <div className="text-center pt-8 text-gray-800">
-        <h3 className="text-2xl md:text-3xl font-display font-bold mb-6">Key Highlights of Champion Travels and Tours</h3>
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            <div className="flex flex-col items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
-                <p className="text-2xl font-bold">20000+</p>
-                <p className="text-gray-600">Umrah packages last 10 year</p>
-            </div>
-            <div className="flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
-                <p className="text-2xl font-bold">15000+</p>
-                <p className="text-gray-600">Hajj Pilgrimage</p>
+    <div className="bg-light-bg rounded-xl p-6 md:p-10 mt-16 shadow-inner">
+        <div className="text-center">
+            <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-10">Key Highlights of Champion Travels and Tours</h3>
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                <div className="flex flex-col items-center text-center max-w-xs">
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
+                    <p className="text-4xl font-bold text-primary">20,000+</p>
+                    <p className="text-muted-text mt-1">Umrah Packages Provided in the Last 10 Years</p>
+                </div>
+                <div className="flex flex-col items-center text-center max-w-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
+                    <p className="text-4xl font-bold text-primary">15,000+</p>
+                    <p className="text-muted-text mt-1">Hajj Pilgrims Successfully Served</p>
+                </div>
             </div>
         </div>
     </div>
@@ -399,7 +401,6 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
                     </div>
                 )}
             </div>
-            <KeyHighlights />
         </div>
 
         {/* --- Umrah Packages Section --- */}
@@ -459,6 +460,9 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
              )}
           </div>
         </div>
+
+        {/* --- Key Highlights Section --- */}
+        <KeyHighlights />
 
         {/* --- Gallery Section --- */}
         <Gallery />

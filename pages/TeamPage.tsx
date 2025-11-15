@@ -11,37 +11,13 @@ const DecorativeLine: React.FC = () => (
 );
 
 const chairman = {
-  name: 'abdul mannan',
-  role: 'Business Management',
-  imageUrl: 'https://i.postimg.cc/pT3F20Y7/abdul-mannan.png',
-  title: 'Chairman',
+  name: 'Abdul Mannan',
+  role: 'C.E.O & Chairman',
+  imageUrl: 'https://i.postimg.cc/rwn0QTMc/image.png',
+  title: '',
 };
 
-const distinguishedEmployees = [
-  {
-    name: 'MD SOFIKUL ISLAM',
-    role: 'MANAGER',
-    imageUrl: 'https://i.postimg.cc/q79f3M8F/md-sofikul-islam.png',
-  },
-  {
-    name: 'MD AMIN UDDIN',
-    role: 'IT EXECUTIVE',
-    imageUrl: 'https://i.postimg.cc/7Z0CgVj9/md-amin-uddin.png',
-  },
-  {
-    name: 'SOJOL AMIN SHAON',
-    role: 'ACCOUNTS',
-    imageUrl: 'https://i.postimg.cc/C1081bM3/sojol-amin-shaon.png',
-  },
-];
-
 const talentedEmployees = [
-  {
-    name: 'FARDOUSI BEGUM',
-    role: 'C.E.O',
-    imageUrl: 'https://i.postimg.cc/PqYwFTtV/fardousi-begum.png',
-  },
-  ...distinguishedEmployees,
   {
     name: 'MD TAMIMUL ISLAM SUJON',
     role: 'ACCOUNTS',
@@ -90,25 +66,9 @@ const TeamPage: React.FC = () => {
         <section className="py-20 bg-dark-bg">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 
-                {/* Distinguished Board and Employees Preview */}
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">Our distinguished Board of Directors and Employee</h2>
-                    <DecorativeLine />
-                </div>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
-                    {distinguishedEmployees.map((member) => (
-                        <TeamMemberCard key={member.name} {...member} />
-                    ))}
-                </div>
-                 <div className="text-center mb-20">
-                    <a href="#talented-employee" className="bg-secondary text-dark-bg font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-all duration-300 inline-block">
-                        View All Members
-                    </a>
-                </div>
-
                 {/* Honourable Chairman */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">Our Honourable Chairman</h2>
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">Our Honourable C.E.O & Chairman</h2>
                     <DecorativeLine />
                 </div>
                 <div className="max-w-xs mx-auto mb-20">
