@@ -25,13 +25,6 @@ const umrahPackages = [
     { name: 'VIP Umrah Package', price: '270000', date: 'Sept/Oct (10 Days)', hotelMakkah: 'HILTON/MAKKA TOWER/ ELAF KINDA DISTANCE - 0 MITRE (5 Star)', hotelMadinah: 'MARJAN GOLDEN DISTANCE-100-200 MITRE (3 Star)', flightsUp: 'BG/SV', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 15000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/R01mH74z/aj.webp', buttonText: 'Book Super Saver Now' },
 ];
 
-// --- Type definition for enhanced package ---
-type EnhancedUmrahPackage = (typeof umrahPackages)[0] & {
-  flightType: string;
-  hotelProximity: string;
-};
-
-
 // --- Hajj Card Detail Row Component ---
 const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
     <div className="flex items-start space-x-3 py-2 border-b border-gray-200 last:border-b-0">
@@ -287,8 +280,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         const match = pkg.duration.match(/\d+/);
         return match ? parseInt(match[0], 10) : 0;
     };
-    
-    const parseUmrahDuration = (pkg: EnhancedUmrahPackage) => {
+    const parseUmrahDuration = (pkg: typeof umrahPackages[0]) => {
         const match = pkg.date.match(/\((\d+)\s*Days\)/);
         return match ? parseInt(match[1], 10) : 0;
     };
@@ -307,7 +299,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
     } = usePackageFilters(hajjPackages, parseHajjDuration);
     
     // --- Enhance Umrah packages with filterable properties ---
-    const enhancedUmrahPackages: EnhancedUmrahPackage[] = useMemo(() => {
+    const enhancedUmrahPackages = useMemo(() => {
         return umrahPackages.map(pkg => {
             const flightType = (pkg.flightsUp.toLowerCase().includes('transit') || pkg.flightsDown.toLowerCase().includes('transit')) ? 'Transit' : 'Direct';
             const hotelInfo = `${pkg.hotelMakkah} ${pkg.hotelMadinah}`.toLowerCase();
@@ -329,7 +321,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         selectedTypes: umrahSelectedTypes, handleTypeChange: handleUmrahTypeChange,
         resetFilters: resetUmrahFiltersFromHook,
         filteredPackages: filteredUmrahPackagesFromHook
-    } = usePackageFilters<EnhancedUmrahPackage>(enhancedUmrahPackages, parseUmrahDuration);
+    } = usePackageFilters(enhancedUmrahPackages, parseUmrahDuration);
 
     const [flightType, setFlightType] = useState('any');
     const [hotelProximity, setHotelProximity] = useState('any');
