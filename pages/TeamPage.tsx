@@ -48,6 +48,11 @@ const talentedEmployees = [
     role: 'New Joined',
     imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png',
   },
+  {
+    name: 'MD Kawsar Ahmed',
+    role: 'Ticketing',
+    imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop',
+  },
 ];
 
 const TeamPage: React.FC = () => {
