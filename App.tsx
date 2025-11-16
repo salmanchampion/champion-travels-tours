@@ -11,14 +11,17 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
-import { DataProvider } from './contexts/DataContext';
+import { DataProvider, DataContext } from './contexts/DataContext';
 import WhyUsPage from './pages/WhyUsPage';
+import UmrahGuidePage from './pages/UmrahGuidePage';
+import { SeoMetadata } from './data';
 
 
 const AppContent: React.FC = () => {
   const [page, setPage] = useState('');
   const [contactSubject, setContactSubject] = useState('');
   const { isAuthenticated } = useContext(AuthContext);
+  const { appData } = useContext(DataContext);
   const keySequenceRef = useRef('');
   const secretCode = '045';
 
@@ -72,6 +75,50 @@ const AppContent: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const getSeoData = (): SeoMetadata | undefined => {
+      const pages = appData.pages;
+      switch (page) {
+        case '#services': return pages.services.seo;
+        case '#packages': return pages.packages.seo;
+        case '#visa-processing': return pages.visaProcessing.seo;
+        case '#why-us': return pages.whyChooseUs.seo;
+        case '#umrah-guide-in-bangla': return pages.umrahGuide.seo;
+        case '#team': return pages.team.seo;
+        case '#testimonials': return pages.testimonials.seo;
+        case '#contact':
+        case '#book-now': return pages.contact.seo;
+        case '#home':
+        default:
+          return pages.home.seo;
+      }
+    };
+
+    const seo = getSeoData();
+
+    if (seo) {
+      document.title = seo.title;
+      
+      // Update or create meta description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.setAttribute('name', 'description');
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.setAttribute('content', seo.description);
+
+      // Update or create meta keywords
+      let metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (!metaKeywords) {
+        metaKeywords = document.createElement('meta');
+        metaKeywords.setAttribute('name', 'keywords');
+        document.head.appendChild(metaKeywords);
+      }
+      metaKeywords.setAttribute('content', seo.keywords);
+    }
+  }, [page, appData]);
+
   const renderPage = () => {
     let currentPage = page;
     // Unify #book-now to #contact for rendering
@@ -94,6 +141,8 @@ const AppContent: React.FC = () => {
         return <VisaProcessingPage />;
       case '#why-us':
         return <WhyUsPage />;
+      case '#umrah-guide-in-bangla':
+        return <UmrahGuidePage />;
       case '#team':
         return <TeamPage />;
       case '#testimonials':

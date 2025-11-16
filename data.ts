@@ -82,6 +82,58 @@ export interface ContactInfo {
     value: string;
 }
 
+// --- New Interfaces for Umrah Guide ---
+export interface UmrahGuideStep {
+  title: string;
+  description: string;
+  points: string[];
+  arabicText?: string;
+  arabicMeaning?: string;
+}
+
+export interface UmrahGuideDoDontItem {
+  title: string;
+  items: string[];
+}
+
+export interface UmrahGuideFaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface SeoMetadata {
+  title: string;
+  description: string;
+  keywords: string;
+}
+
+export interface UmrahGuideData {
+  seo: SeoMetadata;
+  pageBanner: {
+    title: string;
+    subtitle: string;
+  };
+  stepsTitle: string;
+  stepsIntro: string;
+  steps: UmrahGuideStep[];
+  dosAndDonts: {
+    title: string;
+    intro: string;
+    dos: UmrahGuideDoDontItem;
+    donts: UmrahGuideDoDontItem;
+    images: string[];
+    note: string;
+  };
+  faq: {
+    title: string;
+    items: UmrahGuideFaqItem[];
+  };
+  cta: {
+    title: string;
+    buttonText: string;
+  };
+}
+
 export interface AppData {
     site: {
         logoUrl: string;
@@ -116,6 +168,7 @@ export interface AppData {
     umrahPackages: UmrahPackage[];
     pages: {
         home: {
+            seo: SeoMetadata;
             hero: {
                 title: string;
                 licenseInfo: string;
@@ -138,10 +191,12 @@ export interface AppData {
             }
         };
         services: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             list: Service[];
         };
         packages: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             hajjPreRegistration: {
                 image: string;
@@ -170,6 +225,7 @@ export interface AppData {
             }
         };
         visaProcessing: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             offerTitle: string;
             offerList: VisaFeature[];
@@ -185,6 +241,7 @@ export interface AppData {
             googleAppsScriptUrl: string;
         };
         team: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             chairmanTitle: string;
             chairman: TeamMember;
@@ -193,10 +250,12 @@ export interface AppData {
             talentedEmployees: TeamMember[];
         };
         testimonials: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             list: Testimonial[];
         };
         contact: {
+            seo: SeoMetadata;
             pageBanner: { title: string; subtitle: string; };
             infoTitle: string;
             infoSubtitle: string;
@@ -209,6 +268,7 @@ export interface AppData {
             googleAppsScriptUrl: string;
         };
         whyChooseUs: {
+            seo: SeoMetadata;
             backgroundImage: string,
             guides: {
                 mainImage: string;
@@ -241,7 +301,8 @@ export interface AppData {
                 buttonText: string;
             },
             footerImage: string;
-        }
+        },
+        umrahGuide: UmrahGuideData;
     };
 }
 
@@ -262,6 +323,7 @@ export const defaultData: AppData = {
                 { href: '#visa-processing', label: 'Visa Processing' },
               ]
             },
+            { href: '#umrah-guide-in-bangla', label: 'Umrah Guide (Bangla)' },
             { href: '#why-us', label: 'Why Us' },
             { href: '#team', label: 'Our Team' },
             { href: '#testimonials', label: 'Testimonials' },
@@ -314,6 +376,11 @@ export const defaultData: AppData = {
     ],
     pages: {
         home: {
+            seo: {
+                title: 'Champion Travels & Tours | Hajj, Umrah & Air Ticketing in Bangladesh',
+                description: 'Your trusted partner for Hajj, Umrah, Visa Processing, and worldwide travel in Bangladesh. We are committed to providing exceptional service and unforgettable spiritual journeys.',
+                keywords: 'Hajj package Bangladesh, Umrah package Bangladesh, Champion Travels, Air Ticket Dhaka, Visa processing Bangladesh'
+            },
              hero: {
                 title: 'Champion Travels & Tours',
                 licenseInfo: 'Bangladesh Govt. Approved hajj License No.-1432 & Umrah License no.-515',
@@ -340,6 +407,11 @@ export const defaultData: AppData = {
             }
         },
         services: {
+            seo: {
+                title: 'Our Services | Champion Travels & Tours',
+                description: 'Explore a complete range of travel solutions including Hajj, Umrah, Visa Processing, Air Ticketing, Hotel Booking, and curated Tour Packages.',
+                keywords: 'Travel services, Hajj, Umrah, Visa, Air ticket, Hotel booking, Tour packages'
+            },
             pageBanner: { 
                 title: 'Our Services',
                 subtitle: 'We offer a complete range of travel solutions with a commitment to quality and customer satisfaction.'
@@ -426,6 +498,11 @@ export const defaultData: AppData = {
             ]
         },
         packages: {
+            seo: {
+                title: 'Hajj & Umrah Packages | Champion Travels & Tours',
+                description: 'Find the best Hajj and Umrah packages from Bangladesh. We offer a range of economy, executive, and VIP packages to suit your needs for a blessed journey.',
+                keywords: 'Hajj packages 2026, Umrah packages 2025, Economy Hajj, VIP Umrah, Hajj pre-registration'
+            },
             pageBanner: { 
                 title: 'Hajj & Umrah Packages', 
                 subtitle: 'Explore our diverse range of Hajj and Umrah packages. Each is thoughtfully crafted to provide a spiritually rewarding, comfortable, and seamless pilgrimage experience.'
@@ -466,6 +543,11 @@ export const defaultData: AppData = {
             }
         },
         team: {
+            seo: {
+                title: 'Our Team | Champion Travels & Tours',
+                description: 'Meet the dedicated and experienced team at Champion Travels & Tours. Our professionals are committed to making your journey seamless and memorable.',
+                keywords: 'Travel agency team, Champion Travels team, travel experts Bangladesh'
+            },
             pageBanner: {
                 title: 'Meet Our Team',
                 subtitle: 'The dedicated professionals behind our success. We are committed to providing you with the best travel experiences.'
@@ -495,6 +577,11 @@ export const defaultData: AppData = {
             ]
         },
         testimonials: {
+            seo: {
+                title: 'Client Testimonials | Champion Travels & Tours',
+                description: 'Read reviews and testimonials from our satisfied clients. See why travelers trust us for their Hajj, Umrah, and other travel needs.',
+                keywords: 'Travel reviews, client testimonials, Hajj feedback, Umrah feedback'
+            },
             pageBanner: {
                 title: 'Words From Our Clients',
                 subtitle: 'We are proud to have served thousands of satisfied pilgrims and travelers.'
@@ -521,6 +608,11 @@ export const defaultData: AppData = {
             ]
         },
         visaProcessing: {
+            seo: {
+                title: 'Visa Processing Services | Champion Travels & Tours',
+                description: 'Reliable and efficient visa processing for tourist, business, student, and medical purposes. Let our experts handle your application with a high success rate.',
+                keywords: 'Visa processing Dhaka, tourist visa, business visa, student visa, medical visa'
+            },
             pageBanner: { 
                 title: 'Visa Processing Services',
                 subtitle: 'Navigating the complexities of visa applications can be daunting. Our dedicated team is here to provide you with seamless, reliable, and efficient visa processing services for various countries.'
@@ -554,6 +646,11 @@ export const defaultData: AppData = {
             googleAppsScriptUrl: '',
         },
         contact: {
+            seo: {
+                title: 'Contact Us | Champion Travels & Tours',
+                description: 'Get in touch with Champion Travels & Tours. Visit our office in Dhaka, call us, or send an email for your travel inquiries. We are here to help you.',
+                keywords: 'Contact Champion Travels, travel agency Dhaka, travel agency address'
+            },
             pageBanner: {
                 title: 'Get In Touch',
                 subtitle: 'Have questions or ready to book your next journey? Contact us today!'
@@ -585,6 +682,11 @@ export const defaultData: AppData = {
             googleAppsScriptUrl: '',
         },
         whyChooseUs: {
+            seo: {
+                title: 'Why Choose Us | Champion Travels & Tours',
+                description: 'Learn why Champion Travels & Tours is the right choice for your spiritual journey. With expert guides, a dedicated team, and comprehensive services, we ensure a memorable experience.',
+                keywords: 'Why Champion Travels, best travel agency, expert Umrah guides, trusted Hajj services'
+            },
             backgroundImage: "https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png",
             guides: {
                 mainImage: 'https://i.postimg.cc/FHFRwHxn/gg.jpg',
@@ -623,6 +725,112 @@ export const defaultData: AppData = {
                 buttonText: 'Request for Umrah Booking Online'
             },
             footerImage: 'https://i.postimg.cc/MHfn961Y/ds.jpg',
+        },
+        umrahGuide: {
+            seo: {
+                title: 'Umrah Guide in Bangla (ওমরাহ গাইডলাইন) | Champion Travels & Tours',
+                description: 'A comprehensive step-by-step Umrah guide in Bengali. Learn about Ihram, Tawaf, Sa\'i, and the do\'s and don\'ts of Umrah for a blessed pilgrimage.',
+                keywords: 'Umrah guide Bangla, how to perform Umrah, Omrah korar niyom, ওমরাহ করার নিয়ম, ইহরাম, তাওয়াফ, সাঈ'
+            },
+            pageBanner: {
+                title: 'ওমরাহ গাইডলাইন',
+                subtitle: 'আপনার ওমরাহ যাত্রাকে সহজ ও অর্থবহ করার জন্য বিস্তারিত নির্দেশিকা।'
+            },
+            stepsTitle: 'স্টেপ বাই স্টেপ ওমরাহ গাইডলাইন',
+            stepsIntro: 'ওমরাহ পালনের মাধ্যমে মুমিনরা তাদের জীবনের গুরুত্বপূর্ণ এক অধ্যায় সম্পন্ন করেন। ওমরাহ পালন করার জন্য নির্দিষ্ট কিছু প্রক্রিয়া আছে। এখানে ধারাবাহিকভাবে সে প্রক্রিয়াগুলো উল্লেখ করা হলো:',
+            steps: [
+                {
+                    title: '০১. ইহরাম (ফরজ)',
+                    description: 'ওমরাহ পালন করার জন্য ইহরাম অপরিহার্য। ইহরামের পোশাক পরার জন্য কিছু ধাপ অনুসরণ করতে হয়:',
+                    points: [
+                        'পরিষ্কার-পরিচ্ছন্ন হয়ে গোসল বা অজু করা',
+                        'ইহরামের নির্দিষ্ট পোশাক পরা',
+                        'মিকাতের আগে বা মিকাতে ইহরামের কাপড় পরে নেওয়া',
+                        'ইহরামের নিয়তে দুই রাকাত নামাজ আদায় করা',
+                        'ওমরাহর নিয়ত করা'
+                    ],
+                    arabicText: 'লাব্বাইক! আল্লাহুম্মা লাব্বাইক, লাব্বাইকা লা শারিকা লাকা লাব্বাইক, ইন্নাল হামদা ওয়ান নি’মাতা লাকা ওয়াল মুলক, লা শারিকা লাক।',
+                    arabicMeaning: 'অর্থ: আমি হাজির, হে আল্লাহ! আমি হাজির, তোমার কোন অংশীদার নেই, আমি হাজির, নিশ্চয়ই সমস্ত প্রশংসা এবং নেয়ামত তোমার এবং রাজত্ব তোমারই, তোমার কোন অংশীদার নেই।'
+                },
+                {
+                    title: '০২. তাওয়াফ (ফরজ)',
+                    description: 'ওমরাহ পালনের জন্য তাওয়াফ করা আবশ্যক। তাওয়াফ করার প্রস্তুতি হিসেবে যে কাজগুলো করতে হয়:',
+                    points: [
+                        'তাওয়াফের নিয়ত করা',
+                        'ইহরামের চাদর সঠিকভাবে ডান কাঁধের নিচে দিয়ে বাম কাঁধের ওপর রাখা',
+                        'অজু করা',
+                        'কাবাঘরকে বামদিকে রেখে তাওয়াফ শুরু করা',
+                        'হাজরে আসওয়াদকে চুম্বন করা, স্পর্শ করা বা ইশারা করা',
+                        'সাতবার কাবা প্রদক্ষিণ করা'
+                    ]
+                },
+                {
+                    title: '০৩. সাঈ (ওয়াজিব)',
+                    description: 'সাঈ করার পদ্ধতি হলো:',
+                    points: [
+                        'সাফা পাহাড়ে কাবা শরিফের দিকে মুখ করে দাঁড়ানো',
+                        'দুই হাত তুলে দোয়া করা',
+                        'মারওয়া পাহাড়ের কাছে পৌঁছালে, সাফা পাহাড়ের দিকে মুখ করে দোয়ার মতো হাত তুলে দোয়া করা',
+                        'উভয় পাহাড়ের দিকে মুখ করে দোয়ার মতো হাত তুলে তাকবির বলা',
+                        'এইভাবে দুই পাহাড়ের মাঝে সাতবার দৌড়ানো',
+                        'সাঈ শেষে দোয়া করা'
+                    ]
+                },
+                {
+                    title: '০৪. চুল মুণ্ডন করা (ওয়াজিব)',
+                    description: 'চুল মুণ্ডন করা (ওয়াজিব)। ওমরাহ পালনে এটি অবশ্যই করণীয়। পুরুষের ক্ষেত্রে রাসূলুল্লাহ (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম)-এর আদর্শ অনুসারে সম্পূর্ণ মাথা মুণ্ডন করা। তবে কেউ চাইলে চুল ছোটও করতে পারে। মহিলাদের ক্ষেত্রে চুল এক ইঞ্চি পরিমাণ কেটে ফেলা।',
+                    // FIX: Added missing 'points' property to satisfy the UmrahGuideStep interface.
+                    points: []
+                }
+            ],
+            dosAndDonts: {
+                title: 'ওমরাহ পালনে করণীয় ও বর্জনীয়',
+                intro: 'ওমরাহ একটি গুরুত্বপূর্ণ ইবাদত। এটি পালনের সময় কিছু কাজকে গুরুত্ব দিতে হয় এবং এবং কিছু কাজ বর্জন করতে হয়। এখানে ওমরাহ পালনের করণীয় ও বর্জনীয়গুলো তুলে ধরা হলো:',
+                dos: {
+                    title: 'ওমরাহ পালনে করণীয়:',
+                    items: [
+                        'নফল তাওয়াফ বেশি করা',
+                        'অধিক পরিমাণ জমজমের পানি পান করা',
+                        'হাতিমে সালাত আদায় করা',
+                        'মাকামে ইবরাহিমে সালাত আদায় করা',
+                        'হাজরে আসওয়াদ চুম্বন খাওয়া',
+                        'কাবা ঘর ধরে দোয়া করা',
+                        'মুলতাযামে ধরে দোয়া করা'
+                    ]
+                },
+                donts: {
+                    title: 'ওমরাহ পালনে বর্জনীয়:',
+                    items: [
+                        'সহবাস করা',
+                        'দাড়ি বা গোঁফ কাটা ও মুণ্ডন করা',
+                        'চুল বা নখ কাটা',
+                        'লোম তোলা',
+                        'সুগন্ধি বা পারফিউম ব্যবহার করা',
+                        'ঝগড়া করা',
+                        'গালাগালি করা',
+                        'পশু শিকার করা',
+                        'খারাপ কথা বলা'
+                    ]
+                },
+                images: [
+                    'https://i.postimg.cc/Y2z4HFFK/ah.jpg',
+                    'https://i.postimg.cc/FHFRwHxn/gg.jpg'
+                ],
+                note: 'নোট: ইহরাম অবস্থায় এ কাজগুলো করা যাবে না। ইহরাম থেকে মুক্ত হওয়ার পর ঝগড়া, গালাগালি ও খারাপ কথা বলা ছাড়া উপরের সব কাজ করা যাবে।'
+            },
+            faq: {
+                title: 'সচরাচর জিজ্ঞাসিত প্রশ্নাবলী',
+                items: [
+                    { question: 'ওমরাহ পালনের মূল ধাপগুলো কী কী?', answer: 'ওমরাহ পালনের মূল ধাপগুলো হলো: ইহরাম বাঁধা, কাবা শরিফ তাওয়াফ করা, সাফা ও মারওয়া পাহাড়ের মাঝে সাঈ করা এবং শেষে চুল কাটা বা মুণ্ডন করা।' },
+                    { question: 'ওমরাহ পালনের সময় কী কী বর্জনীয়?', answer: 'ইহরাম অবস্থায় কিছু কাজ নিষিদ্ধ, যেমন: সুগন্ধি ব্যবহার, চুল বা নখ কাটা, কোনো প্রাণী শিকার করা, ঝগড়া-বিবাদ করা এবং স্বামী-স্ত্রীর বিশেষ সম্পর্ক স্থাপন করা।' },
+                    { question: 'ইহরাম অবস্থায় সুগন্ধি ব্যবহার করা নিষিদ্ধ?', answer: 'হ্যাঁ, ইহরাম অবস্থায় যেকোনো ধরনের সুগন্ধি, পারফিউম বা সেন্ট ব্যবহার করা সম্পূর্ণরূপে নিষিদ্ধ।' },
+                    { question: 'মহিলারা কি একা ওমরাহ করতে পারেন?', answer: 'ইসলামিক আইন অনুযায়ী, মহিলাদের জন্য মাহরাম (স্বামী বা যার সাথে বিবাহ নিষিদ্ধ) ছাড়া হজ বা ওমরাহর জন্য সফর করা অনুমোদিত নয়। তবে বিভিন্ন দেশ ও মাজহাবের नियমে ভিন্নতা থাকতে পারে।' },
+                ]
+            },
+            cta: {
+                title: 'Apply for an Umrah visa and experience the hassle-free journey to the city of Makkah and Madina',
+                buttonText: 'Request for Umrah Booking Online'
+            }
         }
     }
 };

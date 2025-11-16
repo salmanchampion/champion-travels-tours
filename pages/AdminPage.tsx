@@ -1,7 +1,7 @@
 import React, { useState, useContext, ChangeEvent } from 'react';
 import PageBanner from '../components/PageBanner';
 import { DataContext } from '../contexts/DataContext';
-import { AppData, HajjPackage, UmrahPackage, TeamMember, GalleryImage, ContactInfo, Service, Testimonial, NavLink } from '../data';
+import { AppData, HajjPackage, UmrahPackage, TeamMember, GalleryImage, ContactInfo, Service, Testimonial, NavLink, UmrahGuideStep, UmrahGuideFaqItem } from '../data';
 
 // Helper component for form fields
 // FIX: Converted to React.FC with an interface to correctly handle `key` and `className` props.
@@ -18,14 +18,14 @@ interface AdminInputProps {
 const AdminInput: React.FC<AdminInputProps> = ({ label, name, value, onChange, placeholder = '', type = 'text', className }) => (
     <div className={className}>
         <label htmlFor={name} className="block text-sm font-medium text-muted-text mb-1">{label}</label>
-        <input type={type} id={name} name={name} value={value} onChange={onChange} placeholder={placeholder} className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary" />
+        <input type={type} id={name} name={name} value={value || ''} onChange={onChange} placeholder={placeholder} className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary" />
     </div>
 );
 
 const AdminTextarea = ({ label, name, value, onChange, rows = 3 }: { label: string, name: string, value: string, onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void, rows?: number }) => (
     <div>
         <label htmlFor={name} className="block text-sm font-medium text-muted-text mb-1">{label}</label>
-        <textarea id={name} name={name} value={value} onChange={onChange} rows={rows} className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary" />
+        <textarea id={name} name={name} value={value || ''} onChange={onChange} rows={rows} className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary" />
     </div>
 );
 
@@ -36,9 +36,105 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
     </div>
 );
 
+const SeoEditor: React.FC<{ pageName: string; seoPath: string; localData: AppData; onChange: (path: string, value: any) => void; }> = ({ pageName, seoPath, localData, onChange }) => {
+    const getSeoData = () => {
+        const keys = seoPath.split('.');
+        let data: any = localData;
+        for (const key of keys) {
+            if (data[key] === undefined) return { title: '', description: '', keywords: '' };
+            data = data[key];
+        }
+        return data;
+    }
+    const seoData = getSeoData();
+
+    return (
+        <div className="mt-6 p-4 border border-gray-700 rounded-lg">
+            <h4 className="font-bold text-xl mb-2 text-secondary">{pageName} Page</h4>
+            <AdminInput label="Meta Title" name={`${seoPath}.title`} value={seoData.title} onChange={e => onChange(e.target.name, e.target.value)} />
+            <div className="mt-2">
+            <AdminTextarea label="Meta Description" name={`${seoPath}.description`} value={seoData.description} onChange={e => onChange(e.target.name, e.target.value)} />
+            </div>
+            <div className="mt-2">
+            <AdminInput label="Meta Keywords (comma-separated)" name={`${seoPath}.keywords`} value={seoData.keywords} onChange={e => onChange(e.target.name, e.target.value)} />
+            </div>
+        </div>
+    );
+};
+
+// --- Refactored Package Editor Component ---
+const packageFieldLabels: { [key: string]: string } = {
+    name: 'Name',
+    price: 'Price',
+    duration: 'Duration',
+    date: 'Date/Duration',
+    hotelMakkah: 'Hotel Makkah',
+    hotelMadinah: 'Hotel Madinah',
+    flightsUp: 'Flights Up',
+    flightsDown: 'Flights Down',
+    food: 'Food',
+    special: 'Special Services',
+    note: 'Note',
+    image: 'Image URL',
+    buttonText: 'Button Text',
+};
+
+const PackageEditor: React.FC<{
+    pkg: HajjPackage | UmrahPackage;
+    index: number;
+    packageType: 'hajj' | 'umrah';
+    onChange: (path: string, index: number, field: string, value: any) => void;
+    onRemove: (path: string, index: number) => void;
+}> = ({ pkg, index, packageType, onChange, onRemove }) => {
+    const path = packageType === 'hajj' ? 'hajjPackages' : 'umrahPackages';
+
+    return (
+        <div className="mb-6 p-4 border border-gray-700 rounded-md">
+            <div className="flex justify-between items-center">
+                <h4 className="font-bold text-xl mb-2 text-secondary">{pkg.name || `Package ${index + 1}`}</h4>
+                <button onClick={() => onRemove(path, index)} className="bg-red-600 text-white px-3 py-1 rounded">Remove</button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Object.keys(pkg).map(key => {
+                    const label = packageFieldLabels[key] || key;
+                    const value = (pkg as any)[key];
+                    
+                    if (key === 'note') {
+                        return (
+                           <div key={key} className="md:col-span-2 lg:col-span-3">
+                                <AdminTextarea
+                                    label={label}
+                                    name={key}
+                                    value={value}
+                                    onChange={e => onChange(path, index, e.target.name, e.target.value)}
+                                />
+                           </div>
+                        );
+                    }
+                    
+                    if (key in packageFieldLabels) { // Only render fields we have labels for
+                        return (
+                            <AdminInput
+                                key={key}
+                                label={label}
+                                name={key}
+                                value={value}
+                                onChange={e => onChange(path, index, e.target.name, e.target.value)}
+                            />
+                        );
+                    }
+                    return null;
+                })}
+            </div>
+        </div>
+    );
+};
+
+
 const AdminPage: React.FC = () => {
     const { appData, updateAppData, resetAppData } = useContext(DataContext);
     const [localData, setLocalData] = useState<AppData>(JSON.parse(JSON.stringify(appData))); // Deep copy
+    const [activePackageTab, setActivePackageTab] = useState<'hajj' | 'umrah'>('hajj');
 
     // Generic handler for nested state
     const handleNestedChange = (path: string, value: any) => {
@@ -48,6 +144,10 @@ const AdminPage: React.FC = () => {
             let currentLevel = tempState as any;
 
             for (let i = 0; i < keys.length - 1; i++) {
+                // Create nested objects if they don't exist
+                if (currentLevel[keys[i]] === undefined) {
+                    currentLevel[keys[i]] = {};
+                }
                 currentLevel = currentLevel[keys[i]];
             }
 
@@ -93,6 +193,19 @@ const AdminPage: React.FC = () => {
                 subtitle="Manage your website content here. Click 'Save All Changes' at the bottom to apply your updates."
             />
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+                <Section title="SEO & Metadata">
+                    <p className="text-muted-text mb-4">Manage the title, description, and keywords for each page to improve your website's search engine ranking.</p>
+                    <SeoEditor pageName="Home" seoPath="pages.home.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Services" seoPath="pages.services.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Packages" seoPath="pages.packages.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Visa Processing" seoPath="pages.visaProcessing.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Why Us" seoPath="pages.whyChooseUs.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Umrah Guide (Bangla)" seoPath="pages.umrahGuide.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Our Team" seoPath="pages.team.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Testimonials" seoPath="pages.testimonials.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Contact" seoPath="pages.contact.seo" localData={localData} onChange={handleNestedChange} />
+                </Section>
                 
                 <Section title="Site-wide & Header">
                     <AdminInput label="Website Logo URL" name="site.logoUrl" value={localData.site.logoUrl} onChange={(e) => handleNestedChange(e.target.name, e.target.value)} />
@@ -125,6 +238,56 @@ const AdminPage: React.FC = () => {
                      </div>
                 </Section>
 
+                <Section title="Umrah Guide Page">
+                    <h4 className="font-bold text-xl mb-2 text-secondary">Page Banner</h4>
+                    <AdminInput label="Title" name="pages.umrahGuide.pageBanner.title" value={localData.pages.umrahGuide.pageBanner.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Subtitle" name="pages.umrahGuide.pageBanner.subtitle" value={localData.pages.umrahGuide.pageBanner.subtitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">Steps Section</h4>
+                    <AdminInput label="Section Title" name="pages.umrahGuide.stepsTitle" value={localData.pages.umrahGuide.stepsTitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Section Intro" name="pages.umrahGuide.stepsIntro" value={localData.pages.umrahGuide.stepsIntro} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    
+                    {localData.pages.umrahGuide.steps.map((step, index) => (
+                        <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.umrahGuide.steps', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove Step</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">Step {index + 1}</h5>
+                             <AdminInput label="Title" name="title" value={step.title} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Description" name="description" value={step.description} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Points (one per line)" name="points" value={step.points.join('\n')} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value.split('\n'))} rows={5} />
+                             <AdminInput label="Arabic Text (Optional)" name="arabicText" value={step.arabicText} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Arabic Meaning (Optional)" name="arabicMeaning" value={step.arabicMeaning} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
+                        </div>
+                    ))}
+                    <button onClick={() => addListItem('pages.umrahGuide.steps', { title: 'New Step', description: '', points: [] })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Step</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">Do's & Don'ts Section</h4>
+                    <AdminInput label="Section Title" name="pages.umrahGuide.dosAndDonts.title" value={localData.pages.umrahGuide.dosAndDonts.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Section Intro" name="pages.umrahGuide.dosAndDonts.intro" value={localData.pages.umrahGuide.dosAndDonts.intro} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput label="Image 1 URL" name="pages.umrahGuide.dosAndDonts.images.0" value={localData.pages.umrahGuide.dosAndDonts.images[0]} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput label="Image 2 URL" name="pages.umrahGuide.dosAndDonts.images.1" value={localData.pages.umrahGuide.dosAndDonts.images[1]} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput label="Do's Title" name="pages.umrahGuide.dosAndDonts.dos.title" value={localData.pages.umrahGuide.dosAndDonts.dos.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Do's Items (one per line)" name="pages.umrahGuide.dosAndDonts.dos.items" value={localData.pages.umrahGuide.dosAndDonts.dos.items.join('\n')} onChange={e => handleNestedChange(e.target.name, e.target.value.split('\n'))} rows={7} />
+                    <AdminInput label="Don'ts Title" name="pages.umrahGuide.dosAndDonts.donts.title" value={localData.pages.umrahGuide.dosAndDonts.donts.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Don'ts Items (one per line)" name="pages.umrahGuide.dosAndDonts.donts.items" value={localData.pages.umrahGuide.dosAndDonts.donts.items.join('\n')} onChange={e => handleNestedChange(e.target.name, e.target.value.split('\n'))} rows={7} />
+                    <AdminTextarea label="Note" name="pages.umrahGuide.dosAndDonts.note" value={localData.pages.umrahGuide.dosAndDonts.note} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">FAQ Section</h4>
+                     <AdminInput label="Section Title" name="pages.umrahGuide.faq.title" value={localData.pages.umrahGuide.faq.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                     {localData.pages.umrahGuide.faq.items.map((item, index) => (
+                         <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.umrahGuide.faq.items', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove FAQ</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">FAQ {index + 1}</h5>
+                             <AdminInput label="Question" name="question" value={item.question} onChange={e => handleListChange('pages.umrahGuide.faq.items', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Answer" name="answer" value={item.answer} onChange={e => handleListChange('pages.umrahGuide.faq.items', index, e.target.name, e.target.value)} />
+                         </div>
+                     ))}
+                     <button onClick={() => addListItem('pages.umrahGuide.faq.items', { question: 'New Question?', answer: 'New Answer.' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add FAQ</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">CTA Section</h4>
+                    <AdminTextarea label="CTA Title" name="pages.umrahGuide.cta.title" value={localData.pages.umrahGuide.cta.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput label="Button Text" name="pages.umrahGuide.cta.buttonText" value={localData.pages.umrahGuide.cta.buttonText} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                </Section>
+
                 <Section title="Services">
                     {localData.pages.services.list.map((service, index) => (
                         <div key={index} className="mb-4 p-3 border border-gray-700 rounded-md">
@@ -145,60 +308,113 @@ const AdminPage: React.FC = () => {
                     <button onClick={() => addListItem('pages.services.list', { icon: 'New', title: 'New Service', description: '', details: [] })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Service</button>
                 </Section>
                 
-                <Section title="Hajj Packages">
-                    {localData.hajjPackages.map((pkg, index) => (
-                        <div key={index} className="mb-6 p-4 border border-gray-700 rounded-md">
-                            <div className="flex justify-between items-center">
-                                <h4 className="font-bold text-xl mb-2 text-secondary">{pkg.name || `Package ${index+1}`}</h4>
-                                <button onClick={() => removeListItem('hajjPackages', index)} className="bg-red-600 text-white px-3 py-1 rounded">Remove</button>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                               <AdminInput label="Name" name="name" value={pkg.name} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Price" name="price" value={pkg.price} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Duration" name="duration" value={pkg.duration} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Hotel Makkah" name="hotelMakkah" value={pkg.hotelMakkah} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Hotel Madinah" name="hotelMadinah" value={pkg.hotelMadinah} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Flights Up" name="flightsUp" value={pkg.flightsUp} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Flights Down" name="flightsDown" value={pkg.flightsDown} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Food" name="food" value={pkg.food} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Special Services" name="special" value={pkg.special} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Image URL" name="image" value={pkg.image} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               <div className="md:col-span-2 lg:col-span-3">
-                                <AdminTextarea label="Note" name="note" value={pkg.note} onChange={e => handleListChange('hajjPackages', index, e.target.name, e.target.value)} />
-                               </div>
+                <Section title="Package Management">
+                    <div className="flex border-b border-gray-700 mb-6">
+                        <button 
+                            className={`px-4 py-2 font-semibold ${activePackageTab === 'hajj' ? 'text-primary border-b-2 border-primary' : 'text-muted-text'}`}
+                            onClick={() => setActivePackageTab('hajj')}
+                        >
+                            Hajj Packages
+                        </button>
+                        <button 
+                            className={`px-4 py-2 font-semibold ${activePackageTab === 'umrah' ? 'text-primary border-b-2 border-primary' : 'text-muted-text'}`}
+                            onClick={() => setActivePackageTab('umrah')}
+                        >
+                            Umrah Packages
+                        </button>
+                    </div>
+
+                    {activePackageTab === 'hajj' && (
+                        <div>
+                            {localData.hajjPackages.map((pkg, index) => (
+                                <PackageEditor
+                                    key={index}
+                                    pkg={pkg}
+                                    index={index}
+                                    packageType="hajj"
+                                    onChange={handleListChange}
+                                    onRemove={removeListItem}
+                                />
+                            ))}
+                            <button 
+                                onClick={() => addListItem('hajjPackages', { name: 'New Hajj Package', price: '0', duration: '', hotelMakkah: '', hotelMadinah: '', flightsUp: '', flightsDown: '', food: '', special: '', note: '', image: '' })} 
+                                className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Add Hajj Package
+                            </button>
+                        </div>
+                    )}
+
+                    {activePackageTab === 'umrah' && (
+                        <div>
+                            {localData.umrahPackages.map((pkg, index) => (
+                                <PackageEditor
+                                    key={index}
+                                    pkg={pkg}
+                                    index={index}
+                                    packageType="umrah"
+                                    onChange={handleListChange}
+                                    onRemove={removeListItem}
+                                />
+                            ))}
+                            <button 
+                                onClick={() => addListItem('umrahPackages', { name: 'New Umrah Package', price: '0', date: '', hotelMakkah: '', hotelMadinah: '', flightsUp: '', flightsDown: '', food: '', special: '', note: '', image: '', buttonText: 'Book Now' })}
+                                className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Add Umrah Package
+                            </button>
+                        </div>
+                    )}
+                </Section>
+
+                <Section title="Packages Page - Gallery">
+                    <AdminInput 
+                        label="Gallery Title" 
+                        name="pages.packages.gallery.title" 
+                        value={localData.pages.packages.gallery.title} 
+                        onChange={e => handleNestedChange(e.target.name, e.target.value)} 
+                    />
+                    <div className="mt-4">
+                        <AdminTextarea 
+                            label="Gallery Description" 
+                            name="pages.packages.gallery.description" 
+                            value={localData.pages.packages.gallery.description} 
+                            onChange={e => handleNestedChange(e.target.name, e.target.value)}
+                        />
+                    </div>
+                    <h4 className="font-bold text-xl my-4 text-secondary">Gallery Images</h4>
+                    {localData.pages.packages.gallery.images.map((image, index) => (
+                        <div key={index} className="mb-4 p-3 border border-gray-700 rounded-md relative">
+                            <button 
+                                onClick={() => removeListItem('pages.packages.gallery.images', index)} 
+                                className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs"
+                            >
+                                Remove
+                            </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <AdminInput 
+                                    label={`Image ${index + 1} URL`}
+                                    name="src" 
+                                    value={image.src} 
+                                    onChange={e => handleListChange('pages.packages.gallery.images', index, e.target.name, e.target.value)} 
+                                />
+                                <AdminInput 
+                                    label={`Image ${index + 1} Alt Text`}
+                                    name="alt" 
+                                    value={image.alt} 
+                                    onChange={e => handleListChange('pages.packages.gallery.images', index, e.target.name, e.target.value)} 
+                                />
                             </div>
                         </div>
                     ))}
-                    <button onClick={() => addListItem('hajjPackages', { name: 'New Hajj Package', price: '0', duration: '', hotelMakkah: '', hotelMadinah: '', flightsUp: '', flightsDown: '', food: '', special: '', note: '', image: '' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Hajj Package</button>
+                    <button 
+                        onClick={() => addListItem('pages.packages.gallery.images', { src: 'https://via.placeholder.com/300', alt: 'New Image' })} 
+                        className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Add Gallery Image
+                    </button>
                 </Section>
-                
-                 <Section title="Umrah Packages">
-                    {localData.umrahPackages.map((pkg, index) => (
-                        <div key={index} className="mb-6 p-4 border border-gray-700 rounded-md">
-                            <div className="flex justify-between items-center">
-                                <h4 className="font-bold text-xl mb-2 text-secondary">{pkg.name || `Package ${index+1}`}</h4>
-                                <button onClick={() => removeListItem('umrahPackages', index)} className="bg-red-600 text-white px-3 py-1 rounded">Remove</button>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                               <AdminInput label="Name" name="name" value={pkg.name} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Price" name="price" value={pkg.price} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Date/Duration" name="date" value={pkg.date} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Hotel Makkah" name="hotelMakkah" value={pkg.hotelMakkah} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Hotel Madinah" name="hotelMadinah" value={pkg.hotelMadinah} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Flights Up" name="flightsUp" value={pkg.flightsUp} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Flights Down" name="flightsDown" value={pkg.flightsDown} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Food" name="food" value={pkg.food} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Special Services" name="special" value={pkg.special} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Image URL" name="image" value={pkg.image} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <AdminInput label="Button Text" name="buttonText" value={pkg.buttonText} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               <div className="md:col-span-2 lg:col-span-2">
-                                <AdminTextarea label="Note" name="note" value={pkg.note} onChange={e => handleListChange('umrahPackages', index, e.target.name, e.target.value)} />
-                               </div>
-                            </div>
-                        </div>
-                    ))}
-                    <button onClick={() => addListItem('umrahPackages', { name: 'New Umrah Package', price: '0', date: '', hotelMakkah: '', hotelMadinah: '', flightsUp: '', flightsDown: '', food: '', special: '', note: '', image: '', buttonText: 'Book Now' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Umrah Package</button>
-                </Section>
+
 
                 <Section title="Team Members">
                      <h4 className="font-bold text-xl mb-2 text-secondary">C.E.O & Chairman</h4>
