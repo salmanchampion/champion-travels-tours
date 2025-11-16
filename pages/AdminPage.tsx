@@ -245,6 +245,17 @@ const AdminPage: React.FC = () => {
                     <button onClick={() => addListItem('pages.testimonials.list', { quote: '', name: '', title: '', avatar: '' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Testimonial</button>
                 </Section>
 
+                <Section title="Visa Processing Page">
+                    <AdminInput
+                        label="Google Apps Script URL for Visa Inquiry Form"
+                        name="pages.visaProcessing.googleAppsScriptUrl"
+                        value={localData.pages.visaProcessing.googleAppsScriptUrl}
+                        onChange={e => handleNestedChange(e.target.name, e.target.value)}
+                        placeholder="Paste your deployed web app URL here"
+                        className="mt-4"
+                    />
+                </Section>
+
                 <Section title="Contact Page">
                     <h4 className="font-bold text-xl mb-2 text-secondary">Info Section</h4>
                     <AdminInput label="Info Title" name="pages.contact.infoTitle" value={localData.pages.contact.infoTitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />

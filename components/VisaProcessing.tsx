@@ -48,7 +48,7 @@ const ProcessStep: React.FC<{ icon: React.ReactNode; title: string; description:
 
 const VisaInquiryForm: React.FC = () => {
     const { appData } = useContext(DataContext);
-    const { form } = appData.pages.visaProcessing;
+    const { form, googleAppsScriptUrl } = appData.pages.visaProcessing;
 
     const [formData, setFormData] = useState({
         name: '',
@@ -59,14 +59,46 @@ const VisaInquiryForm: React.FC = () => {
         question: '',
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        alert('Thank you for your visa inquiry! We will get back to you soon.');
-        setFormData({ name: '', email: '', phone: '', destination: '', visaType: 'Tourist Visa', question: '' });
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        if (!googleAppsScriptUrl) {
+            console.error('Visa Inquiry Google Apps Script URL is not set in the admin panel.');
+            setSubmitStatus('error');
+            setIsSubmitting(false);
+            return;
+        }
+
+        const formElement = e.target as HTMLFormElement;
+        const submissionData = new FormData(formElement);
+
+        try {
+            const response = await fetch(googleAppsScriptUrl, {
+                method: 'POST',
+                body: submissionData,
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setFormData({ name: '', email: '', phone: '', destination: '', visaType: 'Tourist Visa', question: '' });
+            } else {
+                throw new Error('Visa inquiry submission failed.');
+            }
+        } catch (error) {
+            console.error('Error submitting visa inquiry form:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -90,8 +122,16 @@ const VisaInquiryForm: React.FC = () => {
                     </select>
                 </div>
                 <textarea name="question" value={formData.question} onChange={handleChange} placeholder="Your Specific Question" rows={5} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
-                <button type="submit" className="w-full bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105">
-                    {form.buttonText}
+                
+                {submitStatus === 'success' && (
+                  <p className="text-green-400 text-center">Thank you for your inquiry! We will get back to you soon.</p>
+                )}
+                {submitStatus === 'error' && (
+                  <p className="text-red-400 text-center">Something went wrong. Please check the Admin Panel for the script URL or try again later.</p>
+                )}
+
+                <button type="submit" disabled={isSubmitting} className="w-full bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
+                    {isSubmitting ? 'Submitting...' : form.buttonText}
                 </button>
             </form>
         </div>

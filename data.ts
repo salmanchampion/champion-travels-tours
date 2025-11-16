@@ -182,6 +182,7 @@ export interface AppData {
                 subtitle: string;
                 buttonText: string;
             };
+            googleAppsScriptUrl: string;
         };
         team: {
             pageBanner: { title: string; subtitle: string; };
@@ -549,7 +550,8 @@ export const defaultData: AppData = {
                 title: 'Visa Inquiry Form',
                 subtitle: 'Have a specific question about your visa application? Fill out the form below, and our experts will get in touch with you.',
                 buttonText: 'Submit Inquiry'
-            }
+            },
+            googleAppsScriptUrl: '',
         },
         contact: {
             pageBanner: {
