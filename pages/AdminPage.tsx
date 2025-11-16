@@ -1,10 +1,8 @@
 import React, { useState, useContext, ChangeEvent } from 'react';
 import PageBanner from '../components/PageBanner';
 import { DataContext } from '../contexts/DataContext';
-import { AppData, HajjPackage, UmrahPackage, TeamMember, GalleryImage, ContactInfo, Service, Testimonial, NavLink, UmrahGuideStep, UmrahGuideFaqItem } from '../data';
+import { AppData, HajjPackage, UmrahPackage, TeamMember, GalleryImage, ContactInfo, Service, Testimonial, NavLink, UmrahGuideStep, HajjGuideFaqItem, HajjGuideType, HajjGuideAct } from '../data';
 
-// Helper component for form fields
-// FIX: Converted to React.FC with an interface to correctly handle `key` and `className` props.
 interface AdminInputProps {
     label: string;
     name: string;
@@ -62,7 +60,6 @@ const SeoEditor: React.FC<{ pageName: string; seoPath: string; localData: AppDat
     );
 };
 
-// --- Refactored Package Editor Component ---
 const packageFieldLabels: { [key: string]: string } = {
     name: 'Name',
     price: 'Price',
@@ -112,7 +109,7 @@ const PackageEditor: React.FC<{
                         );
                     }
                     
-                    if (key in packageFieldLabels) { // Only render fields we have labels for
+                    if (key in packageFieldLabels) {
                         return (
                             <AdminInput
                                 key={key}
@@ -133,18 +130,22 @@ const PackageEditor: React.FC<{
 
 const AdminPage: React.FC = () => {
     const { appData, updateAppData, resetAppData } = useContext(DataContext);
-    const [localData, setLocalData] = useState<AppData>(JSON.parse(JSON.stringify(appData))); // Deep copy
+    const [localData, setLocalData] = useState<AppData>(JSON.parse(JSON.stringify(appData)));
     const [activePackageTab, setActivePackageTab] = useState<'hajj' | 'umrah'>('hajj');
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Generic handler for nested state
+    // Sync local state if appData from context changes (e.g., after reset)
+    React.useEffect(() => {
+        setLocalData(JSON.parse(JSON.stringify(appData)));
+    }, [appData]);
+
     const handleNestedChange = (path: string, value: any) => {
         setLocalData(prev => {
             const keys = path.split('.');
-            let tempState = JSON.parse(JSON.stringify(prev)); // Deep copy to ensure no mutation
+            let tempState = JSON.parse(JSON.stringify(prev));
             let currentLevel = tempState as any;
 
             for (let i = 0; i < keys.length - 1; i++) {
-                // Create nested objects if they don't exist
                 if (currentLevel[keys[i]] === undefined) {
                     currentLevel[keys[i]] = {};
                 }
@@ -181,10 +182,17 @@ const AdminPage: React.FC = () => {
         handleNestedChange(path, newList);
     };
     
-    const saveChanges = () => {
-        updateAppData(localData);
+    const saveChanges = async () => {
+        setIsSaving(true);
+        await updateAppData(localData);
+        setIsSaving(false);
         alert('Changes saved successfully!');
     };
+    
+    const handleReset = async () => {
+        await resetAppData();
+        // The useEffect hook will update localData once appData changes
+    }
 
     return (
         <div className="pt-20">
@@ -202,6 +210,7 @@ const AdminPage: React.FC = () => {
                     <SeoEditor pageName="Visa Processing" seoPath="pages.visaProcessing.seo" localData={localData} onChange={handleNestedChange} />
                     <SeoEditor pageName="Why Us" seoPath="pages.whyChooseUs.seo" localData={localData} onChange={handleNestedChange} />
                     <SeoEditor pageName="Umrah Guide (Bangla)" seoPath="pages.umrahGuide.seo" localData={localData} onChange={handleNestedChange} />
+                    <SeoEditor pageName="Hajj Guide (Bangla)" seoPath="pages.hajjGuide.seo" localData={localData} onChange={handleNestedChange} />
                     <SeoEditor pageName="Our Team" seoPath="pages.team.seo" localData={localData} onChange={handleNestedChange} />
                     <SeoEditor pageName="Testimonials" seoPath="pages.testimonials.seo" localData={localData} onChange={handleNestedChange} />
                     <SeoEditor pageName="Contact" seoPath="pages.contact.seo" localData={localData} onChange={handleNestedChange} />
@@ -238,6 +247,67 @@ const AdminPage: React.FC = () => {
                      </div>
                 </Section>
 
+                <Section title="Hajj Guide Page">
+                    <h4 className="font-bold text-xl mb-2 text-secondary">Page Banner</h4>
+                    <AdminInput label="Title" name="pages.hajjGuide.pageBanner.title" value={localData.pages.hajjGuide.pageBanner.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Subtitle" name="pages.hajjGuide.pageBanner.subtitle" value={localData.pages.hajjGuide.pageBanner.subtitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">Types of Hajj Section</h4>
+                    <AdminInput label="Section Title" name="pages.hajjGuide.types.title" value={localData.pages.hajjGuide.types.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Section Intro" name="pages.hajjGuide.types.intro" value={localData.pages.hajjGuide.types.intro} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                     {localData.pages.hajjGuide.types.list.map((item, index) => (
+                        <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.hajjGuide.types.list', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove Type</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">Type {index + 1}</h5>
+                             <AdminInput label="Title" name="title" value={item.title} onChange={e => handleListChange('pages.hajjGuide.types.list', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Description" name="description" value={item.description} onChange={e => handleListChange('pages.hajjGuide.types.list', index, e.target.name, e.target.value)} />
+                        </div>
+                    ))}
+                    <button onClick={() => addListItem('pages.hajjGuide.types.list', { title: 'New Type', description: '' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Type</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">Faraj of Hajj Section</h4>
+                    <AdminInput label="Section Title" name="pages.hajjGuide.faraj.title" value={localData.pages.hajjGuide.faraj.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Section Intro" name="pages.hajjGuide.faraj.intro" value={localData.pages.hajjGuide.faraj.intro} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                     {localData.pages.hajjGuide.faraj.list.map((item, index) => (
+                        <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.hajjGuide.faraj.list', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove Faraj</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">Faraj {index + 1}</h5>
+                             <AdminInput label="Title" name="title" value={item.title} onChange={e => handleListChange('pages.hajjGuide.faraj.list', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Description" name="description" value={item.description} onChange={e => handleListChange('pages.hajjGuide.faraj.list', index, e.target.name, e.target.value)} />
+                        </div>
+                    ))}
+                    <button onClick={() => addListItem('pages.hajjGuide.faraj.list', { title: 'New Faraj', description: '' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Faraj</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">Wajib of Hajj Section</h4>
+                    <AdminInput label="Section Title" name="pages.hajjGuide.wajib.title" value={localData.pages.hajjGuide.wajib.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminTextarea label="Section Intro" name="pages.hajjGuide.wajib.intro" value={localData.pages.hajjGuide.wajib.intro} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                     {localData.pages.hajjGuide.wajib.list.map((item, index) => (
+                        <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.hajjGuide.wajib.list', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove Wajib</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">Wajib {index + 1}</h5>
+                             <AdminInput label="Title" name="title" value={item.title} onChange={e => handleListChange('pages.hajjGuide.wajib.list', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Description" name="description" value={item.description} onChange={e => handleListChange('pages.hajjGuide.wajib.list', index, e.target.name, e.target.value)} />
+                        </div>
+                    ))}
+                    <button onClick={() => addListItem('pages.hajjGuide.wajib.list', { title: 'New Wajib', description: '' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add Wajib</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">FAQ Section</h4>
+                     <AdminInput label="Section Title" name="pages.hajjGuide.faq.title" value={localData.pages.hajjGuide.faq.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                     {localData.pages.hajjGuide.faq.items.map((item, index) => (
+                         <div key={index} className="my-4 p-3 border border-gray-700 rounded-md">
+                             <button onClick={() => removeListItem('pages.hajjGuide.faq.items', index)} className="float-right bg-red-600 text-white px-3 py-1 rounded">Remove FAQ</button>
+                             <h5 className="font-bold text-lg mb-2 text-white">FAQ {index + 1}</h5>
+                             <AdminInput label="Question" name="question" value={item.question} onChange={e => handleListChange('pages.hajjGuide.faq.items', index, e.target.name, e.target.value)} />
+                             <AdminTextarea label="Answer" name="answer" value={item.answer} onChange={e => handleListChange('pages.hajjGuide.faq.items', index, e.target.name, e.target.value)} />
+                         </div>
+                     ))}
+                     <button onClick={() => addListItem('pages.hajjGuide.faq.items', { question: 'New Question?', answer: 'New Answer.' })} className="mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded">Add FAQ</button>
+
+                    <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">CTA Section</h4>
+                    <AdminTextarea label="CTA Title" name="pages.hajjGuide.cta.title" value={localData.pages.hajjGuide.cta.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput label="Button Text" name="pages.hajjGuide.cta.buttonText" value={localData.pages.hajjGuide.cta.buttonText} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                </Section>
+
                 <Section title="Umrah Guide Page">
                     <h4 className="font-bold text-xl mb-2 text-secondary">Page Banner</h4>
                     <AdminInput label="Title" name="pages.umrahGuide.pageBanner.title" value={localData.pages.umrahGuide.pageBanner.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
@@ -253,7 +323,7 @@ const AdminPage: React.FC = () => {
                              <h5 className="font-bold text-lg mb-2 text-white">Step {index + 1}</h5>
                              <AdminInput label="Title" name="title" value={step.title} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
                              <AdminTextarea label="Description" name="description" value={step.description} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
-                             <AdminTextarea label="Points (one per line)" name="points" value={step.points.join('\n')} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value.split('\n'))} rows={5} />
+                             <AdminTextarea label="Points (one per line)" name="points" value={step.points.join('\n')} onChange={e => handleListChange('pages.umrahGuide.steps', index, 'points', e.target.value.split('\n'))} rows={5} />
                              <AdminInput label="Arabic Text (Optional)" name="arabicText" value={step.arabicText} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
                              <AdminTextarea label="Arabic Meaning (Optional)" name="arabicMeaning" value={step.arabicMeaning} onChange={e => handleListChange('pages.umrahGuide.steps', index, e.target.name, e.target.value)} />
                         </div>
@@ -266,9 +336,9 @@ const AdminPage: React.FC = () => {
                     <AdminInput label="Image 1 URL" name="pages.umrahGuide.dosAndDonts.images.0" value={localData.pages.umrahGuide.dosAndDonts.images[0]} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
                     <AdminInput label="Image 2 URL" name="pages.umrahGuide.dosAndDonts.images.1" value={localData.pages.umrahGuide.dosAndDonts.images[1]} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
                     <AdminInput label="Do's Title" name="pages.umrahGuide.dosAndDonts.dos.title" value={localData.pages.umrahGuide.dosAndDonts.dos.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
-                    <AdminTextarea label="Do's Items (one per line)" name="pages.umrahGuide.dosAndDonts.dos.items" value={localData.pages.umrahGuide.dosAndDonts.dos.items.join('\n')} onChange={e => handleNestedChange(e.target.name, e.target.value.split('\n'))} rows={7} />
+                    <AdminTextarea label="Do's Items (one per line)" name="dos.items" value={localData.pages.umrahGuide.dosAndDonts.dos.items.join('\n')} onChange={e => handleNestedChange('pages.umrahGuide.dosAndDonts.dos.items', e.target.value.split('\n'))} rows={7} />
                     <AdminInput label="Don'ts Title" name="pages.umrahGuide.dosAndDonts.donts.title" value={localData.pages.umrahGuide.dosAndDonts.donts.title} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
-                    <AdminTextarea label="Don'ts Items (one per line)" name="pages.umrahGuide.dosAndDonts.donts.items" value={localData.pages.umrahGuide.dosAndDonts.donts.items.join('\n')} onChange={e => handleNestedChange(e.target.name, e.target.value.split('\n'))} rows={7} />
+                    <AdminTextarea label="Don'ts Items (one per line)" name="donts.items" value={localData.pages.umrahGuide.dosAndDonts.donts.items.join('\n')} onChange={e => handleNestedChange('pages.umrahGuide.dosAndDonts.donts.items', e.target.value.split('\n'))} rows={7} />
                     <AdminTextarea label="Note" name="pages.umrahGuide.dosAndDonts.note" value={localData.pages.umrahGuide.dosAndDonts.note} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
 
                     <h4 className="font-bold text-xl mt-6 mb-2 text-secondary">FAQ Section</h4>
@@ -299,7 +369,7 @@ const AdminPage: React.FC = () => {
                                 <AdminTextarea label="Description" name="description" value={service.description} onChange={e => handleListChange('pages.services.list', index, e.target.name, e.target.value)} />
                                 </div>
                                 <div className="md:col-span-2">
-                                <AdminTextarea label="Details (one per line)" name="details" value={service.details.join('\n')} onChange={e => handleListChange('pages.services.list', index, e.target.name, e.target.value.split('\n'))} rows={6} />
+                                <AdminTextarea label="Details (one per line)" name="details" value={service.details.join('\n')} onChange={e => handleListChange('pages.services.list', index, 'details', e.target.value.split('\n'))} rows={6} />
                                 </div>
                             </div>
                             <button onClick={() => removeListItem('pages.services.list', index)} className="mt-2 bg-red-600 text-white px-3 py-1 rounded">Remove Service</button>
@@ -511,10 +581,10 @@ const AdminPage: React.FC = () => {
                 </Section>
                 
                 <div className="mt-12 text-center flex flex-col sm:flex-row justify-center gap-4">
-                    <button onClick={saveChanges} className="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                        Save All Changes
+                    <button onClick={saveChanges} disabled={isSaving} className="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-wait">
+                        {isSaving ? 'Saving...' : 'Save All Changes'}
                     </button>
-                    <button onClick={resetAppData} className="w-full sm:w-auto bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition-all duration-300">
+                    <button onClick={handleReset} className="w-full sm:w-auto bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition-all duration-300">
                         Reset to Default
                     </button>
                 </div>

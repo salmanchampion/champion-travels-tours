@@ -91,14 +91,25 @@ export interface UmrahGuideStep {
   arabicMeaning?: string;
 }
 
-export interface UmrahGuideDoDontItem {
-  title: string;
-  items: string[];
+// --- New Interfaces for Hajj Guide ---
+export interface HajjGuideType {
+    title: string;
+    description: string;
 }
 
-export interface UmrahGuideFaqItem {
+export interface HajjGuideAct {
+    title: string;
+    description: string;
+}
+
+export interface HajjGuideFaqItem {
   question: string;
   answer: string;
+}
+
+export interface GuideDoDontItem {
+  title: string;
+  items: string[];
 }
 
 export interface SeoMetadata {
@@ -119,14 +130,53 @@ export interface UmrahGuideData {
   dosAndDonts: {
     title: string;
     intro: string;
-    dos: UmrahGuideDoDontItem;
-    donts: UmrahGuideDoDontItem;
+    dos: GuideDoDontItem;
+    donts: GuideDoDontItem;
     images: string[];
     note: string;
   };
   faq: {
     title: string;
-    items: UmrahGuideFaqItem[];
+    items: HajjGuideFaqItem[];
+  };
+  cta: {
+    title: string;
+    buttonText: string;
+  };
+}
+
+export interface HajjGuideData {
+  seo: SeoMetadata;
+  pageBanner: {
+    title: string;
+    subtitle: string;
+  };
+  types: {
+    title: string;
+    intro: string;
+    list: HajjGuideType[];
+  };
+  faraj: {
+    title: string;
+    intro: string;
+    list: HajjGuideAct[];
+  };
+  wajib: {
+    title: string;
+    intro: string;
+    list: HajjGuideAct[];
+  };
+  dosAndDonts: {
+    title: string;
+    intro: string;
+    dos: GuideDoDontItem;
+    donts: GuideDoDontItem;
+    images: string[];
+    note: string;
+  };
+  faq: {
+    title: string;
+    items: HajjGuideFaqItem[];
   };
   cta: {
     title: string;
@@ -303,6 +353,7 @@ export interface AppData {
             footerImage: string;
         },
         umrahGuide: UmrahGuideData;
+        hajjGuide: HajjGuideData;
     };
 }
 
@@ -323,7 +374,14 @@ export const defaultData: AppData = {
                 { href: '#visa-processing', label: 'Visa Processing' },
               ]
             },
-            { href: '#umrah-guide-in-bangla', label: 'Umrah Guide (Bangla)' },
+            {
+              label: 'Guidelines',
+              href: '#',
+              subLinks: [
+                { href: '#hajj-guide-in-bangla', label: 'Hajj Guide (Bangla)' },
+                { href: '#umrah-guide-in-bangla', label: 'Umrah Guide (Bangla)' },
+              ]
+            },
             { href: '#why-us', label: 'Why Us' },
             { href: '#team', label: 'Our Team' },
             { href: '#testimonials', label: 'Testimonials' },
@@ -568,7 +626,7 @@ export const defaultData: AppData = {
             employeesSubtitle: 'At The Heart Of Our Commitment To Providing Exceptional Immigration Solutions Stands We Provide Experts Create Great Value For Visa Categories',
             talentedEmployees: [
                 { name: 'মোঃ মুছা', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
-                { name: 'সাদ্দام হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
+                { name: 'সাদ্দাম হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
                 { name: 'লোকমান হোসাইন', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
                 { name: 'মোহাম্মদ নূরে আলম ডালিম', role: 'General Manager', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
                 { name: 'মোঃ আলী আকবর', role: 'Accounts', imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png', socials: { facebook: '#', phone: '#', whatsapp: '#' } },
@@ -745,7 +803,7 @@ export const defaultData: AppData = {
                     points: [
                         'পরিষ্কার-পরিচ্ছন্ন হয়ে গোসল বা অজু করা',
                         'ইহরামের নির্দিষ্ট পোশাক পরা',
-                        'মিকাতের আগে বা মিকাতে ইহরামের কাপড় পরে নেওয়া',
+                        'মিকাতের আগে বা মিকাতে ইহرامের কাপড় পরে নেওয়া',
                         'ইহরামের নিয়তে দুই রাকাত নামাজ আদায় করা',
                         'ওমরাহর নিয়ত করা'
                     ],
@@ -830,6 +888,90 @@ export const defaultData: AppData = {
             cta: {
                 title: 'Apply for an Umrah visa and experience the hassle-free journey to the city of Makkah and Madina',
                 buttonText: 'Request for Umrah Booking Online'
+            }
+        },
+// FIX: Added default data for `hajjGuide` to satisfy the `AppData` type.
+        hajjGuide: {
+            seo: {
+                title: 'Hajj Guide in Bangla (হজ গাইডলাইন) | Champion Travels & Tours',
+                description: 'A complete Hajj guide in Bengali. Learn about the types of Hajj (Tamattu, Qiran, Ifrad), Farz and Wajib acts, and essential do\'s and don\'ts for a successful pilgrimage.',
+                keywords: 'Hajj guide Bangla, how to perform Hajj, Hajj korar niyom, হজ করার নিয়ম, তামাত্তু, ক্বিরান, ইফরাদ'
+            },
+            pageBanner: {
+                title: 'হজ গাইডলাইন',
+                subtitle: 'আপনার হজ যাত্রাকে সহজ ও অর্থবহ করার জন্য বিস্তারিত নির্দেশিকা।'
+            },
+            types: {
+                title: 'হজের প্রকারভেদ',
+                intro: 'হজ তিন প্রকার। প্রত্যেক প্রকার হজের নিয়ম-কানুনে কিছু পার্থক্য রয়েছে। আপনার জন্য সুবিধাজনক হজ বেছে নিন:',
+                list: [
+                    { title: 'হজ্জে তামাত্তু', description: 'এই হজে, হজযাত্রীগণ প্রথমে ওমরাহ পালন করে ইহরাম থেকে হালাল হন এবং হজের সময় নতুন করে ইহরাম বেঁধে হজের কার্যক্রম সম্পন্ন করেন। এটি বাংলাদেশ থেকে আগত হজযাত্রীদের জন্য সবচেয়ে জনপ্রিয়।' },
+                    { title: 'হজ্জে ক্বিরান', description: 'এই হজে, হজযাত্রীগণ ওমরাহ এবং হজ উভয়ের জন্য একই সাথে ইহরাম বাঁধেন এবং হজের কার্যক্রম শেষ না হওয়া পর্যন্ত ইহরাম অবস্থায় থাকেন।' },
+                    { title: 'হজ্জে ইফরাদ', description: 'এই হজে, হজযাত্রীগণ শুধুমাত্র হজের জন্য ইহরাম বাঁধেন এবং হজের কার্যক্রম সম্পন্ন করেন। তারা ওমরাহ পালন করেন না।' }
+                ]
+            },
+            faraj: {
+                title: 'হজের ফরজ কাজসমূহ',
+                intro: 'হজের মোট তিনটি ফরজ কাজ রয়েছে। এর কোনো একটি বাদ পড়লে হজ আদায় হবে না।',
+                list: [
+                    { title: 'ইহরাম বাঁধা', description: 'হজের নিয়তে নির্দিষ্ট স্থান (মিকাত) থেকে ইহরামের পোশাক পরা এবং তালবিয়া পাঠ করা।' },
+                    { title: 'আরাফাতের ময়দানে অবস্থান', description: 'জিলহজ মাসের ৯ তারিখে আরাফাতের ময়দানে সূর্যোদয় থেকে সূর্যাস্ত পর্যন্ত অবস্থান করা হজের সবচেয়ে গুরুত্বপূর্ণ ফরজ।' },
+                    { title: 'তাওয়াফে জিয়ারত', description: 'জিলহজ মাসের ১০ থেকে ১২ তারিখের মধ্যে কাবা শরিফ সাতবার প্রদক্ষিণ করা।' }
+                ]
+            },
+            wajib: {
+                title: 'হজের ওয়াজিব কাজসমূহ',
+                intro: 'হজের ওয়াজিব কাজগুলো অবশ্যই পালনীয়। কোনো একটি ছুটে গেলে দম (কুরবানি) দিয়ে তার ক্ষতিপূরণ করতে হয়।',
+                list: [
+                    { title: 'সাঈ করা', description: 'সাফা ও মারওয়া পাহাড়ের মধ্যে সাতবার দৌড়ানো।' },
+                    { title: 'মুজদালিফায় অবস্থান', description: 'আরাফাত থেকে ফিরে ১০ জিলহজ রাতে মুজদালিফায় অবস্থান করা।' },
+                    { title: 'জামারাতে পাথর নিক্ষেপ', description: '১০, ১১ ও ১২ জিলহজ মিনায় শয়তানকে পাথর নিক্ষেপ করা।' },
+                    { title: 'কুরবানি করা', description: 'আল্লাহর সন্তুষ্টির জন্য পশু কুরবানি করা।' },
+                    { title: 'মাথা মুণ্ডন বা চুল ছোট করা', description: 'কুরবানির পর পুরুষরা মাথা মুণ্ডন করবেন বা চুল ছোট করবেন এবং মহিলারা চুলের অগ্রভাগ সামান্য কাটবেন।' },
+                    { title: 'বিদায়ী তাওয়াফ', description: 'মক্কা থেকে বিদায় নেওয়ার আগে কাবা শরিফ তাওয়াফ করা।' }
+                ]
+            },
+            dosAndDonts: {
+                title: 'হজ পালনে করণীয় ও বর্জনীয়',
+                intro: 'হজ একটি গুরুত্বপূর্ণ ইবাদত। এটি পালনের সময় কিছু কাজকে গুরুত্ব দিতে হয় এবং এবং কিছু কাজ বর্জন করতে হয়।',
+                dos: {
+                    title: 'হজ পালনে করণীয়:',
+                    items: [
+                        'সব সময় আল্লাহর জিকির ও ইবাদতে মশগুল থাকা',
+                        'ধৈর্য ধারণ করা এবং অন্য হাজিদের সাহায্য করা',
+                        'পরিষ্কার-পরিচ্ছন্নতা বজায় রাখা',
+                        'ইসলামী জ্ঞান অর্জন ও দোয়া-দরুদ পাঠ করা',
+                        'নফল তাওয়াফ ও ইবাদত বেশি করা'
+                    ]
+                },
+                donts: {
+                    title: 'হজ পালনে বর্জনীয়:',
+                    items: [
+                        'ইহরাম অবস্থায় নিষিদ্ধ কাজগুলো করা (যেমন সুগন্ধি ব্যবহার, নখ বা চুল কাটা)',
+                        'ঝগড়া-বিবাদ বা কোনো ধরনের পাপাচারে লিপ্ত হওয়া',
+                        'কোনো প্রাণী শিকার করা বা কষ্ট দেওয়া',
+                        'অপ্রয়োজনে দুনিয়াবী কথাবার্তা ও কাজে সময় নষ্ট করা',
+                        'ছবি তোলা বা ভিডিও করায় অতিরিক্ত ব্যস্ত থাকা'
+                    ]
+                },
+                images: [
+                    'https://i.postimg.cc/R0N8Mv8X/as.jpg',
+                    'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg'
+                ],
+                note: 'নোট: ইহরাম অবস্থায় এ কাজগুলো করা যাবে না। ইহরাম থেকে মুক্ত হওয়ার পর কিছু কাজ করা যাবে, তবে ঝগড়া, গালাগালি ও খারাপ কথা বলা সব সময় বর্জনীয়।'
+            },
+            faq: {
+                title: 'সচরাচর জিজ্ঞাসিত প্রশ্নাবলী',
+                items: [
+                    { question: 'হজের মূল কাজ কোনটি?', answer: 'হজের সবচেয়ে গুরুত্বপূর্ণ ও মূল কাজ হলো আরাফাতের ময়দানে অবস্থান করা। এটি ছাড়া হজ পূর্ণ হয় না।' },
+                    { question: 'তাওয়াফে জিয়ারত কখন করতে হয়?', answer: 'তাওয়াফে জিয়ারত ১০ জিলহজ কুরবানির পর থেকে ১২ জিলহজ সূর্যাস্তের আগে পর্যন্ত যেকোনো সময় করা যায়।' },
+                    { question: 'হজের সময় অসুস্থ হয়ে পড়লে কী করণীয়?', answer: 'হজের সময় অসুস্থ হলে ধৈর্য ধারণ করতে হবে এবং নিকটস্থ স্বাস্থ্যকেন্দ্রে যোগাযোগ করতে হবে। সৌদি সরকার হাজিদের জন্য বিনামূল্যে চিকিৎসার ব্যবস্থা রাখে।' },
+                    { question: 'কুরবানি কোথায় করতে হবে?', answer: 'হজের কুরবানি মিনা বা মক্কার হারাম এলাকার মধ্যে করতে হয়। বর্তমানে সৌদি সরকারের তত্ত্বাবধানে ব্যাংক বা নির্দিষ্ট সংস্থার মাধ্যমে কুরবানি করা সহজ।' },
+                ]
+            },
+            cta: {
+                title: 'আপনার হজের যাত্রা শুরু করতে আজই আমাদের সাথে যোগাযোগ করুন এবং একটি অবিস্মরণীয় অভিজ্ঞতার জন্য প্রস্তুত হন।',
+                buttonText: 'হজ প্যাকেজের জন্য অনুরোধ'
             }
         }
     }

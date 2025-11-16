@@ -6,15 +6,18 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { login } = useContext(AuthContext);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
-    const success = login(email, password);
+    setIsLoggingIn(true);
+    const success = await login(email, password);
     if (!success) {
-      setError('Invalid email or password. Please try again.');
+      setError('Login failed. Please double-check your credentials. If this is your first time logging in, you must create an admin user in your Firebase project\'s "Authentication" section.');
     }
+    setIsLoggingIn(false);
   };
 
   return (
@@ -54,8 +57,8 @@ const LoginPage: React.FC = () => {
                     {error && <p className="text-red-400 text-sm">{error}</p>}
 
                     <div>
-                        <button type="submit" className="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                            Login
+                        <button type="submit" disabled={isLoggingIn} className="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500">
+                            {isLoggingIn ? 'Logging in...' : 'Login'}
                         </button>
                     </div>
                 </form>

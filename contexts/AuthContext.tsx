@@ -1,14 +1,18 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { auth } from '../firebase';
+import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (email: string, pass: string) => boolean;
+  isLoading: boolean;
+  login: (email: string, pass: string) => Promise<boolean>;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
-  login: () => false,
+  isLoading: true,
+  login: async () => false,
   logout: () => {},
 });
 
@@ -17,33 +21,42 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    // Check session storage on initial load
-    return sessionStorage.getItem('isAdminLoggedIn') === 'true';
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Sync state with session storage
-    sessionStorage.setItem('isAdminLoggedIn', String(isAuthenticated));
-  }, [isAuthenticated]);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setIsLoading(false);
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
-  const login = (email: string, pass: string): boolean => {
-    // IMPORTANT: This is a simulation. In a real app, this would be a secure API call.
-    if (email === 'mhammadsalmansharif37@gmail.com' && pass === 'snsf10') {
-      setIsAuthenticated(true);
+  const login = async (email: string, pass: string): Promise<boolean> => {
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
       window.location.hash = '#admin';
       return true;
+    } catch (error) {
+      console.error("Firebase login error:", error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    window.location.hash = '#home';
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      window.location.hash = '#home';
+    } catch (error) {
+      console.error("Firebase logout error:", error);
+    }
   };
+
+  const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

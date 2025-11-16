@@ -15,13 +15,14 @@ import { DataProvider, DataContext } from './contexts/DataContext';
 import WhyUsPage from './pages/WhyUsPage';
 import UmrahGuidePage from './pages/UmrahGuidePage';
 import { SeoMetadata } from './data';
+import HajjGuidePage from './pages/HajjGuidePage';
 
 
 const AppContent: React.FC = () => {
   const [page, setPage] = useState('');
   const [contactSubject, setContactSubject] = useState('');
-  const { isAuthenticated } = useContext(AuthContext);
-  const { appData } = useContext(DataContext);
+  const { isAuthenticated, isLoading: isAuthLoading } = useContext(AuthContext);
+  const { appData, isLoading: isDataLoading } = useContext(DataContext);
   const keySequenceRef = useRef('');
   const secretCode = '045';
 
@@ -29,15 +30,13 @@ const AppContent: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
         keySequenceRef.current += e.key;
 
-        // Keep the sequence only as long as the secret code
         if (keySequenceRef.current.length > secretCode.length) {
             keySequenceRef.current = keySequenceRef.current.slice(-secretCode.length);
         }
 
-        // Check if the sequence matches the secret code
         if (keySequenceRef.current === secretCode) {
             window.location.hash = '#login';
-            keySequenceRef.current = ''; // Reset the sequence
+            keySequenceRef.current = '';
         }
     };
 
@@ -46,7 +45,7 @@ const AppContent: React.FC = () => {
     return () => {
         window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -54,20 +53,18 @@ const AppContent: React.FC = () => {
       const [path, queryString] = hash.split('?');
       
       setPage(path);
-      window.scrollTo(0, 0); // Scroll to top on page change
+      window.scrollTo(0, 0);
 
       if (path === '#contact' || path === '#book-now') {
         const params = new URLSearchParams(queryString || '');
         const subject = params.get('subject') || '';
         setContactSubject(subject);
       } else {
-        setContactSubject(''); // Clear subject for other pages
+        setContactSubject('');
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    
-    // Set initial page and subject on load
     handleHashChange();
 
     return () => {
@@ -76,6 +73,8 @@ const AppContent: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (isDataLoading) return; // Wait for data to be loaded
+
     const getSeoData = (): SeoMetadata | undefined => {
       const pages = appData.pages;
       switch (page) {
@@ -84,6 +83,7 @@ const AppContent: React.FC = () => {
         case '#visa-processing': return pages.visaProcessing.seo;
         case '#why-us': return pages.whyChooseUs.seo;
         case '#umrah-guide-in-bangla': return pages.umrahGuide.seo;
+        case '#hajj-guide-in-bangla': return pages.hajjGuide.seo;
         case '#team': return pages.team.seo;
         case '#testimonials': return pages.testimonials.seo;
         case '#contact':
@@ -99,7 +99,6 @@ const AppContent: React.FC = () => {
     if (seo) {
       document.title = seo.title;
       
-      // Update or create meta description
       let metaDesc = document.querySelector('meta[name="description"]');
       if (!metaDesc) {
         metaDesc = document.createElement('meta');
@@ -108,7 +107,6 @@ const AppContent: React.FC = () => {
       }
       metaDesc.setAttribute('content', seo.description);
 
-      // Update or create meta keywords
       let metaKeywords = document.querySelector('meta[name="keywords"]');
       if (!metaKeywords) {
         metaKeywords = document.createElement('meta');
@@ -117,47 +115,49 @@ const AppContent: React.FC = () => {
       }
       metaKeywords.setAttribute('content', seo.keywords);
     }
-  }, [page, appData]);
+  }, [page, appData, isDataLoading]);
 
   const renderPage = () => {
     let currentPage = page;
-    // Unify #book-now to #contact for rendering
     if (currentPage === '#book-now') {
       currentPage = '#contact';
     }
     
-    // Protected admin route
     if (currentPage === '#admin' && !isAuthenticated) {
       window.location.hash = '#login';
       return <LoginPage />;
     }
 
     switch (currentPage) {
-      case '#services':
-        return <ServicesPage />;
-      case '#packages':
-        return <PackagesPage />;
-      case '#visa-processing':
-        return <VisaProcessingPage />;
-      case '#why-us':
-        return <WhyUsPage />;
-      case '#umrah-guide-in-bangla':
-        return <UmrahGuidePage />;
-      case '#team':
-        return <TeamPage />;
-      case '#testimonials':
-        return <TestimonialsPage />;
-      case '#contact':
-        return <ContactPage defaultSubject={contactSubject} />;
-      case '#login':
-        return <LoginPage />;
-      case '#admin':
-        return <AdminPage />;
+      case '#services': return <ServicesPage />;
+      case '#packages': return <PackagesPage />;
+      case '#visa-processing': return <VisaProcessingPage />;
+      case '#why-us': return <WhyUsPage />;
+      case '#umrah-guide-in-bangla': return <UmrahGuidePage />;
+      case '#hajj-guide-in-bangla': return <HajjGuidePage />;
+      case '#team': return <TeamPage />;
+      case '#testimonials': return <TestimonialsPage />;
+      case '#contact': return <ContactPage defaultSubject={contactSubject} />;
+      case '#login': return <LoginPage />;
+      case '#admin': return <AdminPage />;
       case '#home':
-      default:
-        return <HomePage />;
+      default: return <HomePage />;
     }
   };
+
+  if (isAuthLoading || isDataLoading) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-dark-bg text-white">
+            <div className="flex flex-col items-center">
+                <svg className="animate-spin h-10 w-10 text-primary mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p className="font-display text-2xl">Loading Website...</p>
+            </div>
+        </div>
+    );
+  }
 
   return (
     <div className="bg-dark-bg">
