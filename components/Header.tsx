@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
     };
   }, []);
 
-  const isServicesSectionActive = ['#services', '#packages', '#visa-processing', '#umrah-guide-in-bangla'].includes(activePage);
+  const isServicesSectionActive = ['#services', '#packages', '#visa-processing'].includes(activePage);
 
   return (
     <header

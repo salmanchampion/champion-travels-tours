@@ -82,6 +82,17 @@ const HajjPackageCard: React.FC<{ pkg: HajjPackage }> = ({ pkg }) => (
 const HajjPreRegistrationCard: React.FC = () => {
     const { appData } = useContext(DataContext);
     const { hajjPreRegistration } = appData.pages.packages;
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        if (isClicked) return; // Prevent multiple clicks
+
+        setIsClicked(true);
+        setTimeout(() => {
+            window.location.hash = `#contact?subject=${encodeURIComponent(hajjPreRegistration.inquirySubject)}`;
+        }, 2000); // 2-second delay for redirect
+    };
 
     return (
         <div className="bg-[#fdf9f0] rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-200 text-gray-800 col-span-1 md:col-span-2 lg:col-span-1">
@@ -100,9 +111,20 @@ const HajjPreRegistrationCard: React.FC = () => {
             <p className="text-base text-[#5d4037] mb-4 leading-relaxed flex-grow">
              {hajjPreRegistration.subDescription}
             </p>
-            <a href={`#contact?subject=${encodeURIComponent(hajjPreRegistration.inquirySubject)}`} className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md">
-              {hajjPreRegistration.buttonText}
-            </a>
+            
+            {isClicked && (
+              <div className="text-center text-green-700 font-semibold mb-4">
+                Thank you! Redirecting you to the inquiry form...
+              </div>
+            )}
+            
+            <button
+              onClick={handleClick}
+              disabled={isClicked}
+              className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md disabled:bg-gray-400 disabled:cursor-wait"
+            >
+              {isClicked ? 'Redirecting...' : hajjPreRegistration.buttonText}
+            </button>
           </div>
         </div>
     );
@@ -338,12 +360,16 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
     const enhancedUmrahPackages = useMemo((): EnhancedUmrahPackage[] => {
         return umrahPackages.map(pkg => {
             const flightType = (pkg.flightsUp.toLowerCase().includes('transit') || pkg.flightsDown.toLowerCase().includes('transit')) ? 'Transit' : 'Direct';
-            const hotelInfo = `${pkg.hotelMakkah} ${pkg.hotelMadinah}`.toLowerCase();
-            let hotelProximity = 'Close'; // Default
-            if (hotelInfo.includes('0 mitre') || hotelInfo.includes('100-200 mitre')) {
-                hotelProximity = 'Very Close';
-            }
-            return { ...pkg, flightType, hotelProximity };
+            
+            const distanceMatch = pkg.hotelMakkah.match(/(\d+)\s*m/);
+            const distance = distanceMatch ? parseInt(distanceMatch[1], 10) : 9999;
+            const hotelProximity = distance <= 300 ? 'Close' : 'Far';
+
+            return {
+                ...pkg,
+                flightType,
+                hotelProximity,
+            };
         });
     }, [umrahPackages]);
 
@@ -355,153 +381,116 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         maxDuration: umrahMaxDuration, setMaxDuration: setUmrahMaxDuration,
         packageTypes: umrahPackageTypes,
         selectedTypes: umrahSelectedTypes, handleTypeChange: handleUmrahTypeChange,
-        resetFilters: resetUmrahFiltersFromHook,
-        filteredPackages: filteredUmrahPackagesFromHook
+        resetFilters: resetUmrahFilters,
+        filteredPackages: filteredUmrahPackages
     } = usePackageFilters<EnhancedUmrahPackage>(enhancedUmrahPackages, parseUmrahDuration);
 
-    const [flightType, setFlightType] = useState('any');
-    const [hotelProximity, setHotelProximity] = useState('any');
+    const [umrahFlightType, setUmrahFlightType] = useState('all');
+    const [umrahHotelProximity, setUmrahHotelProximity] = useState('all');
 
-    const resetUmrahFilters = () => {
-        resetUmrahFiltersFromHook();
-        setFlightType('any');
-        setHotelProximity('any');
+    const finalFilteredUmrahPackages = useMemo(() => {
+        let packages = filteredUmrahPackages;
+        if (umrahFlightType !== 'all') {
+            packages = packages.filter(p => p.flightType.toLowerCase() === umrahFlightType);
+        }
+        if (umrahHotelProximity !== 'all') {
+            packages = packages.filter(p => p.hotelProximity.toLowerCase() === umrahHotelProximity);
+        }
+        return packages;
+    }, [filteredUmrahPackages, umrahFlightType, umrahHotelProximity]);
+
+    const resetAllUmrahFilters = () => {
+        resetUmrahFilters();
+        setUmrahFlightType('all');
+        setUmrahHotelProximity('all');
     };
 
-    const filteredUmrahPackages = useMemo(() => {
-        return filteredUmrahPackagesFromHook.filter(pkg => {
-            const flightMatch = flightType === 'any' || pkg.flightType.toLowerCase() === flightType;
-            const proximityMatch = hotelProximity === 'any' || pkg.hotelProximity.toLowerCase().replace(' ', '-') === hotelProximity;
-            return flightMatch && proximityMatch;
-        });
-    }, [filteredUmrahPackagesFromHook, flightType, hotelProximity]);
-
-
-  return (
-    <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-dark-bg`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {showTitle && (
-            <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{homePageData.title}</h2>
-            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{homePageData.subtitle}</p>
-            </div>
-        )}
-
-        {/* --- Hajj Packages Section --- */}
-        <div className="bg-gray-100 rounded-xl p-6 md:p-10 mb-16 shadow-inner">
-            {showHajjFilters && (
-              <div className="bg-light-bg rounded-lg p-4 md:p-6 mb-8 shadow-inner text-white">
-                <h3 className="text-2xl font-display mb-4">Filter Hajj Packages</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
-                    <FilterInput label="Min Price (৳)" type="number" value={hajjMinPrice} onChange={e => setHajjMinPrice(e.target.value)} placeholder="e.g. 9500000" />
-                    <FilterInput label="Max Price (৳)" type="number" value={hajjMaxPrice} onChange={e => setHajjMaxPrice(e.target.value)} placeholder="e.g. 10000000" />
-                    <FilterSelect label="Sort By" value={hajjSort} onChange={e => setHajjSort(e.target.value)}>
-                        <option value="default">Default</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                    </FilterSelect>
-                    <FilterInput label="Min Duration (Days)" type="number" value={hajjMinDuration} onChange={e => setHajjMinDuration(e.target.value)} placeholder="e.g. 20" />
-                    <FilterInput label="Max Duration (Days)" type="number" value={hajjMaxDuration} onChange={e => setHajjMaxDuration(e.target.value)} placeholder="e.g. 40" />
-                </div>
-                <div className="mt-4">
-                    <h4 className="font-semibold mb-2">Package Type</h4>
-                    <div className="flex flex-wrap gap-x-6 gap-y-2">
-                        {hajjPackageTypes.map(type => (
-                            <FilterCheckbox key={type} label={type} checked={hajjSelectedTypes.includes(type)} onChange={() => handleHajjTypeChange(type)} />
-                        ))}
-                    </div>
-                </div>
-                <div className="mt-6">
-                    <button onClick={resetHajjFilters} className="bg-secondary text-dark-bg font-bold py-2 px-5 rounded-lg hover:bg-amber-600 transition-colors">Reset Filters</button>
-                </div>
-              </div>
-            )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
-                {loading ? (
-                    [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
-                ) : filteredHajjPackages.length > 0 ? (
-                    <>
-                        {filteredHajjPackages.map((pkg) => <HajjPackageCard key={pkg.name} pkg={pkg} />)}
-                        <HajjPreRegistrationCard />
-                    </>
-                ) : (
-                    <div className="col-span-full text-center py-16 text-gray-500">
-                        <h4 className="text-2xl font-semibold">No Hajj Packages Found</h4>
-                        <p className="mt-2">Try adjusting your filters or contact us for custom packages.</p>
+    return (
+        <section className="py-20 bg-dark-bg">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                {showTitle && (
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{homePageData.title}</h2>
+                        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{homePageData.subtitle}</p>
                     </div>
                 )}
-            </div>
-        </div>
 
-        {/* --- Umrah Packages Section --- */}
-        <div className="bg-[#EBF5F0] rounded-xl p-6 md:p-10 shadow-inner">
-           <div className="text-center mb-12">
-             <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-800">{packagesPageData.umrahSection.title}</h3>
-             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">{packagesPageData.umrahSection.subtitle}</p>
-             <a href="#packages" className="mt-6 inline-block bg-secondary text-dark-bg font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-colors">
-                {packagesPageData.umrahSection.buttonText}
-             </a>
-           </div>
-          {showUmrahFilters && (
-              <div className="bg-light-bg rounded-lg p-4 md:p-6 mb-8 shadow-inner text-white">
-                <h3 className="text-2xl font-display mb-4">Filter Umrah Packages</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-                    <FilterInput label="Min Price (৳)" type="number" value={umrahMinPrice} onChange={e => setUmrahMinPrice(e.target.value)} placeholder="e.g. 150000" />
-                    <FilterInput label="Max Price (৳)" type="number" value={umrahMaxPrice} onChange={e => setUmrahMaxPrice(e.target.value)} placeholder="e.g. 200000" />
-                    <FilterSelect label="Sort By" value={umrahSort} onChange={e => setUmrahSort(e.target.value)}>
-                        <option value="default">Default</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                    </FilterSelect>
-                     <FilterSelect label="Flight Type" value={flightType} onChange={e => setFlightType(e.target.value)}>
-                        <option value="any">Any Flight Type</option>
-                        <option value="direct">Direct</option>
-                        <option value="transit">Transit</option>
-                    </FilterSelect>
-                    <FilterInput label="Min Duration (Days)" type="number" value={umrahMinDuration} onChange={e => setUmrahMinDuration(e.target.value)} placeholder="e.g. 10" />
-                    <FilterInput label="Max Duration (Days)" type="number" value={umrahMaxDuration} onChange={e => setUmrahMaxDuration(e.target.value)} placeholder="e.g. 15" />
-                    <FilterSelect label="Hotel Proximity" value={hotelProximity} onChange={e => setHotelProximity(e.target.value)}>
-                        <option value="any">Any Proximity</option>
-                        <option value="very-close">Very Close (0-200m)</option>
-                        <option value="close">Close (201m+)</option>
-                    </FilterSelect>
-                </div>
-                <div className="mt-4">
-                    <h4 className="font-semibold mb-2">Package Type</h4>
-                    <div className="flex flex-wrap gap-x-6 gap-y-2">
-                        {umrahPackageTypes.map(type => (
-                            <FilterCheckbox key={type} label={type} checked={umrahSelectedTypes.includes(type)} onChange={() => handleUmrahTypeChange(type)} />
-                        ))}
+                {/* --- Hajj Packages Section --- */}
+                <div>
+                    {showHajjFilters && (
+                        <div className="bg-light-bg p-6 rounded-lg mb-10 shadow-lg">
+                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 items-end">
+                                <FilterSelect label="Sort by" value={hajjSort} onChange={e => setHajjSort(e.target.value)}>
+                                    <option value="default">Default</option>
+                                    <option value="price-asc">Price: Low to High</option>
+                                    <option value="price-desc">Price: High to Low</option>
+                                </FilterSelect>
+                                <FilterInput label="Min Price" type="number" value={hajjMinPrice} onChange={e => setHajjMinPrice(e.target.value)} placeholder="e.g. 500000" />
+                                <FilterInput label="Max Price" type="number" value={hajjMaxPrice} onChange={e => setHajjMaxPrice(e.target.value)} placeholder="e.g. 1500000" />
+                                <FilterInput label="Min Duration (Days)" type="number" value={hajjMinDuration} onChange={e => setHajjMinDuration(e.target.value)} placeholder="e.g. 15" />
+                                <FilterInput label="Max Duration (Days)" type="number" value={hajjMaxDuration} onChange={e => setHajjMaxDuration(e.target.value)} placeholder="e.g. 45" />
+                                <button onClick={resetHajjFilters} className="bg-secondary text-dark-bg font-bold py-2 px-4 rounded-md hover:bg-amber-600 h-10">Reset</button>
+                            </div>
+                             <div className="mt-4 pt-4 border-t border-gray-700">
+                                <h4 className="text-lg font-semibold text-white mb-2">Package Type</h4>
+                                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                                    {hajjPackageTypes.map(type => (
+                                        <FilterCheckbox key={type} label={type} checked={hajjSelectedTypes.includes(type)} onChange={() => handleHajjTypeChange(type)} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {loading ? [...Array(3)].map((_, i) => <SkeletonCard key={i} />) : filteredHajjPackages.map(pkg => <HajjPackageCard key={pkg.name} pkg={pkg} />)}
+                        <HajjPreRegistrationCard />
                     </div>
                 </div>
-                <div className="mt-6">
-                    <button onClick={resetUmrahFilters} className="bg-secondary text-dark-bg font-bold py-2 px-5 rounded-lg hover:bg-amber-600 transition-colors">Reset Filters</button>
+                
+                <KeyHighlights />
+
+                {/* --- Umrah Packages Section --- */}
+                <div className="mt-20">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{packagesPageData.umrahSection.title}</h2>
+                        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{packagesPageData.umrahSection.subtitle}</p>
+                    </div>
+                     {showUmrahFilters && (
+                        <div className="bg-light-bg p-6 rounded-lg mb-10 shadow-lg">
+                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
+                                <FilterSelect label="Sort by" value={umrahSort} onChange={e => setUmrahSort(e.target.value)}>
+                                    <option value="default">Default</option>
+                                    <option value="price-asc">Price: Low to High</option>
+                                    <option value="price-desc">Price: High to Low</option>
+                                </FilterSelect>
+                                <FilterInput label="Min Price" type="number" value={umrahMinPrice} onChange={e => setUmrahMinPrice(e.target.value)} placeholder="e.g. 150000" />
+                                <FilterInput label="Max Price" type="number" value={umrahMaxPrice} onChange={e => setUmrahMaxPrice(e.target.value)} placeholder="e.g. 300000" />
+                                <FilterSelect label="Flight Type" value={umrahFlightType} onChange={e => setUmrahFlightType(e.target.value)}>
+                                    <option value="all">All</option>
+                                    <option value="direct">Direct</option>
+                                    <option value="transit">Transit</option>
+                                </FilterSelect>
+                                <button onClick={resetAllUmrahFilters} className="bg-secondary text-dark-bg font-bold py-2 px-4 rounded-md hover:bg-amber-600 h-10">Reset</button>
+                            </div>
+                             <div className="mt-4 pt-4 border-t border-gray-700">
+                                <h4 className="text-lg font-semibold text-white mb-2">Package Type</h4>
+                                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                                    {umrahPackageTypes.map(type => (
+                                        <FilterCheckbox key={type} label={type} checked={umrahSelectedTypes.includes(type)} onChange={() => handleUmrahTypeChange(type)} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {loading ? [...Array(3)].map((_, i) => <SkeletonCard key={i} />) : finalFilteredUmrahPackages.map(pkg => <UmrahPackageCard key={pkg.name} pkg={pkg} />)}
+                    </div>
                 </div>
-              </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             {loading ? (
-                [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
-             ) : filteredUmrahPackages.length > 0 ? (
-                filteredUmrahPackages.map((pkg) => <UmrahPackageCard key={pkg.name} pkg={pkg} />)
-             ) : (
-                <div className="col-span-full text-center py-16 text-gray-500">
-                    <h4 className="text-2xl font-semibold">No Umrah Packages Found</h4>
-                    <p className="mt-2">Try adjusting your filters or check back for new packages soon.</p>
-                </div>
-             )}
-          </div>
-        </div>
 
-        {/* --- Key Highlights Section --- */}
-        <KeyHighlights />
-
-        {/* --- Gallery Section --- */}
-        <Gallery />
-
-      </div>
-    </section>
-  );
+                <Gallery />
+            </div>
+        </section>
+    );
 };
 
 export default FeaturedPackages;
