@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -19,6 +19,31 @@ const AppContent: React.FC = () => {
   const [page, setPage] = useState('');
   const [contactSubject, setContactSubject] = useState('');
   const { isAuthenticated } = useContext(AuthContext);
+  const keySequenceRef = useRef('');
+  const secretCode = '045';
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        keySequenceRef.current += e.key;
+
+        // Keep the sequence only as long as the secret code
+        if (keySequenceRef.current.length > secretCode.length) {
+            keySequenceRef.current = keySequenceRef.current.slice(-secretCode.length);
+        }
+
+        // Check if the sequence matches the secret code
+        if (keySequenceRef.current === secretCode) {
+            window.location.hash = '#login';
+            keySequenceRef.current = ''; // Reset the sequence
+        }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); // Empty dependency array ensures this runs only once
 
   useEffect(() => {
     const handleHashChange = () => {

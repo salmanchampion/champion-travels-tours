@@ -6,13 +6,6 @@ interface HeaderProps {
   activePage: string;
 }
 
-// A common interface for navigation links to ensure type safety.
-interface NavLink {
-  href: string;
-  label: string;
-  subLinks?: { href: string; label: string; }[];
-}
-
 const Header: React.FC<HeaderProps> = ({ activePage }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,11 +25,6 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const adminLinks: NavLink[] = isAuthenticated
-    ? [{ href: '#admin', label: 'Admin Panel' }]
-    : [{ href: '#login', label: 'Login' }];
-
 
   const isServicesSectionActive = ['#services', '#packages', '#visa-processing'].includes(activePage);
 
@@ -105,13 +93,15 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
                 </a>
               )
             ))}
-            <div className="w-px h-6 bg-gray-600"></div>
-            {adminLinks.map(link => (
-               <a key={link.href} href={link.href} className={`hover:text-secondary transition-colors duration-300 font-medium ${activePage === link.href ? 'text-secondary' : 'text-light-text'}`}>
-                  {link.label}
+            {isAuthenticated && (
+              <>
+                <div className="w-px h-6 bg-gray-600"></div>
+                <a href="#admin" className={`hover:text-secondary transition-colors duration-300 font-medium ${activePage === '#admin' ? 'text-secondary' : 'text-light-text'}`}>
+                  Admin Panel
                 </a>
-            ))}
-             {isAuthenticated && <button onClick={logout} className="hover:text-secondary transition-colors duration-300 font-medium text-light-text">(Logout)</button>}
+                <button onClick={logout} className="hover:text-secondary transition-colors duration-300 font-medium text-light-text">(Logout)</button>
+              </>
+            )}
           </nav>
           
           <a href={header.bookNowButton.href} className="hidden md:inline-block bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
@@ -134,7 +124,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-light-bg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
-            {[...header.navLinks, ...adminLinks].map((link) => (
+            {header.navLinks.map((link) => (
               link.subLinks ? (
                 <div key={link.label} className="w-full text-center">
                   <div className="flex w-full items-center justify-center">
@@ -187,7 +177,20 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
                 </a>
               )
             ))}
-             {isAuthenticated && <button onClick={() => { logout(); setIsMenuOpen(false); }} className="hover:text-secondary block px-3 py-2 rounded-md text-base font-medium text-light-text">(Logout)</button>}
+            {isAuthenticated && (
+                <>
+                    <a
+                    href="#admin"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`hover:text-secondary block px-3 py-2 rounded-md text-base font-medium ${
+                        activePage === '#admin' ? 'text-secondary' : 'text-light-text'
+                    }`}
+                    >
+                    Admin Panel
+                    </a>
+                    <button onClick={() => { logout(); setIsMenuOpen(false); }} className="hover:text-secondary block px-3 py-2 rounded-md text-base font-medium text-light-text">(Logout)</button>
+                </>
+            )}
             <a href={header.bookNowButton.href} onClick={() => setIsMenuOpen(false)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary-dark transition-transform duration-300 hover:scale-105">
               {header.bookNowButton.text}
             </a>

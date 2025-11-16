@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"
-                            placeholder="mhammadsalmansharif37@gmail.com"
+                            placeholder="Enter your gmail"
                         />
                     </div>
                     <div>
