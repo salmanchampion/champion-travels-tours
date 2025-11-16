@@ -79,18 +79,23 @@ const VisaInquiryForm: React.FC = () => {
         }
 
         const formElement = e.target as HTMLFormElement;
-        const submissionData = new FormData(formElement);
+        const submissionFormData = new FormData(formElement);
+        const body = new URLSearchParams();
+        submissionFormData.forEach((value, key) => {
+            body.append(key, value.toString());
+        });
 
         try {
             const response = await fetch(googleAppsScriptUrl, {
                 method: 'POST',
-                body: submissionData,
+                body: body,
             });
 
             if (response.ok) {
                 setSubmitStatus('success');
                 setFormData({ name: '', email: '', phone: '', destination: '', visaType: 'Tourist Visa', question: '' });
             } else {
+                console.error('Visa inquiry submission failed. Response status:', response.status);
                 throw new Error('Visa inquiry submission failed.');
             }
         } catch (error) {

@@ -46,18 +46,23 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
     }
 
     const form = e.target as HTMLFormElement;
-    const submissionData = new FormData(form);
+    const submissionFormData = new FormData(form);
+    const body = new URLSearchParams();
+    submissionFormData.forEach((value, key) => {
+        body.append(key, value.toString());
+    });
 
     try {
       const response = await fetch(scriptURL, {
         method: 'POST',
-        body: submissionData,
+        body: body,
       });
 
       if (response.ok) {
         setSubmitStatus('success');
         setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
       } else {
+        console.error('Submission failed. Response status:', response.status);
         throw new Error('Submission failed.');
       }
     } catch (error) {
