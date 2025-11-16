@@ -250,6 +250,14 @@ const AdminPage: React.FC = () => {
                     <AdminInput label="Info Title" name="pages.contact.infoTitle" value={localData.pages.contact.infoTitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
                     <AdminTextarea label="Info Subtitle" name="pages.contact.infoSubtitle" value={localData.pages.contact.infoSubtitle} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
                     <AdminInput label="Map Background Image URL" name="pages.contact.mapUrl" value={localData.pages.contact.mapUrl} onChange={e => handleNestedChange(e.target.name, e.target.value)} />
+                    <AdminInput 
+                        label="Google Apps Script URL for Contact Form" 
+                        name="pages.contact.googleAppsScriptUrl" 
+                        value={localData.pages.contact.googleAppsScriptUrl} 
+                        onChange={e => handleNestedChange(e.target.name, e.target.value)} 
+                        placeholder="Paste your deployed web app URL here"
+                        className="mt-4"
+                    />
                     
                     <h4 className="font-bold text-xl mt-4 mb-2 text-secondary">Contact Details</h4>
                     {localData.pages.contact.contactInfo.map((info, index) => (

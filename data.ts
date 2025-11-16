@@ -205,6 +205,7 @@ export interface AppData {
             accreditationsImage: string;
             formButtonText: string;
             mapUrl: string;
+            googleAppsScriptUrl: string;
         };
         whyChooseUs: {
             backgroundImage: string,
@@ -578,7 +579,8 @@ export const defaultData: AppData = {
             ],
             accreditationsImage: 'https://i.postimg.cc/CxskNw84/dd.png',
             formButtonText: 'Send Message',
-            mapUrl: 'https://www.google.com/maps/d/thumbnail?mid=1_Eigadx_tF92wH3uh5B_z3460_M&hl=en'
+            mapUrl: 'https://www.google.com/maps/d/thumbnail?mid=1_Eigadx_tF92wH3uh5B_z3460_M&hl=en',
+            googleAppsScriptUrl: '',
         },
         whyChooseUs: {
             backgroundImage: "https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png",

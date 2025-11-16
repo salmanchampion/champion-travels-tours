@@ -20,6 +20,9 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
     message: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
+
   useEffect(() => {
     setFormData(prevData => ({ ...prevData, subject: defaultSubject }));
   }, [defaultSubject]);
@@ -29,11 +32,40 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you would typically handle form submission, e.g., send to an API
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const scriptURL = contactPageData.googleAppsScriptUrl;
+    if (!scriptURL) {
+      console.error('Google Apps Script URL is not set in the admin panel.');
+      setSubmitStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const form = e.target as HTMLFormElement;
+    const submissionData = new FormData(form);
+
+    try {
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: submissionData,
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      } else {
+        throw new Error('Submission failed.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   const addressInfo = contactPageData.contactInfo.find(info => info.label === 'Address');
@@ -124,8 +156,16 @@ const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true
               <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone" className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
               <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
               <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" rows={5} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
-              <button type="submit" className="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                {contactPageData.formButtonText}
+              
+              {submitStatus === 'success' && (
+                <p className="text-green-400 text-center">Thank you for your message! We will get back to you soon.</p>
+              )}
+              {submitStatus === 'error' && (
+                <p className="text-red-400 text-center">Something went wrong. Please check the Admin Panel for the script URL or try again later.</p>
+              )}
+
+              <button type="submit" disabled={isSubmitting} className="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
+                {isSubmitting ? 'Sending...' : contactPageData.formButtonText}
               </button>
             </form>
           </div>
