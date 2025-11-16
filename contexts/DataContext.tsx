@@ -16,6 +16,31 @@ const initialContextValue: DataContextType = {
 
 export const DataContext = createContext<DataContextType>(initialContextValue);
 
+// Helper function for deep merging objects
+const isObject = (item: any): item is object => {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+};
+
+const deepMerge = (target: any, source: any): any => {
+    let output = { ...target };
+
+    if (isObject(target) && isObject(source)) {
+        Object.keys(source).forEach(key => {
+            if (isObject(source[key])) {
+                if (!(key in target)) {
+                    Object.assign(output, { [key]: source[key] });
+                } else {
+                    output[key] = deepMerge(target[key], source[key]);
+                }
+            } else {
+                Object.assign(output, { [key]: source[key] });
+            }
+        });
+    }
+    return output;
+};
+
+
 interface DataProviderProps {
   children: ReactNode;
 }
@@ -28,8 +53,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         // Basic check to see if it's a valid object
         const parsed = JSON.parse(storedData);
         if (typeof parsed === 'object' && parsed !== null && parsed.site) {
-             // Merge with default data to ensure new fields are present
-             return { ...defaultData, ...parsed };
+             // Deep merge with default data to ensure new fields from updates are present
+             return deepMerge(defaultData, parsed);
         }
       }
     } catch (error) {
@@ -48,7 +73,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   }, [appData]);
 
   const updateAppData = (newData: Partial<AppData>) => {
-    setAppData(prevData => ({ ...prevData, ...newData }));
+    setAppData(prevData => deepMerge(prevData, newData));
   };
 
   const resetAppData = () => {
