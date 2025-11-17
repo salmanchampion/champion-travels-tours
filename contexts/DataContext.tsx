@@ -56,9 +56,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const dbData = docSnap.data() as AppData;
+                const dbNavLinks = dbData.header?.navLinks;
 
                 // Patch: Ensure 'Guidelines' nav link and its sublinks are up-to-date
-                const dbNavLinks = dbData.header?.navLinks;
                 const defaultGuidelinesLink = defaultData.header.navLinks.find(link => link.label === 'Guidelines');
 
                 if (dbNavLinks && defaultGuidelinesLink) {
@@ -75,6 +75,19 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                                 dbGuidelinesLink.subLinks.push(JSON.parse(JSON.stringify(defaultSubLink)));
                             }
                         });
+                    }
+                }
+
+                // Patch: Ensure 'Why Choose Us' nav link is present
+                if (dbNavLinks) {
+                    const whyChooseUsLinkInDb = dbNavLinks.find(link => link.href === '#why-choose-us');
+                    if (!whyChooseUsLinkInDb) {
+                        const defaultWhyChooseUsLink = defaultData.header.navLinks.find(link => link.href === '#why-choose-us');
+                        if (defaultWhyChooseUsLink) {
+                            const homeIndex = dbNavLinks.findIndex(link => link.href === '#home');
+                            // Insert after Home, or at the beginning if Home isn't found
+                            dbNavLinks.splice(homeIndex > -1 ? homeIndex + 1 : 0, 0, JSON.parse(JSON.stringify(defaultWhyChooseUsLink)));
+                        }
                     }
                 }
                 

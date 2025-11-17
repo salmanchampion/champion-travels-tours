@@ -41,12 +41,12 @@ const SkeletonCard: React.FC = () => (
 
 
 // --- Hajj Card Detail Row Component ---
-const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
+const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: any; }> = ({ icon, label, value }) => (
     <div className="flex items-start space-x-3 py-2 border-b border-gray-200 last:border-b-0">
         <div className="flex-shrink-0 pt-1">{icon}</div>
         <div className="flex-grow">
             <p className="text-sm font-semibold text-gray-700">{label}</p>
-            <p className="text-sm text-gray-500">{value}</p>
+            <p className="text-sm text-gray-500">{String(value || '')}</p>
         </div>
     </div>
 );
@@ -60,7 +60,7 @@ const HajjPackageCard: React.FC<{ pkg: HajjPackage }> = ({ pkg }) => (
             <h3 className="text-xl font-bold font-display text-primary">{pkg.name}</h3>
         </div>
         <div className="p-4 flex-grow">
-            <DetailRow icon={<PriceIcon />} label="Price" value={`৳${Number(pkg.price).toLocaleString()}`} />
+            <DetailRow icon={<PriceIcon />} label="Price" value={pkg.price} />
             <DetailRow icon={<DurationIcon />} label="Time & Duration" value={pkg.duration} />
             <DetailRow icon={<HotelIcon />} label="Hotel Makkah" value={pkg.hotelMakkah} />
             <DetailRow icon={<HotelIcon />} label="Hotel Madinah" value={pkg.hotelMadinah} />
@@ -168,7 +168,7 @@ const UmrahPackageCard: React.FC<{ pkg: EnhancedUmrahPackage }> = ({ pkg }) => {
         </div>
         <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
         <div className="p-4 flex-grow">
-            <DetailRow icon={<PriceIcon />} label="Price" value={`৳${Number(pkg.price).toLocaleString()}`} />
+            <DetailRow icon={<PriceIcon />} label="Price" value={pkg.price} />
             <DetailRow icon={<DateIcon />} label="Date" value={pkg.date} />
             <DetailRow icon={<HotelIcon />} label="Hotel Makkah" value={pkg.hotelMakkah} />
             <DetailRow icon={<HotelIcon />} label="Hotel Madinah" value={pkg.hotelMadinah} />
@@ -198,7 +198,7 @@ const Gallery: React.FC = () => {
         <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{gallery.description}</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {gallery.images.map((image, index) => (
+        {gallery.images.filter(img => img.enabled).map((image, index) => (
           <div key={index} className="overflow-hidden rounded-lg shadow-lg group aspect-square">
             <img
               src={image.src}
@@ -264,7 +264,26 @@ const usePackageFilters = <T extends { name: string; price: string; }>(
     const packageTypes = useMemo(() => [...new Set(initialPackages.map(p => p.name))], [initialPackages]);
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     
-    const parsePrice = (priceStr: string) => Number(String(priceStr).replace(/,/g, ''));
+    const parsePrice = (priceStr: any) => {
+        const str = priceStr?.toString() || '';
+        if (!str) return NaN;
+
+        const bengaliNumerals: { [key: string]: string } = {
+            '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4',
+            '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9'
+        };
+
+        let englishStr = str.replace(/[০-৯]/g, (match) => bengaliNumerals[match]);
+        
+        // Remove all non-digit characters (commas, currency symbols, text)
+        const numericPart = englishStr.replace(/[^\d]/g, '');
+
+        if (numericPart) {
+            return parseInt(numericPart, 10);
+        }
+
+        return NaN; // Return NaN if no numeric part is found
+    };
 
     const handleTypeChange = (typeName: string) => {
         setSelectedTypes(prev =>
@@ -286,14 +305,35 @@ const usePackageFilters = <T extends { name: string; price: string; }>(
     const filteredPackages = useMemo(() => {
         let packages = [...initialPackages];
 
-        if (minPrice) packages = packages.filter(p => parsePrice(p.price) >= Number(minPrice));
-        if (maxPrice) packages = packages.filter(p => parsePrice(p.price) <= Number(maxPrice));
+        if (minPrice) packages = packages.filter(p => {
+            const price = parsePrice(p.price);
+            return !isNaN(price) && price >= Number(minPrice);
+        });
+        if (maxPrice) packages = packages.filter(p => {
+            const price = parsePrice(p.price);
+            return !isNaN(price) && price <= Number(maxPrice);
+        });
         if (minDuration) packages = packages.filter(p => durationParser(p) >= Number(minDuration));
         if (maxDuration) packages = packages.filter(p => durationParser(p) <= Number(maxDuration));
         if (selectedTypes.length > 0) packages = packages.filter(p => selectedTypes.includes(p.name));
         
-        if (sort === 'price-asc') packages.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-        else if (sort === 'price-desc') packages.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+        if (sort === 'price-asc') {
+             packages.sort((a, b) => {
+                const priceA = parsePrice(a.price);
+                const priceB = parsePrice(b.price);
+                if (isNaN(priceA)) return 1;
+                if (isNaN(priceB)) return -1;
+                return priceA - priceB;
+            });
+        } else if (sort === 'price-desc') {
+            packages.sort((a, b) => {
+                const priceA = parsePrice(a.price);
+                const priceB = parsePrice(b.price);
+                if (isNaN(priceA)) return 1;
+                if (isNaN(priceB)) return -1;
+                return priceB - priceA;
+            });
+        }
 
         return packages;
     }, [sort, minPrice, maxPrice, minDuration, maxDuration, selectedTypes, initialPackages, durationParser]);
@@ -321,9 +361,12 @@ interface FeaturedPackagesProps {
 const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = false, showUmrahFilters = false, showTitle = true }) => {
     const [loading, setLoading] = useState(true);
     const { appData } = useContext(DataContext);
-    const { hajjPackages, umrahPackages } = appData;
+
+    const visibleHajjPackages = useMemo(() => appData.hajjPackages.filter(p => p.enabled), [appData.hajjPackages]);
+    const visibleUmrahPackages = useMemo(() => appData.umrahPackages.filter(p => p.enabled), [appData.umrahPackages]);
+
+    const homePageData = appData.pages.home.sections.packages;
     const packagesPageData = appData.pages.packages;
-    const homePageData = appData.pages.home.packages;
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -354,11 +397,11 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
         selectedTypes: hajjSelectedTypes, handleTypeChange: handleHajjTypeChange,
         resetFilters: resetHajjFilters,
         filteredPackages: filteredHajjPackages
-    } = usePackageFilters<HajjPackage>(hajjPackages, parseHajjDuration);
+    } = usePackageFilters<HajjPackage>(visibleHajjPackages, parseHajjDuration);
     
     // --- Enhance Umrah packages with filterable properties ---
     const enhancedUmrahPackages = useMemo((): EnhancedUmrahPackage[] => {
-        return umrahPackages.map(pkg => {
+        return visibleUmrahPackages.map(pkg => {
             const flightType = (pkg.flightsUp.toLowerCase().includes('transit') || pkg.flightsDown.toLowerCase().includes('transit')) ? 'Transit' : 'Direct';
             
             const distanceMatch = pkg.hotelMakkah.match(/(\d+)\s*m/);
@@ -371,7 +414,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
                 hotelProximity,
             };
         });
-    }, [umrahPackages]);
+    }, [visibleUmrahPackages]);
 
     const {
         sort: umrahSort, setSort: setUmrahSort,

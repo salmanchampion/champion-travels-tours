@@ -152,6 +152,11 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
     const { visaProcessing } = appData.pages;
     const { pageBanner, offerTitle, offerList, processTitle, processSteps, whyChooseUsTitle, whyChooseUsFeatures } = visaProcessing;
 
+    const visibleOffers = offerList.filter(item => item.enabled);
+    const visibleSteps = processSteps.filter(item => item.enabled);
+    const visibleFeatures = whyChooseUsFeatures.filter(item => item.enabled);
+
+
     return (
         <div className="bg-dark-bg">
             <section className={`${showTitle ? 'py-20' : 'pb-20'}`}>
@@ -167,7 +172,7 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
                     <div className="mb-20">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-white mb-10">{offerTitle}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {offerList.map(service => <FeatureCard key={service.title} {...service} icon={iconMap[service.icon] || iconMap.Default} />)}
+                            {visibleOffers.map(service => <FeatureCard key={service.title} {...service} icon={iconMap[service.icon] || iconMap.Default} />)}
                         </div>
                     </div>
 
@@ -175,7 +180,7 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
                     <div className="mb-20">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-white mb-12">{processTitle}</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                            {processSteps.map((step, index) => <ProcessStep key={step.title} {...step} step={index + 1} icon={iconMap[step.icon] || iconMap.Default} />)}
+                            {visibleSteps.map((step, index) => <ProcessStep key={step.title} {...step} step={index + 1} icon={iconMap[step.icon] || iconMap.Default} />)}
                         </div>
                     </div>
 
@@ -183,7 +188,7 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
                     <div className="bg-light-bg rounded-lg p-8 md:p-12">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-white mb-10">{whyChooseUsTitle}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {whyChooseUsFeatures.map(feature => <FeatureCard key={feature.title} {...feature} icon={iconMap[feature.icon] || iconMap.Default} />)}
+                            {visibleFeatures.map(feature => <FeatureCard key={feature.title} {...feature} icon={iconMap[feature.icon] || iconMap.Default} />)}
                         </div>
                          <VisaInquiryForm />
                     </div>

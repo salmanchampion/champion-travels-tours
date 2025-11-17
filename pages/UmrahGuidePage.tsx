@@ -43,6 +43,9 @@ const UmrahGuidePage: React.FC = () => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
 
+    const visibleSteps = steps.filter(step => step.enabled);
+    const visibleFaqs = faq.items.filter(item => item.enabled);
+
     return (
         <div className="pt-20 bg-[#FBF9F5]" style={{ backgroundImage: `url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png')` }}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-gray-800">
@@ -60,7 +63,7 @@ const UmrahGuidePage: React.FC = () => {
                         <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">{stepsIntro}</p>
                     </div>
                     <div className="space-y-8">
-                        {steps.map((step, index) => (
+                        {visibleSteps.map((step, index) => (
                             <div key={index} className="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-gray-200">
                                 <h3 className="text-3xl font-bold text-primary mb-2">{step.title}</h3>
                                 <p className="text-gray-600 mb-4">{step.description}</p>
@@ -126,7 +129,7 @@ const UmrahGuidePage: React.FC = () => {
                             <h2 className="text-3xl md:text-5xl font-display font-bold text-dark-bg">{faq.title}</h2>
                         </div>
                         <div className="max-w-3xl mx-auto">
-                            {faq.items.map((item, index) => (
+                            {visibleFaqs.map((item, index) => (
                                 <FaqItem
                                     key={index}
                                     item={item}

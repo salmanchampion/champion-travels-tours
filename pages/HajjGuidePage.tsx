@@ -43,7 +43,7 @@ const GuideSection: React.FC<{
             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">{intro}</p>
         </div>
         <div className="space-y-8">
-            {items.map((item, index) => (
+            {items.filter(i => i.enabled).map((item, index) => (
                 <div key={index} className="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-gray-200">
                     <h3 className="text-3xl font-bold text-primary mb-2">{item.title}</h3>
                     <p className="text-gray-600">{item.description}</p>
@@ -65,6 +65,11 @@ const HajjGuidePage: React.FC = () => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
 
+    const visibleTypes = types.list.filter(item => item.enabled);
+    const visibleFaraj = faraj.list.filter(item => item.enabled);
+    const visibleWajib = wajib.list.filter(item => item.enabled);
+    const visibleFaqs = faq.items.filter(item => item.enabled);
+
     return (
         <div className="pt-20 bg-[#FBF9F5]" style={{ backgroundImage: `url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png')` }}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-gray-800">
@@ -76,13 +81,13 @@ const HajjGuidePage: React.FC = () => {
                 </section>
 
                 {/* --- Types of Hajj --- */}
-                <GuideSection title={types.title} intro={types.intro} items={types.list} />
+                <GuideSection title={types.title} intro={types.intro} items={visibleTypes} />
 
                 {/* --- Faraj of Hajj --- */}
-                <GuideSection title={faraj.title} intro={faraj.intro} items={faraj.list} />
+                <GuideSection title={faraj.title} intro={faraj.intro} items={visibleFaraj} />
                 
                 {/* --- Wajib of Hajj --- */}
-                <GuideSection title={wajib.title} intro={wajib.intro} items={wajib.list} />
+                <GuideSection title={wajib.title} intro={wajib.intro} items={visibleWajib} />
 
                 {/* --- Do's and Don'ts --- */}
                  <section className="mb-16">
@@ -104,16 +109,18 @@ const HajjGuidePage: React.FC = () => {
                             </div>
                              <div className="lg:w-1/2 flex items-center justify-center min-h-[300px]">
                                 <div className="relative w-full h-64 sm:h-80">
-                                    <img 
-                                        src={dosAndDonts.images[0]}
-                                        alt="Hajj Pilgrims"
-                                        className="absolute top-0 left-0 w-[65%] h-[90%] object-cover rounded-lg shadow-xl transform -rotate-12"
-                                    />
-                                    <img 
-                                        src={dosAndDonts.images[1]}
-                                        alt="Mount Arafat"
-                                        className="absolute bottom-0 right-0 w-[65%] h-[90%] object-cover rounded-lg shadow-xl transform rotate-12"
-                                    />
+                                     {dosAndDonts.images.map((src, index) => (
+                                        <img 
+                                            key={index}
+                                            src={src}
+                                            alt={`Hajj illustration ${index + 1}`}
+                                            className={`absolute object-cover rounded-lg shadow-xl transform 
+                                                ${index === 0 ? 'top-0 left-0 w-[65%] h-[90%] -rotate-12' : ''}
+                                                ${index === 1 ? 'bottom-0 right-0 w-[65%] h-[90%] rotate-12' : ''}
+                                                ${index === 2 ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[60%] z-10 border-4 border-white' : ''}
+                                            `}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -130,7 +137,7 @@ const HajjGuidePage: React.FC = () => {
                             <h2 className="text-3xl md:text-5xl font-display font-bold text-dark-bg">{faq.title}</h2>
                         </div>
                         <div className="max-w-3xl mx-auto">
-                            {faq.items.map((item, index) => (
+                            {visibleFaqs.map((item, index) => (
                                 <FaqItem
                                     key={index}
                                     item={item}

@@ -11,6 +11,9 @@ const Footer: React.FC = () => {
   const { appData } = useContext(DataContext);
   const { footer } = appData;
 
+  const visibleQuickLinks = footer.quickLinks.links.filter(link => link.enabled);
+  const visibleMainServices = footer.mainServices.links.filter(link => link.enabled);
+
   return (
     <footer className="bg-light-bg text-light-text">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -32,7 +35,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-display font-semibold text-white mb-4">{footer.quickLinks.title}</h3>
             <ul className="space-y-2">
-              {footer.quickLinks.links.map(link => (
+              {visibleQuickLinks.map(link => (
                   <li key={link.href}><a href={link.href} className="text-muted-text hover:text-primary transition-colors">{link.label}</a></li>
               ))}
             </ul>
@@ -42,7 +45,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-display font-semibold text-white mb-4">{footer.mainServices.title}</h3>
             <ul className="space-y-2">
-              {footer.mainServices.links.map(link => (
+              {visibleMainServices.map(link => (
                 <li key={link.href}><a href={link.href} className="text-muted-text hover:text-primary transition-colors">{link.label}</a></li>
               ))}
             </ul>

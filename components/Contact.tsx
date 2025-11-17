@@ -8,7 +8,8 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ defaultSubject = '', showTitle = true }) => {
   const { appData } = useContext(DataContext);
-  const homeData = appData.pages.home.contact;
+  // FIX: Corrected path to home page contact section data.
+  const homeData = appData.pages.home.sections.contact;
   const contactPageData = appData.pages.contact;
   const data = showTitle ? homeData : contactPageData.pageBanner;
   

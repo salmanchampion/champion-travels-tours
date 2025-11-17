@@ -27,8 +27,8 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
   }, []);
 
   const isHomepage = activePage === '#home' || activePage === '';
-  const isServicesSectionActive = ['#services', '#packages', '#visa-processing'].includes(activePage);
-  const isGuidelinesSectionActive = ['#hajj-guide-in-bangla', '#umrah-guide-in-bangla'].includes(activePage);
+  const isServicesSectionActive = ['#services', '#packages', '#visa-processing', '#air-ticketing'].includes(activePage);
+  const isGuidelinesSectionActive = ['#hajj-guide-in-bangla', '#umrah-guide-in-bangla', '#why-us', '#expert-hajj-guides'].includes(activePage);
 
   const getIsActive = (label: string) => {
     if (label === 'Services') return isServicesSectionActive;
@@ -39,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
   const handleMobileSubmenuToggle = (label: string) => {
     setMobileSubmenu(mobileSubmenu === label ? null : label);
   }
+  
+  const visibleNavLinks = header.navLinks.filter(link => link.enabled);
 
   return (
     <header
@@ -60,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
           </a>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {header.navLinks.map((link) => (
+            {visibleNavLinks.map((link) => (
               link.subLinks ? (
                 <div 
                   key={link.label}
@@ -80,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
                   </a>
                   {openDropdown === link.label && (
                     <div className="absolute top-full left-0 mt-2 w-60 bg-light-bg rounded-md shadow-lg py-2">
-                      {link.subLinks.map(subLink => (
+                      {link.subLinks.filter(sub => sub.enabled).map(subLink => (
                         <a
                           key={subLink.href}
                           href={subLink.href}
@@ -137,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-light-bg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
-            {header.navLinks.map((link) => (
+            {visibleNavLinks.map((link) => (
               link.subLinks ? (
                 <div key={link.label} className="w-full text-center">
                   <div className="flex w-full items-center justify-center">
@@ -169,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({ activePage }) => {
                   </div>
                   {mobileSubmenu === link.label && (
                     <div className="pl-4 bg-dark-bg rounded-md">
-                      {link.subLinks.map(subLink => (
+                      {link.subLinks.filter(sub => sub.enabled).map(subLink => (
                         <a
                           key={subLink.href}
                           href={subLink.href}

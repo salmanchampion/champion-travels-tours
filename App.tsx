@@ -16,6 +16,10 @@ import WhyUsPage from './pages/WhyUsPage';
 import UmrahGuidePage from './pages/UmrahGuidePage';
 import { SeoMetadata } from './data';
 import HajjGuidePage from './pages/HajjGuidePage';
+import ExpertHajjGuidesPage from './pages/ExpertHajjGuidesPage';
+import WhyChooseChampionPage from './pages/WhyChooseChampionPage';
+import AirTicketingPage from './pages/AirTicketingPage';
+import CustomPage from './pages/CustomPage';
 
 
 const AppContent: React.FC = () => {
@@ -77,11 +81,21 @@ const AppContent: React.FC = () => {
 
     const getSeoData = (): SeoMetadata | undefined => {
       const pages = appData.pages;
+      
+      // Check for custom pages first
+      const customPageData = appData.customPages?.find(p => p.id === page && p.enabled);
+      if (customPageData) {
+        return customPageData.seo;
+      }
+      
       switch (page) {
         case '#services': return pages.services.seo;
         case '#packages': return pages.packages.seo;
         case '#visa-processing': return pages.visaProcessing.seo;
+        case '#air-ticketing': return pages.airTicketing.seo;
         case '#why-us': return pages.whyChooseUs.seo;
+        case '#expert-hajj-guides': return pages.expertHajjGuides.seo;
+        case '#why-choose-us': return pages.whyChooseChampion.seo;
         case '#umrah-guide-in-bangla': return pages.umrahGuide.seo;
         case '#hajj-guide-in-bangla': return pages.hajjGuide.seo;
         case '#team': return pages.team.seo;
@@ -128,11 +142,20 @@ const AppContent: React.FC = () => {
       return <LoginPage />;
     }
 
+    // Check for custom pages
+    const customPageData = appData.customPages?.find(p => p.id === currentPage && p.enabled);
+    if (customPageData) {
+        return <CustomPage pageData={customPageData} />;
+    }
+
     switch (currentPage) {
       case '#services': return <ServicesPage />;
       case '#packages': return <PackagesPage />;
       case '#visa-processing': return <VisaProcessingPage />;
+      case '#air-ticketing': return <AirTicketingPage />;
       case '#why-us': return <WhyUsPage />;
+      case '#expert-hajj-guides': return <ExpertHajjGuidesPage />;
+      case '#why-choose-us': return <WhyChooseChampionPage />;
       case '#umrah-guide-in-bangla': return <UmrahGuidePage />;
       case '#hajj-guide-in-bangla': return <HajjGuidePage />;
       case '#team': return <TeamPage />;

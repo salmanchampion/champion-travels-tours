@@ -15,6 +15,8 @@ const DecorativeLine: React.FC = () => (
 const TeamPage: React.FC = () => {
     const { appData } = useContext(DataContext);
     const { pageBanner, chairman, talentedEmployees, chairmanTitle, employeesTitle, employeesSubtitle } = appData.pages.team;
+    
+    const visibleEmployees = talentedEmployees.filter(member => member.enabled);
 
   return (
     <div className="pt-20 bg-dark-bg">
@@ -27,13 +29,17 @@ const TeamPage: React.FC = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 
                 {/* Honourable Chairman */}
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{chairmanTitle}</h2>
-                    <DecorativeLine />
-                </div>
-                <div className="max-w-xs mx-auto mb-20">
-                    <TeamMemberCard {...chairman} />
-                </div>
+                {chairman.enabled && (
+                    <>
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{chairmanTitle}</h2>
+                            <DecorativeLine />
+                        </div>
+                        <div className="max-w-xs mx-auto mb-20">
+                            <TeamMemberCard {...chairman} />
+                        </div>
+                    </>
+                )}
 
                 {/* Talented Employees */}
                 <div id="talented-employee" className="text-center mb-16 scroll-mt-20">
@@ -42,7 +48,7 @@ const TeamPage: React.FC = () => {
                     <DecorativeLine />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {talentedEmployees.map((member) => (
+                    {visibleEmployees.map((member) => (
                         <TeamMemberCard key={member.name} {...member} />
                     ))}
                 </div>

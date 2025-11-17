@@ -33,8 +33,8 @@ interface ServicesProps {
 const Services: React.FC<ServicesProps> = ({ showTitle = true }) => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const { appData } = useContext(DataContext);
-  const data = showTitle ? appData.pages.home.services : appData.pages.services.pageBanner;
-  const services = appData.pages.services.list;
+  const data = showTitle ? appData.pages.home.sections.services : appData.pages.services.pageBanner;
+  const services = appData.pages.services.list.filter(s => s.enabled);
 
   return (
     <>

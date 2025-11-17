@@ -43,15 +43,19 @@ interface TestimonialsProps {
 
 const Testimonials: React.FC<TestimonialsProps> = ({ showTitle = true }) => {
   const { appData } = useContext(DataContext);
-  const { pageBanner, list: testimonials } = appData.pages.testimonials;
+  const homePageData = appData.pages.home.sections.testimonials;
+  const testimonialsPageData = appData.pages.testimonials;
+
+  const data = showTitle ? homePageData : testimonialsPageData.pageBanner;
+  const testimonials = testimonialsPageData.list.filter(t => t.enabled);
 
   return (
     <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-light-bg`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {showTitle && (
             <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{pageBanner.title}</h2>
-            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">{pageBanner.subtitle}</p>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{data.title}</h2>
+            <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">{data.subtitle}</p>
             </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
