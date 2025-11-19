@@ -34,7 +34,7 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description:
 const ProcessStep: React.FC<{ icon: React.ReactNode; title: string; description: string; step: number; }> = ({ icon, title, description, step }) => (
     <div className="flex flex-col items-center text-center">
         <div className="relative mb-4">
-            <div className="flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-[var(--color-primary)] text-white text-3xl font-bold border-4 border-[var(--color-light-bg)] shadow-[var(--ui-shadow)]">
+            <div className="flex-shrink-0 flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-[var(--color-primary)] text-white text-3xl font-bold border-4 border-[var(--color-light-bg)] shadow-[var(--ui-shadow)]">
                 {icon}
             </div>
             <div className="absolute -top-2 -right-2 flex items-center justify-center h-8 w-8 rounded-full bg-[var(--color-secondary)] text-[var(--color-dark-bg)] font-bold text-sm">
@@ -150,7 +150,7 @@ interface VisaProcessingProps {
 const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => {
     const { appData } = useContext(DataContext);
     const { visaProcessing } = appData.pages;
-    const { pageBanner, offerTitle, offerList, processTitle, processSteps, whyChooseUsTitle, whyChooseUsFeatures } = visaProcessing;
+    const { pageBanner, contentHtml, offerTitle, offerList, processTitle, processSteps, whyChooseUsTitle, whyChooseUsFeatures } = visaProcessing;
 
     const visibleOffers = offerList.filter(item => item.enabled);
     const visibleSteps = processSteps.filter(item => item.enabled);
@@ -166,6 +166,14 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
                             <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-primary)]">{pageBanner.title}</h1>
                             <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{pageBanner.subtitle}</p>
                         </div>
+                    )}
+
+                    {/* Content Section */}
+                    {contentHtml && (
+                        <div 
+                            className="mb-20 prose prose-invert lg:prose-xl max-w-4xl mx-auto text-center"
+                            dangerouslySetInnerHTML={{ __html: contentHtml }}
+                        />
                     )}
 
                     {/* What We Offer Section */}

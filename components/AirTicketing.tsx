@@ -159,13 +159,21 @@ const FlightInquiryForm: React.FC = () => {
 
 const AirTicketing: React.FC = () => {
     const { appData } = useContext(DataContext);
-    const { features } = appData.pages.airTicketing;
+    const { features, contentHtml } = appData.pages.airTicketing;
     const visibleFeatures = features.filter(item => item.enabled);
 
     return (
         <div className="bg-[var(--color-dark-bg)]">
             <section className="pb-20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    {/* Content Section */}
+                    {contentHtml && (
+                        <div 
+                            className="mb-12 prose prose-invert lg:prose-xl max-w-4xl mx-auto text-center"
+                            dangerouslySetInnerHTML={{ __html: contentHtml }}
+                        />
+                    )}
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {visibleFeatures.map(feature => <FeatureCard key={feature.title} {...feature} icon={iconMap[feature.icon] || iconMap.Default} />)}

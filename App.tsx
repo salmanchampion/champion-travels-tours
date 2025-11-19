@@ -23,6 +23,10 @@ import AirTicketingPage from './pages/AirTicketingPage';
 import CustomPage from './pages/CustomPage';
 import HajjPage from './pages/HajjPage';
 import UmrahPage from './pages/UmrahPage';
+import HajjDetailsPage from './pages/HajjDetailsPage';
+import UmrahDetailsPage from './pages/UmrahDetailsPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 import FloatingActionButton from './components/FloatingActionButton';
 import Partners from './components/Partners';
 import PrayerTimesWidget from './components/PrayerTimesWidget';
@@ -165,7 +169,9 @@ const AppContent: React.FC = () => {
       
       switch (page) {
         case '#hajj': return pages.hajj.seo;
+        case '#hajj-details': return pages.hajjDetails.seo;
         case '#umrah': return pages.umrah.seo;
+        case '#umrah-details': return pages.umrahDetails.seo;
         case '#services': return pages.services.seo;
         case '#packages': return pages.packages.seo;
         case '#visa-processing': return pages.visaProcessing.seo;
@@ -177,6 +183,7 @@ const AppContent: React.FC = () => {
         case '#hajj-guide-in-bangla': return pages.hajjGuide.seo;
         case '#team': return pages.team.seo;
         case '#testimonials': return pages.testimonials.seo;
+        case '#blog': return pages.blog.seo;
         case '#contact':
         case '#book-now': return pages.contact.seo;
         case '#home':
@@ -227,7 +234,9 @@ const AppContent: React.FC = () => {
 
     switch (currentPage) {
       case '#hajj': return <HajjPage />;
+      case '#hajj-details': return <HajjDetailsPage />;
       case '#umrah': return <UmrahPage />;
+      case '#umrah-details': return <UmrahDetailsPage />;
       case '#services': return <ServicesPage />;
       case '#packages': return <PackagesPage />;
       case '#visa-processing': return <VisaProcessingPage />;
@@ -239,6 +248,11 @@ const AppContent: React.FC = () => {
       case '#hajj-guide-in-bangla': return <HajjGuidePage />;
       case '#team': return <TeamPage />;
       case '#testimonials': return <TestimonialsPage />;
+      case '#blog': return <BlogPage />;
+      case '#blog-post': 
+        const params = new URLSearchParams(window.location.hash.split('?')[1]);
+        const id = params.get('id');
+        return <BlogPostPage postId={id} />;
       case '#contact': return <ContactPage defaultSubject={contactSubject} />;
       case '#login': return <LoginPage />;
       case '#admin': return <AdminPage />;

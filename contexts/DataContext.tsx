@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { defaultData, AppData } from '../data';
 import { db } from '../firebase';
@@ -125,6 +126,30 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                         });
                     }
                 }
+                
+                // Patch: Ensure 'Blog' nav link is present
+                if (dbNavLinks) {
+                    const blogLinkInDb = dbNavLinks.find(link => link.href === '#blog');
+                    if (!blogLinkInDb) {
+                        const defaultBlogLink = defaultData.header.navLinks.find(link => link.href === '#blog');
+                        if (defaultBlogLink) {
+                            // Insert after 'Guidelines'
+                            const guidelinesIndex = dbNavLinks.findIndex(link => link.label === 'Guidelines');
+                            if (guidelinesIndex !== -1) {
+                                dbNavLinks.splice(guidelinesIndex + 1, 0, JSON.parse(JSON.stringify(defaultBlogLink)));
+                            } else {
+                                // Or before 'Our Team' / 'Contact' if Guidelines missing
+                                const teamIndex = dbNavLinks.findIndex(link => link.href === '#team');
+                                if (teamIndex !== -1) {
+                                    dbNavLinks.splice(teamIndex, 0, JSON.parse(JSON.stringify(defaultBlogLink)));
+                                } else {
+                                    // Fallback: add to end
+                                    dbNavLinks.push(JSON.parse(JSON.stringify(defaultBlogLink)));
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // Patch: Ensure 'Why Choose Us' nav link is present
                 if (dbNavLinks) {
@@ -160,6 +185,20 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 defaultData.customPages.forEach(defaultPage => {
                     if (!dbCustomPageIds.includes(defaultPage.id)) {
                         dbData.customPages.push(JSON.parse(JSON.stringify(defaultPage)));
+                    }
+                });
+
+                // Patch: Ensure contentBlocks are populated for specific pages if empty in DB
+                // This fixes the issue where users don't see content for About Us, etc. if it was empty in DB
+                const targetPageIds = ['#hotel-booking', '#ziyarat-tours', '#umrah-training', '#about-us', '#privacy-policy'];
+                targetPageIds.forEach(id => {
+                    const dbPage = dbData.customPages?.find(p => p.id === id);
+                    const defaultPage = defaultData.customPages?.find(p => p.id === id);
+                    if (dbPage && defaultPage) {
+                        // If DB page has no content blocks or empty ones, but default has them, overwrite.
+                        if ((!dbPage.contentBlocks || dbPage.contentBlocks.length === 0) && defaultPage.contentBlocks.length > 0) {
+                            dbPage.contentBlocks = JSON.parse(JSON.stringify(defaultPage.contentBlocks));
+                        }
                     }
                 });
                 
