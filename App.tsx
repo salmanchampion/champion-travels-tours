@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -22,6 +23,9 @@ import AirTicketingPage from './pages/AirTicketingPage';
 import CustomPage from './pages/CustomPage';
 import HajjPage from './pages/HajjPage';
 import UmrahPage from './pages/UmrahPage';
+import FloatingActionButton from './components/FloatingActionButton';
+import Partners from './components/Partners';
+import PrayerTimesWidget from './components/PrayerTimesWidget';
 
 // Theme Injector Component
 const ThemeInjector: React.FC = () => {
@@ -264,6 +268,9 @@ const AppContent: React.FC = () => {
       <main>
         {renderPage()}
       </main>
+      <FloatingActionButton />
+      <PrayerTimesWidget />
+      <Partners />
       <Footer />
     </div>
   );
