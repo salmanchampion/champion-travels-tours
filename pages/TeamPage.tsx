@@ -19,20 +19,20 @@ const TeamPage: React.FC = () => {
     const visibleEmployees = talentedEmployees.filter(member => member.enabled);
 
   return (
-    <div className="pt-20 bg-dark-bg">
+    <div className="pt-20 bg-[var(--color-dark-bg)]">
         <PageBanner
             title={pageBanner.title}
             subtitle={pageBanner.subtitle}
         />
 
-        <section className="py-20 bg-dark-bg">
+        <section className="py-20 bg-[var(--color-dark-bg)]">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 
                 {/* Honourable Chairman */}
                 {chairman.enabled && (
                     <>
                         <div className="text-center mb-16">
-                            <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{chairmanTitle}</h2>
+                            <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-light-text)]">{chairmanTitle}</h2>
                             <DecorativeLine />
                         </div>
                         <div className="max-w-xs mx-auto mb-20">
@@ -43,8 +43,8 @@ const TeamPage: React.FC = () => {
 
                 {/* Talented Employees */}
                 <div id="talented-employee" className="text-center mb-16 scroll-mt-20">
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-light-text">{employeesTitle}</h2>
-                     <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{employeesSubtitle}</p>
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-light-text)]">{employeesTitle}</h2>
+                     <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{employeesSubtitle}</p>
                     <DecorativeLine />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

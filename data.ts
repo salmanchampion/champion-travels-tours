@@ -39,6 +39,8 @@ export interface HajjPackage {
     name: string;
     price: string;
     duration: string;
+    category: string;
+    shortDescription: string;
     hotelMakkah: string;
     hotelMadinah: string;
     flightsUp: string;
@@ -54,6 +56,8 @@ export interface UmrahPackage {
     name: string;
     price: string;
     date: string;
+    category: string;
+    shortDescription: string;
     hotelMakkah: string;
     hotelMadinah: string;
     flightsUp: string;
@@ -75,6 +79,7 @@ export interface TeamMember {
         facebook?: string;
         phone?: string;
         whatsapp?: string;
+        email?: string;
     };
     enabled: boolean;
 }
@@ -277,11 +282,16 @@ export interface AirTicketingData {
     googleAppsScriptUrl: string;
 }
 
+export type ContentBlock = 
+  | { type: 'html'; content: string; }
+  | { type: 'image'; src: string; alt: string; }
+  | { type: 'button'; text: string; href: string; };
+
 export interface CustomPage {
   id: string; // e.g., #about-us
   title: string;
   bannerSubtitle: string;
-  content: string; // Supports basic HTML
+  contentBlocks: ContentBlock[];
   seo: SeoMetadata;
   enabled: boolean;
 }
@@ -291,6 +301,9 @@ export interface AppData {
         logoUrl: string;
     };
     header: {
+        taglines?: string[];
+        contactInfo?: { label: string; value: string; }[];
+        socialLinks?: { name: string; href: string; icon: string; }[];
         navLinks: NavLink[];
         bookNowButton: {
             text: string;
@@ -316,6 +329,27 @@ export interface AppData {
         };
         copyrightText: string;
     };
+    theme: {
+        colors: {
+            primary: string;
+            primaryDark: string;
+            secondary: string;
+            secondaryDark: string;
+            darkBg: string;
+            lightBg: string;
+            lightText: string;
+            mutedText: string;
+        };
+        fonts: {
+            sans: string;
+            display: string;
+        };
+        ui: {
+            borderRadius: string;
+            buttonStyle: 'rounded' | 'pill' | 'sharp';
+            shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+        };
+    };
     hajjPackages: HajjPackage[];
     umrahPackages: UmrahPackage[];
     pages: {
@@ -336,6 +370,16 @@ export interface AppData {
                 images: string[];
                 buttonText: string;
             },
+        };
+        hajj: {
+            seo: SeoMetadata;
+            pageBanner: { title: string; subtitle: string; backgroundImage?: string; };
+            filters: { label: string; category: string; icon: string; }[];
+        };
+        umrah: {
+            seo: SeoMetadata;
+            pageBanner: { title: string; subtitle: string; backgroundImage?: string; };
+            filters: { label: string; category: string; icon: string; }[];
         };
         services: {
             seo: SeoMetadata;
@@ -430,6 +474,20 @@ export const defaultData: AppData = {
         logoUrl: 'https://i.postimg.cc/9QNWStMS/champion-logo-1.png',
     },
     header: {
+        taglines: [
+            "আপনার হজ ও ওমরার বিশ্বস্ত সঙ্গী।",
+            "ঝামেলাহীন ভিসা প্রসেসিং সেবা।",
+            "সেরা রেটে বিশ্বব্যাপী ফ্লাইট বুক করুন।"
+        ],
+        contactInfo: [
+            { label: 'Phone', value: '+8801718425042' },
+            { label: 'Email', value: 'championtravels.Dhaka@gmail.com' }
+        ],
+        socialLinks: [
+            { name: 'Facebook', href: 'https://facebook.com', icon: '<path d="M22.675 0h-21.35C.59 0 0 .59 0 1.325v21.35C0 23.41.59 24 1.325 24H12.82v-9.29H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.735 0 1.325-.59 1.325-1.325V1.325C24 .59 23.41 0 22.675 0z"/>' },
+            { name: 'Instagram', href: 'https://instagram.com', icon: '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.802C9.042 3.965 8.718 3.977 7.545 4.029c-2.502.115-3.447.447-3.955 1.054C3.04 5.588 2.686 6.544 2.57 9.045c-.052 1.172-.064 1.496-.064 4.455s.012 3.283.064 4.455c.115 2.501.448 3.447 1.054 3.955.508.508 1.453.84 3.955 1.054 1.172.052 1.496.064 4.455.064s3.283-.012 4.455-.064c2.502-.115 3.447-.447 3.955-1.054.508-.508.84-1.453 1.054-3.955.052-1.172.064 1.496.064-4.455s-.012-3.283-.064-4.455c-.115-2.501-.448-3.447-1.054-3.955-.508-.508-1.453-.84-3.955-1.054C15.282 3.977 14.958 3.965 12 3.965zM12 7.218c-2.628 0-4.782 2.154-4.782 4.782s2.154 4.782 4.782 4.782 4.782-2.154 4.782-4.782S14.628 7.218 12 7.218zm0 7.764c-1.646 0-2.982-1.336-2.982-2.982S10.354 9.018 12 9.018s2.982 1.336 2.982 2.982-1.336 2.982-2.982 2.982zm4.965-7.764c-.786 0-1.425.64-1.425 1.425s.64 1.425 1.425 1.425 1.425-.64 1.425-1.425-.639-1.425-1.425-1.425z"/>' },
+            { name: 'Twitter', href: 'https://twitter.com', icon: '<path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085c.645 1.956 2.52 3.379 4.738 3.418-1.71 1.336-3.86 2.135-6.22 2.135-.404 0-.802-.023-1.19-.069a13.91 13.91 0 007.548 2.212c9.058 0 14.01-7.502 14.01-14.01 0-.213-.005-.426-.015-.637a10.02 10.02 0 002.46-2.548z"/>' }
+        ],
         navLinks: [
             { href: '#home', label: 'Home', enabled: true },
             { href: '#why-choose-us', label: 'Why Choose Us', enabled: true },
@@ -439,10 +497,28 @@ export const defaultData: AppData = {
               enabled: true,
               subLinks: [
                 { href: '#services', label: 'All Services', enabled: true },
-                { href: '#packages', label: 'Hajj & Umrah Packages', enabled: true },
                 { href: '#visa-processing', label: 'Visa Processing', enabled: true },
                 { href: '#air-ticketing', label: 'Air Ticketing', enabled: true },
+                { href: '#hotel-booking', label: 'Hotel Booking', enabled: true },
+                { href: '#ziyarat-tours', label: 'Ziyarat Tours', enabled: true },
+                { href: '#umrah-training', label: 'Umrah Training', enabled: true },
               ]
+            },
+            {
+                href: '#',
+                label: 'Hajj',
+                enabled: true,
+                subLinks: [
+                    { href: '#hajj', label: 'All Packages', enabled: true },
+                ]
+            },
+            {
+                href: '#',
+                label: 'Umrah',
+                enabled: true,
+                subLinks: [
+                    { href: '#umrah', label: 'All Packages', enabled: true },
+                ]
             },
             {
               label: 'Guidelines',
@@ -495,16 +571,39 @@ export const defaultData: AppData = {
         },
         copyrightText: 'Champion Travels & Tours. All Rights Reserved.'
     },
+    theme: {
+        colors: {
+            primary: '#C5A47E', // Gold
+            primaryDark: '#B38B6D',
+            secondary: '#4CAF50', // Green
+            secondaryDark: '#388E3C',
+            darkBg: '#111827', // Dark Gray
+            lightBg: '#1F2937', // Lighter Gray
+            lightText: '#F3F4F6', // Off-white
+            mutedText: '#9CA3AF', // Muted Gray
+        },
+        fonts: {
+            sans: 'Roboto',
+            display: 'Teko',
+        },
+        ui: {
+            borderRadius: '0.75rem', // 12px
+            buttonStyle: 'rounded',
+            shadow: 'lg',
+        }
+    },
     hajjPackages: [
-        { name: 'Economy', price: '9510000', duration: '40-45 Days', hotelMakkah: '1500-1600 Meter', hotelMadinah: 'Apx. 600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/R0N8Mv8X/as.jpg', enabled: true },
-        { name: 'Executive', price: '9580000', duration: '40-45 Days', hotelMakkah: '1000 Meter', hotelMadinah: '500-600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg', enabled: true },
-        { name: 'Executive Royal', price: '9670000', duration: '40-45 Days', hotelMakkah: '700 Meter', hotelMadinah: '200 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/Bb92VfRP/ag.webp', enabled: true },
-        { name: 'Vip Gold', price: '12900000', duration: '18-21 Days', hotelMakkah: '5 Star | 1-7 Meter', hotelMadinah: '4 Star | 1 Minute Walk', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch, Evening snacks & Dinner (From our catering service)', special: 'VIP, Special Train, Ziyara + Guide + Da\'e', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/Y2z4HFFK/ah.jpg', enabled: true },
+        { name: 'Regular Hajj Package E', price: 'BDT 680,000', duration: '35-40 days', category: 'Regular Hajj', shortDescription: 'Experience a sacred 35-40 day journey with our Regular Hajj Package-E, offering Economy & Standard Hotels and special services. Begin your profound pilgrimage journey with prices starting at BDT 680,000.', hotelMakkah: '1500-1600 Meter', hotelMadinah: 'Apx. 600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/CL6k3832/ak.jpg', enabled: true },
+        { name: 'Regular Hajj Package A', price: 'BDT 780,000', duration: '35-40 days', category: 'Regular Hajj', shortDescription: 'Embrace a complete spiritual experience with our Regular Hajj Package, offering 35-40 days with standard accommodations, ensuring a fulfilling Hajj. Prices begin at BDT 780,000.', hotelMakkah: '1000 Meter', hotelMadinah: '500-600 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/x1gn4TDd/ad.jpg', enabled: true },
+        { name: 'Regular Hajj Package B', price: 'BDT 730,000', duration: '35-40 days', category: 'Regular Hajj', shortDescription: 'Discover spiritual fulfillment with our Regular Hajj Package-B, spanning 35-40 days, featuring enhanced services and superior accommodations for a deeply enriching Hajj. Starting price: BDT 730,000.', hotelMakkah: '700 Meter', hotelMadinah: '200 Meter', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch & dinner (From our catering service)', special: 'Ziyara + Guide + Date + Workshop', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/mD2wzRfY/hajj-b.jpg', enabled: true },
+        { name: 'Vip Gold Hajj Package', price: 'BDT 1,290,000', duration: '18-21 Days', category: 'VIP Gold Hajj', shortDescription: 'Indulge in our VIP Gold package for an exclusive Hajj experience. Enjoy 5-star hotels just steps away from the Haram, with all-inclusive premium services for a journey of a lifetime.', hotelMakkah: '5 Star | 1-7 Meter', hotelMadinah: '4 Star | 1 Minute Walk', flightsUp: 'Direct - SV/Biman', flightsDown: 'Direct - SV/Biman', food: 'Breakfast, Lunch, Evening snacks & Dinner (From our catering service)', special: 'VIP, Special Train, Ziyara + Guide + Da\'e', note: 'If you want to take a short (21 Days) package, you will have to pay an additional 35000/- to 45000/- for airfare', image: 'https://i.postimg.cc/Y2z4HFFK/ah.jpg', enabled: true },
     ],
     umrahPackages: [
-        { name: 'Standard Umrah Package', price: '170000', date: 'Sept/Oct (14 Days)', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE', flightsUp: 'Direct - SV/BG/BS', flightsDown: 'Direct - SV/BG/BS', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want VIP train you need to pay extra 5000/-', image: 'https://i.postimg.cc/CL6k3832/ak.jpg', buttonText: 'Select Standard Package', enabled: true },
-        { name: 'Economy Umrah Package', price: '160000', date: 'Sept/Oct (14 Days)', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE (3 Star)', flightsUp: 'Transit - Air Arabia/Gulf Air', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/VkQL0LnX/al.webp', buttonText: 'Choose Economy Package', enabled: true },
-        { name: 'VIP Umrah Package', price: '270000', date: 'Sept/Oct (10 Days)', hotelMakkah: 'HILTON/MAKKA TOWER/ ELAF KINDA DISTANCE - 0 MITRE (5 Star)', hotelMadinah: 'MARJAN GOLDEN DISTANCE-100-200 MITRE (3 Star)', flightsUp: 'BG/SV', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 15000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/RZ8BGSpf/aj.webp', buttonText: 'Book Super Saver Now', enabled: true },
+        { name: '5 Star Silver Umrah', price: '170000', date: 'Sept/Oct (14 Days)', category: '5 Star', shortDescription: 'A premium 5-star package offering unparalleled comfort and convenience, with hotels just steps away from the Haram.', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE', flightsUp: 'Direct - SV/BG/BS', flightsDown: 'Direct - SV/BG/BS', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want VIP train you need to pay extra 5000/-', image: 'https://i.postimg.cc/3R91yY2B/umrah-1.jpg', buttonText: 'Select Standard Package', enabled: true },
+        { name: 'Economy Umrah Package', price: '160000', date: 'Sept/Oct (14 Days)', category: 'Economy', shortDescription: 'An affordable package that covers all your essential needs, providing a comfortable and spiritually fulfilling journey on a budget.', hotelMakkah: 'MAATHER AL JAWAR/Equivalent Hotel | Distance 550-650m.', hotelMadinah: 'MARJAN GOLDEN HOTEL PISTANCE - 100-200 MITRE (3 Star)', flightsUp: 'Transit - Air Arabia/Gulf Air', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 10000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/VkQL0LnX/al.webp', buttonText: 'Choose Economy Package', enabled: true },
+        { name: '5 Star Premium Umrah', price: '270000', date: 'Sept/Oct (10 Days)', category: '5 Star', shortDescription: 'Experience the ultimate spiritual journey with our 5-star premium package, featuring luxurious accommodations and exclusive services.', hotelMakkah: 'HILTON/MAKKA TOWER/ ELAF KINDA DISTANCE - 0 MITRE (5 Star)', hotelMadinah: 'MARJAN GOLDEN DISTANCE-100-200 MITRE (3 Star)', flightsUp: 'BG/SV', flightsDown: 'BG/SV', food: 'Excluded', special: 'Ziyara + Guide + Da\'e', note: 'IF FOOD INCLUDE EXTRA CHARGE 15000/- WILL BE PAY. If you want bullet train you need to pay extra 5000/-', image: 'https://i.postimg.cc/50rQG1f5/umrah-2.jpg', buttonText: 'Book Super Saver Now', enabled: true },
+        { name: '3 Star Umrah Package', price: '150000', date: 'Nov/Dec (12 Days)', category: '3 Star', shortDescription: 'A balanced package offering comfort and value with well-located 3-star hotels and all necessary arrangements for a smooth journey.', hotelMakkah: '3 Star Hotel | Distance 400m', hotelMadinah: '3 Star Hotel | Distance 250m', flightsUp: 'Direct', flightsDown: 'Direct', food: 'Breakfast Included', special: 'Ziyara included', note: '', image: 'https://i.postimg.cc/W12KzQG3/umrah-4.jpg', buttonText: 'Book 3 Star Package', enabled: true },
+        { name: 'Ramadan Umrah Package', price: '250000', date: 'Ramadan (15 Days)', category: 'Ramadan', shortDescription: 'Experience the holy month of Ramadan in the sacred cities with our special package designed for worship and reflection.', hotelMakkah: '4 Star Hotel | Distance 300m', hotelMadinah: '4 Star Hotel | Distance 150m', flightsUp: 'Direct', flightsDown: 'Direct', food: 'Iftar & Sehri Included', special: 'Special Ramadan lectures', note: '', image: 'https://i.postimg.cc/8zQJtJMD/umrah-5.jpg', buttonText: 'Book Ramadan Package', enabled: true },
     ],
     pages: {
         home: {
@@ -532,6 +631,43 @@ export const defaultData: AppData = {
                 ],
                 buttonText: 'Explore Our Packages'
             },
+        },
+        hajj: {
+            seo: {
+                title: 'Hajj Packages | Champion Travels & Tours',
+                description: 'Explore our exclusive Hajj packages from Bangladesh. We offer a range of options from economy to VIP for a blessed and comfortable pilgrimage.',
+                keywords: 'Hajj packages, Hajj 2026, Bangladesh Hajj, Economy Hajj Package, VIP Hajj'
+            },
+            pageBanner: {
+                title: 'Hajj Packages',
+                subtitle: 'Choose from our curated Hajj packages for a blessed journey.',
+                backgroundImage: 'https://i.postimg.cc/jSKtdnQ4/HD-wallpaper-mecca-madina-during-evening-time-ramzan.jpg'
+            },
+            filters: [
+                { label: 'Regular Hajj', category: 'Regular Hajj', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a9.004 9.004 0 00-4.5 15.75" />' },
+                { label: 'VIP Gold Hajj', category: 'VIP Gold Hajj', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-3.152a.563.563 0 00-.652 0l-4.725 3.152a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />' }
+            ]
+        },
+        umrah: {
+            seo: {
+                title: 'Umrah Packages | Champion Travels & Tours',
+                description: 'Find the perfect Umrah package from Bangladesh. We offer 5-star, 3-star, economy, and special Ramadan packages to suit your needs.',
+                keywords: 'Umrah packages, Umrah 2025, 5 Star Umrah, Economy Umrah, Ramadan Umrah'
+            },
+            pageBanner: {
+                title: 'Best Umrah Packages BD 2025-2026-2027',
+                subtitle: 'Find the perfect Umrah package that suits your needs and budget.',
+                backgroundImage: 'https://i.postimg.cc/Y2z4HFFK/ah.jpg'
+            },
+            filters: [
+                { label: '5 Star Umrah Packages', category: '5 Star', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-3.152a.563.563 0 00-.652 0l-4.725 3.152a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />' },
+                { label: '3 Star Umrah Packages', category: '3 Star', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-3.152a.563.563 0 00-.652 0l-4.725 3.152a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />' },
+                { label: 'Economy Umrah Packages', category: 'Economy', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0h.75A.75.75 0 015.25 6v.75m0 0v.75a.75.75 0 01-.75.75h-.75m0 0H3.75m0 0h.75m1.5-1.5v.75A.75.75 0 016 9h-.75m0 0v-.75A.75.75 0 016 7.5h.75m0 0h.75a.75.75 0 01.75.75v.75m0 0v.75a.75.75 0 01-.75.75h-.75m0 0h-.75m.75 0h.75" />' },
+                { label: 'Ramadan Umrah Packages', category: 'Ramadan', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />' },
+                { label: 'Itikaf Umrah Packages', category: 'Itikaf', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a9.004 9.004 0 00-4.5 15.75" />' },
+                { label: 'After Eid Umrah Packages', category: 'After Eid', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M8.25 10.75h.008v.008H8.25v-.008zm4.5 0h.008v.008h-.008v-.008zm4.5 0h.008v.008h-.008v-.008z" />' },
+                { label: 'Custom Umrah Packages', category: 'Custom', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.438.995a6.473 6.473 0 010 1.082c0 .382.145.755.438.995l1.003.827c.48.398.668 1.03.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.075.124a6.57 6.57 0 01-.22.127c-.331.183-.581.495-.644.87l-.213 1.281c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.324-.196-.72-.257-1.075-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.437-.995a6.473 6.473 0 010-1.082c0-.382-.145-.755-.437-.995l-1.004-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.075-.124.072-.044.146-.087.22-.127.332-.183.582-.495.644-.87l.213-1.281z" />' },
+            ]
         },
         services: {
             seo: {
@@ -694,20 +830,21 @@ export const defaultData: AppData = {
                 socials: {
                     facebook: 'https://www.facebook.com',
                     phone: '+8801718425042',
-                    whatsapp: '8801718425042'
+                    whatsapp: '8801718425042',
+                    email: 'championtravels.Dhaka@gmail.com'
                 },
                 enabled: true
             },
             employeesTitle: 'Our Talented Employee',
             employeesSubtitle: 'At The Heart Of Our Commitment To Providing Exceptional Immigration Solutions Stands We Provide Experts Create Great Value For Visa Categories',
             talentedEmployees: [
-                { name: 'মোঃ মুছা', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'সাদ্দام হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'লোকমান হোসাইন', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'মোহাম্মদ নূরে আলম ডালিম', role: 'General Manager', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'মোঃ আলী আকবর', role: 'Accounts', imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'Salman sharif', role: 'New Joined', imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
-                { name: 'MD Kawsar Ahmed', role: 'Ticketing', imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#' }, enabled: true },
+                { name: 'মোঃ মুছা', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'সাদ্দام হোসেম', role: 'Manager', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'লোকমান হোসাইন', role: 'Executive', imageUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'মোহাম্মদ নূরে আলম ডালিম', role: 'General Manager', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'মোঃ আলী আকবর', role: 'Accounts', imageUrl: 'https://i.postimg.cc/G3MgC8cQ/image-(2).png', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'Salman sharif', role: 'New Joined', imageUrl: 'https://i.postimg.cc/0jmsLpT9/image-(1).png', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
+                { name: 'MD Kawsar Ahmed', role: 'Ticketing', imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300&auto=format&fit=crop', socials: { facebook: '#', phone: '#', whatsapp: '#', email: '#' }, enabled: true },
             ]
         },
         testimonials: {
@@ -980,7 +1117,7 @@ export const defaultData: AppData = {
             steps: [
                 {
                     title: '০১. ইহরাম (ফরজ)',
-                    description: 'ওমরাহ পালন করার জন্য ইহরাম অপরিহার্য। ইহرامের পোশাক পরার জন্য কিছু ধাপ অনুসরণ করতে হয়:',
+                    description: 'ওমরাহ পালন করার জন্য ইহرام অপরিহার্য। ইহرامের পোশাক পরার জন্য কিছু ধাপ অনুসরণ করতে হয়:',
                     points: [
                         'পরিষ্কার-পরিচ্ছন্ন হয়ে গোসল বা অজু করা',
                         'ইহরামের নির্দিষ্ট পোশাক পরা',
@@ -1164,7 +1301,9 @@ export const defaultData: AppData = {
             id: '#about-us',
             title: 'About Us',
             bannerSubtitle: 'Our Journey, Our Commitment, Your Trusted Travel Partner',
-            content: `<h2>Our Mission</h2>
+            contentBlocks: [{
+                type: 'html',
+                content: `<h2>Our Mission</h2>
 <p>Since our establishment in 2005, Champion Travels & Tours has been dedicated to providing exceptional travel services rooted in trust, integrity, and unparalleled customer care. Our mission is to facilitate seamless and spiritually enriching journeys for pilgrims undertaking Hajj and Umrah, and to offer comprehensive travel solutions for clients worldwide.</p>
 <h2>Who We Are</h2>
 <p>We are a government-approved travel agency (Hajj License No.-1432 & Umrah License No.-515) with a team of experienced professionals who are passionate about travel and dedicated to serving our clients. We understand the significance of a spiritual journey and the importance of a well-planned trip. Our expertise ensures that every detail is handled with precision, allowing you to focus on what truly matters.</p>
@@ -1176,7 +1315,8 @@ export const defaultData: AppData = {
     <li><strong>Air Ticketing:</strong> Competitive fares for domestic and international flights, making your travel affordable and convenient.</li>
     <li><strong>Personalized Service:</strong> We believe every traveler is unique. Our team works closely with you to tailor our services to your specific needs.</li>
 </ul>
-<p><strong>Join us at Champion Travels & Tours, and let us be your trusted partner in creating unforgettable travel memories.</strong></p>`,
+<p><strong>Join us at Champion Travels & Tours, and let us be your trusted partner in creating unforgettable travel memories.</strong></p>`
+            }],
             seo: {
                 title: 'About Champion Travels & Tours | Our Story and Mission',
                 description: 'Learn more about Champion Travels & Tours, a leading travel agency in Bangladesh since 2005. Discover our mission, values, and commitment to providing exceptional Hajj, Umrah, and travel services.',
@@ -1188,7 +1328,9 @@ export const defaultData: AppData = {
             id: '#privacy-policy',
             title: 'Privacy Policy',
             bannerSubtitle: 'Your Privacy is Our Priority',
-            content: `<h2>Introduction</h2>
+            contentBlocks: [{
+                type: 'html',
+                content: `<h2>Introduction</h2>
 <p>Champion Travels & Tours ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
 <h2>Information We Collect</h2>
 <p>We may collect personal information from you in a variety of ways, including when you fill out an inquiry form on our site. The information we collect may include:</p>
@@ -1214,11 +1356,102 @@ export const defaultData: AppData = {
 <h2>Changes to Our Privacy Policy</h2>
 <p>If we decide to change our privacy policy, we will post those changes on this page. This policy was last modified on [Date of last update].</p>
 <h2>Contact Us</h2>
-<p>If you have any questions regarding this privacy policy, you may contact us using the information on our <a href="#contact">Contact page</a>.</p>`,
+<p>If you have any questions regarding this privacy policy, you may contact us using the information on our <a href="#contact">Contact page</a>.</p>`
+            }],
             seo: {
                 title: 'Privacy Policy | Champion Travels & Tours',
                 description: 'Read the privacy policy of Champion Travels & Tours. We are committed to protecting your personal information and being transparent about how we handle your data.',
                 keywords: 'privacy policy, data protection, user privacy, travel agency privacy'
+            },
+            enabled: true
+        },
+        {
+            id: '#hotel-booking',
+            title: 'Hotel Booking',
+            bannerSubtitle: 'Find the perfect stay for your journey, from luxury to budget-friendly options.',
+            contentBlocks: [{
+                type: 'html',
+                content: `<h2>Seamless Hotel Booking Worldwide</h2>
+<p>Whether you are on a spiritual journey for Hajj/Umrah or exploring a new city, comfortable accommodation is key. At Champion Travels & Tours, we provide a hassle-free hotel booking service, offering a wide range of options to suit your needs and budget.</p>
+<h3>Our Network of Hotels</h3>
+<p>We have partnered with a vast network of hotels in Saudi Arabia and other major destinations worldwide. Our options include:</p>
+<ul>
+    <li><strong>5-Star Luxury Hotels:</strong> Experience world-class service and amenities close to the Haramain or city centers.</li>
+    <li><strong>4-Star & 3-Star Hotels:</strong> A perfect balance of comfort, convenience, and value.</li>
+    <li><strong>Economy Stays:</strong> Clean, safe, and budget-friendly options for the savvy traveler.</li>
+    <li><strong>Serviced Apartments:</strong> Ideal for families or longer stays, offering more space and privacy.</li>
+</ul>
+<h3>Why Book With Us?</h3>
+<ul>
+    <li><strong>Competitive Rates:</strong> We leverage our partnerships to offer you the best possible prices.</li>
+    <li><strong>Verified Properties:</strong> All hotels in our network are vetted for quality and service.</li>
+    <li><strong>Convenient Locations:</strong> We specialize in hotels that are conveniently located, especially for pilgrims in Makkah and Madinah.</li>
+    <li><strong>Personalized Service:</strong> Our team is here to help you find the perfect hotel that meets your specific requirements.</li>
+</ul>
+<p><strong>Let us handle your accommodation so you can focus on your journey. <a href="#contact?subject=Hotel Booking Inquiry">Contact us today</a> for a quote.</strong></p>`
+            }],
+            seo: {
+                title: 'Hotel Booking Services | Champion Travels & Tours',
+                description: 'Book hotels in Makkah, Madinah, and worldwide with Champion Travels & Tours. We offer competitive rates on a wide range of hotels, from luxury to budget-friendly stays.',
+                keywords: 'hotel booking, makkah hotels, madinah hotels, book hotel saudi arabia, travel accommodation'
+            },
+            enabled: true
+        },
+        {
+            id: '#ziyarat-tours',
+            title: 'Ziyarat Tours',
+            bannerSubtitle: 'Explore the rich Islamic history of Makkah and Madinah with our guided tours.',
+            contentBlocks: [{
+                type: 'html',
+                content: `<h2>Discover Historical Islamic Sites</h2>
+<p>Enhance your spiritual journey by visiting the significant historical and religious sites in and around the holy cities of Makkah and Madinah. Our guided Ziyarat tours are designed to be both educational and spiritually uplifting, led by knowledgeable guides who bring the rich history of Islam to life.</p>
+<h3>Key Sites in Makkah</h3>
+<ul>
+    <li><strong>Jabal al-Nour (The Mountain of Light):</strong> Home to the Cave of Hira, where the Prophet Muhammad (PBUH) received his first revelation.</li>
+    <li><strong>Jabal al-Thawr:</strong> The mountain where the Prophet Muhammad (PBUH) and Abu Bakr (RA) took refuge from the Quraysh.</li>
+    <li><strong>Jannat al-Mu'alla:</strong> The historical cemetery where many of the Prophet's (PBUH) ancestors, his first wife Khadijah (RA), and companions are buried.</li>
+    <li><strong>Masjid al-Jinn:</strong> The mosque where a group of Jinn are said to have gathered to listen to the Prophet's (PBUH) recitation of the Quran.</li>
+</ul>
+<h3>Key Sites in Madinah</h3>
+<ul>
+    <li><strong>Masjid al-Quba:</strong> The first mosque built in the history of Islam.</li>
+    <li><strong>Masjid al-Qiblatayn (The Mosque of Two Qiblas):</strong> The mosque where the direction of prayer was changed from Jerusalem to the Kaaba in Makkah.</li>
+    '<li><strong>Jabal Uhud (Mount Uhud):</strong> The site of the historic Battle of Uhud, with the graves of the martyrs, including Hamza (RA).</li>
+    <li><strong>The Seven Mosques:</strong> A complex of historical small mosques related to the Battle of the Trench.</li>
+</ul>
+<p>Our tours are conducted in comfortable, air-conditioned vehicles, ensuring a pleasant experience. <strong><a href="#contact?subject=Ziyarat Tours Inquiry">Book your Ziyarat tour</a> with us and deepen your connection to Islamic history.</strong></p>`
+            }],
+            seo: {
+                title: 'Ziyarat Tours in Makkah & Madinah | Champion Travels & Tours',
+                description: 'Join our guided Ziyarat tours to historical Islamic sites in Makkah and Madinah. Visit Jabal al-Nour, Masjid al-Quba, Mount Uhud, and more with knowledgeable guides.',
+                keywords: 'Ziyarat tours, Makkah Ziyarat, Madinah Ziyarat, Islamic historical sites, guided tours Saudi Arabia'
+            },
+            enabled: true
+        },
+        {
+            id: '#umrah-training',
+            title: 'Umrah Training',
+            bannerSubtitle: 'Prepare for your sacred journey with our comprehensive Umrah training programs.',
+            contentBlocks: [{
+                type: 'html',
+                content: `<h2>Prepare Spiritually and Practically for Your Umrah</h2>
+<p>Embarking on the journey of Umrah is a significant spiritual milestone. To ensure you can perform the rituals correctly and with full devotion, Champion Travels & Tours offers comprehensive pre-departure Umrah training and seminars. Our goal is to equip you with the knowledge and confidence needed for a meaningful pilgrimage.</p>
+<h3>What Our Training Covers:</h3>
+<ul>
+    <li><strong>The Rituals of Umrah:</strong> A step-by-step guide on how to perform Ihram, Tawaf, and Sa'i correctly according to the Sunnah.</li>
+    <li><strong>Spiritual Significance:</strong> Understanding the history and spiritual importance behind each ritual to deepen your connection and devotion.</li>
+    <li><strong>Practical Guidance:</strong> Essential tips on what to pack, health and safety precautions, managing logistics in Saudi Arabia, and navigating the crowds.</li>
+    <li><strong>Duas and Supplications:</strong> Learn the recommended supplications for each stage of the Umrah journey.</li>
+    <li><strong>Q&A Sessions:</strong> Our knowledgeable scholars and experienced guides are available to answer all your questions and address any concerns.</li>
+</ul>
+<h3>Who Should Attend?</h3>
+<p>Our training is highly recommended for all pilgrims, especially first-timers. It is an invaluable opportunity to clarify doubts and prepare yourself mentally, spiritually, and physically for the blessed journey ahead.</p>
+<p>Training sessions are included with many of our Umrah packages. <strong><a href="#packages">Explore our packages</a> or <a href="#contact?subject=Umrah Training Inquiry">contact us</a> to learn more about our upcoming training schedules.</strong></p>`
+            }],
+            seo: {
+                title: 'Umrah Training & Seminars | Champion Travels & Tours',
+                description: 'Prepare for your pilgrimage with our comprehensive Umrah training programs. Learn the rituals, practical tips, and spiritual significance of Umrah from our expert guides.',
+                keywords: 'Umrah training, Umrah seminar, how to perform Umrah, Umrah preparation, Umrah rituals'
             },
             enabled: true
         }

@@ -20,6 +20,77 @@ import ExpertHajjGuidesPage from './pages/ExpertHajjGuidesPage';
 import WhyChooseChampionPage from './pages/WhyChooseChampionPage';
 import AirTicketingPage from './pages/AirTicketingPage';
 import CustomPage from './pages/CustomPage';
+import HajjPage from './pages/HajjPage';
+import UmrahPage from './pages/UmrahPage';
+
+// Theme Injector Component
+const ThemeInjector: React.FC = () => {
+    const { appData } = useContext(DataContext);
+    const { theme } = appData;
+
+    useEffect(() => {
+        if (!theme) return;
+
+        const { colors, fonts, ui } = theme;
+
+        const shadowMap = {
+            none: 'none',
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+            lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+            xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+        };
+
+        const buttonRadiusMap = {
+            rounded: ui.borderRadius,
+            pill: '9999px',
+            sharp: '0px'
+        };
+
+        const cssVariables = `
+:root {
+  --color-primary: ${colors.primary};
+  --color-primary-dark: ${colors.primaryDark};
+  --color-secondary: ${colors.secondary};
+  --color-secondary-dark: ${colors.secondaryDark};
+  --color-dark-bg: ${colors.darkBg};
+  --color-light-bg: ${colors.lightBg};
+  --color-light-text: ${colors.lightText};
+  --color-muted-text: ${colors.mutedText};
+  
+  --font-sans: "${fonts.sans}";
+  --font-display: "${fonts.display}";
+  
+  --ui-border-radius: ${ui.borderRadius};
+  --ui-button-radius: ${buttonRadiusMap[ui.buttonStyle] || ui.borderRadius};
+  --ui-shadow: ${shadowMap[ui.shadow] || 'none'};
+}
+body {
+    background-color: var(--color-dark-bg);
+    color: var(--color-light-text);
+    font-family: var(--font-sans), 'Hind Siliguri', sans-serif;
+}
+.font-sans { font-family: var(--font-sans), 'Hind Siliguri', sans-serif; }
+.font-display { font-family: var(--font-display), sans-serif; }
+`;
+        
+        const styleElement = document.getElementById('dynamic-theme-styles');
+        if (styleElement) {
+            styleElement.innerHTML = cssVariables;
+        }
+
+        // Update Google Fonts link
+        const fontsLink = document.getElementById('google-fonts-link') as HTMLLinkElement;
+        if (fontsLink) {
+            const fontSans = fonts.sans.replace(/ /g, '+');
+            const fontDisplay = fonts.display.replace(/ /g, '+');
+            fontsLink.href = `https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&family=${fontSans}:wght@400;500;700&family=${fontDisplay}:wght@400;500;600&display=swap`;
+        }
+
+    }, [theme]);
+
+    return null;
+};
 
 
 const AppContent: React.FC = () => {
@@ -89,6 +160,8 @@ const AppContent: React.FC = () => {
       }
       
       switch (page) {
+        case '#hajj': return pages.hajj.seo;
+        case '#umrah': return pages.umrah.seo;
         case '#services': return pages.services.seo;
         case '#packages': return pages.packages.seo;
         case '#visa-processing': return pages.visaProcessing.seo;
@@ -149,6 +222,8 @@ const AppContent: React.FC = () => {
     }
 
     switch (currentPage) {
+      case '#hajj': return <HajjPage />;
+      case '#umrah': return <UmrahPage />;
       case '#services': return <ServicesPage />;
       case '#packages': return <PackagesPage />;
       case '#visa-processing': return <VisaProcessingPage />;
@@ -170,9 +245,9 @@ const AppContent: React.FC = () => {
 
   if (isAuthLoading || isDataLoading) {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-dark-bg text-white">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--color-dark-bg)] text-white">
             <div className="flex flex-col items-center">
-                <svg className="animate-spin h-10 w-10 text-primary mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-10 w-10 text-[var(--color-primary)] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -183,7 +258,8 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="bg-dark-bg">
+    <div className="bg-[var(--color-dark-bg)]">
+      <ThemeInjector />
       <Header activePage={page} />
       <main>
         {renderPage()}

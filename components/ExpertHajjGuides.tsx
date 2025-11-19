@@ -5,7 +5,7 @@ import { DataContext } from '../contexts/DataContext';
 const CtaButton: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
   <a
     href={href}
-    className="inline-block bg-secondary text-dark-bg font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-all duration-300 shadow-md hover:shadow-lg"
+    className="inline-block bg-[var(--color-secondary)] text-[var(--color-dark-bg)] font-bold py-3 px-8 rounded-[var(--ui-button-radius)] hover:bg-amber-600 transition-all duration-300 shadow-md hover:shadow-lg"
   >
     {children}
   </a>
@@ -15,11 +15,11 @@ const CtaButton: React.FC<{ href: string; children: React.ReactNode }> = ({ href
 const ServiceListItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <li className="flex items-center space-x-3">
     <div className="flex-shrink-0">
-      <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="w-6 h-6 text-[var(--color-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     </div>
-    <span className="text-gray-600">{children}</span>
+    <span className="text-[var(--color-muted-text)]">{children}</span>
   </li>
 );
 
@@ -28,19 +28,19 @@ const ExpertHajjGuides: React.FC = () => {
   const { expertHajjGuides: whyChooseUs } = appData.pages;
 
   return (
-    <div className="bg-[#FBF9F5]" style={{ backgroundImage: `url('${whyChooseUs.backgroundImage}')` }}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-gray-800">
+    <div className="bg-[var(--color-dark-bg)]" style={{ backgroundImage: `url('${whyChooseUs.backgroundImage}')` }}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-[var(--color-light-text)]">
 
         {/* Section 1: Expert Hajj Guides */}
         <section className="flex flex-col lg:flex-row items-center gap-12 mb-24">
           <div className="lg:w-1/2 text-center lg:text-left">
-            <span className="text-secondary font-bold uppercase tracking-wider">{whyChooseUs.guides.tagline}</span>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mt-2 mb-4">{whyChooseUs.guides.title}</h2>
-            <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+            <span className="text-[var(--color-secondary)] font-bold uppercase tracking-wider">{whyChooseUs.guides.tagline}</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-light-text)] mt-2 mb-4">{whyChooseUs.guides.title}</h2>
+            <p className="text-lg text-[var(--color-muted-text)] mb-4 leading-relaxed">
               {whyChooseUs.guides.description}
             </p>
-            <h3 className="text-2xl font-bold text-dark-bg mb-6">{whyChooseUs.guides.subheading}</h3>
-            <p className="text-gray-600 mb-8">
+            <h3 className="text-2xl font-bold text-[var(--color-light-text)] mb-6">{whyChooseUs.guides.subheading}</h3>
+            <p className="text-[var(--color-muted-text)] mb-8">
               {whyChooseUs.guides.subDescription}
             </p>
             <CtaButton href="#packages">{whyChooseUs.guides.buttonText}</CtaButton>
@@ -50,15 +50,15 @@ const ExpertHajjGuides: React.FC = () => {
               <img 
                 src={whyChooseUs.guides.mainImage}
                 alt="Pilgrims at Kaaba" 
-                className="absolute top-0 left-0 w-[70%] sm:w-[80%] h-[70%] sm:h-[80%] object-cover rounded-2xl shadow-2xl z-10 transform hover:scale-105 transition-transform duration-300" 
+                className="absolute top-0 left-0 w-[70%] sm:w-[80%] h-[70%] sm:h-[80%] object-cover rounded-[var(--ui-border-radius)] shadow-2xl z-10 transform hover:scale-105 transition-transform duration-300" 
               />
               <img 
                 src={whyChooseUs.guides.secondaryImage}
                 alt="Prophet's Mosque" 
-                className="absolute bottom-0 right-0 w-[55%] sm:w-[60%] h-[55%] sm:h-[60%] object-cover rounded-2xl shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-300"
+                className="absolute bottom-0 right-0 w-[55%] sm:w-[60%] h-[55%] sm:h-[60%] object-cover rounded-[var(--ui-border-radius)] shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-300"
               />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/20 rounded-full -z-10"></div>
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-secondary/20 rounded-lg transform rotate-12 -z-10"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--color-primary)]/20 rounded-full -z-10"></div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[var(--color-secondary)]/20 rounded-lg transform rotate-12 -z-10"></div>
             </div>
           </div>
         </section>
@@ -67,9 +67,9 @@ const ExpertHajjGuides: React.FC = () => {
         <section className="flex flex-col md:flex-row-reverse items-center gap-12 mb-24 relative">
             <img src={whyChooseUs.directors.decorativeImage} alt="star" className="absolute top-10 right-20 w-14 opacity-30 hidden md:block" />
           <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-4">{whyChooseUs.directors.title}</h2>
-            <p className="text-lg text-gray-600 mb-6 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: whyChooseUs.directors.description.replace(/comprehensive and all-in-one experience/g, '<span class="font-semibold">comprehensive and all-in-one experience</span>')}}
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-light-text)] mb-4">{whyChooseUs.directors.title}</h2>
+            <p className="text-lg text-[var(--color-muted-text)] mb-6 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: whyChooseUs.directors.description.replace(/comprehensive and all-in-one experience/g, '<span class="font-semibold text-[var(--color-light-text)]">comprehensive and all-in-one experience</span>')}}
             />
             <CtaButton href="#team">{whyChooseUs.directors.buttonText}</CtaButton>
           </div>
@@ -85,7 +85,7 @@ const ExpertHajjGuides: React.FC = () => {
         {/* Section 3: Services Offer */}
         <section className="flex flex-col md:flex-row items-center gap-12 mb-24">
           <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-bg mb-6">{whyChooseUs.services.title}</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-light-text)] mb-6">{whyChooseUs.services.title}</h2>
             <ul className="space-y-4 mb-8 text-lg">
                 {whyChooseUs.services.list.map((item, index) => (
                     <ServiceListItem key={index}>{item}</ServiceListItem>
@@ -104,10 +104,10 @@ const ExpertHajjGuides: React.FC = () => {
                 <img 
                     src={whyChooseUs.cta.image}
                     alt="Pilgrims at the Kaaba" 
-                    className="rounded-xl shadow-lg w-full max-w-lg object-cover"
+                    className="rounded-[var(--ui-border-radius)] shadow-lg w-full max-w-lg object-cover"
                 />
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-dark-bg max-w-3xl mx-auto leading-tight">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-[var(--color-light-text)] max-w-3xl mx-auto leading-tight">
                 {whyChooseUs.cta.title}
             </h2>
             <div className="mt-8">

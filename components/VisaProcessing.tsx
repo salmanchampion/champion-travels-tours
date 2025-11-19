@@ -20,13 +20,13 @@ const iconMap: { [key: string]: React.ReactNode } = {
 
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-    <div className="bg-light-bg p-6 rounded-lg flex items-start space-x-4">
-        <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white">
+    <div className="bg-[var(--color-light-bg)] p-6 rounded-[var(--ui-border-radius)] flex items-start space-x-4 shadow-[var(--ui-shadow)]">
+        <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-[var(--color-primary)] text-white">
             {icon}
         </div>
         <div>
             <h3 className="text-xl font-bold text-white">{title}</h3>
-            <p className="mt-1 text-muted-text">{description}</p>
+            <p className="mt-1 text-[var(--color-muted-text)]">{description}</p>
         </div>
     </div>
 );
@@ -34,15 +34,15 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description:
 const ProcessStep: React.FC<{ icon: React.ReactNode; title: string; description: string; step: number; }> = ({ icon, title, description, step }) => (
     <div className="flex flex-col items-center text-center">
         <div className="relative mb-4">
-            <div className="flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-primary text-white text-3xl font-bold border-4 border-light-bg shadow-lg">
+            <div className="flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-[var(--color-primary)] text-white text-3xl font-bold border-4 border-[var(--color-light-bg)] shadow-[var(--ui-shadow)]">
                 {icon}
             </div>
-            <div className="absolute -top-2 -right-2 flex items-center justify-center h-8 w-8 rounded-full bg-secondary text-dark-bg font-bold text-sm">
+            <div className="absolute -top-2 -right-2 flex items-center justify-center h-8 w-8 rounded-full bg-[var(--color-secondary)] text-[var(--color-dark-bg)] font-bold text-sm">
                 {step}
             </div>
         </div>
         <h3 className="text-xl font-display font-semibold text-white mb-2">{title}</h3>
-        <p className="text-muted-text">{description}</p>
+        <p className="text-[var(--color-muted-text)]">{description}</p>
     </div>
 );
 
@@ -109,16 +109,16 @@ const VisaInquiryForm: React.FC = () => {
     return (
         <div className="mt-16">
             <h3 className="text-3xl font-display font-semibold text-white mb-6 text-center">{form.title}</h3>
-            <p className="text-muted-text mb-8 text-center max-w-2xl mx-auto">{form.subtitle}</p>
+            <p className="text-[var(--color-muted-text)] mb-8 text-center max-w-2xl mx-auto">{form.subtitle}</p>
             <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                 </div>
-                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone (Optional)" className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone (Optional)" className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="destination" value={formData.destination} onChange={handleChange} placeholder="Destination Country" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
-                    <select name="visaType" value={formData.visaType} onChange={handleChange} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition">
+                    <input type="text" name="destination" value={formData.destination} onChange={handleChange} placeholder="Destination Country" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
+                    <select name="visaType" value={formData.visaType} onChange={handleChange} required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition">
                         <option>Tourist Visa</option>
                         <option>Business Visa</option>
                         <option>Student Visa</option>
@@ -126,7 +126,7 @@ const VisaInquiryForm: React.FC = () => {
                         <option>Other</option>
                     </select>
                 </div>
-                <textarea name="question" value={formData.question} onChange={handleChange} placeholder="Your Specific Question" rows={5} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
+                <textarea name="question" value={formData.question} onChange={handleChange} placeholder="Your Specific Question" rows={5} required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition"></textarea>
                 
                 {submitStatus === 'success' && (
                   <p className="text-green-400 text-center">Thank you for your inquiry! We will get back to you soon.</p>
@@ -135,7 +135,7 @@ const VisaInquiryForm: React.FC = () => {
                   <p className="text-red-400 text-center">Something went wrong. Please check the Admin Panel for the script URL or try again later.</p>
                 )}
 
-                <button type="submit" disabled={isSubmitting} className="w-full bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
+                <button type="submit" disabled={isSubmitting} className="w-full bg-[var(--color-secondary)] text-[var(--color-dark-bg)] font-bold py-3 px-6 rounded-[var(--ui-button-radius)] hover:bg-amber-600 transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
                     {isSubmitting ? 'Submitting...' : form.buttonText}
                 </button>
             </form>
@@ -158,13 +158,13 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
 
 
     return (
-        <div className="bg-dark-bg">
+        <div className="bg-[var(--color-dark-bg)]">
             <section className={`${showTitle ? 'py-20' : 'pb-20'}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     {showTitle && (
                         <div className="text-center mb-16">
-                            <h1 className="text-4xl md:text-5xl font-display font-bold text-primary">{pageBanner.title}</h1>
-                            <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{pageBanner.subtitle}</p>
+                            <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-primary)]">{pageBanner.title}</h1>
+                            <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{pageBanner.subtitle}</p>
                         </div>
                     )}
 
@@ -185,7 +185,7 @@ const VisaProcessing: React.FC<VisaProcessingProps> = ({ showTitle = true }) => 
                     </div>
 
                     {/* Why Choose Us Section */}
-                    <div className="bg-light-bg rounded-lg p-8 md:p-12">
+                    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] p-8 md:p-12 shadow-[var(--ui-shadow)]">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-white mb-10">{whyChooseUsTitle}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {visibleFeatures.map(feature => <FeatureCard key={feature.title} {...feature} icon={iconMap[feature.icon] || iconMap.Default} />)}

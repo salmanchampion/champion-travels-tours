@@ -3,14 +3,14 @@ import { DataContext } from '../contexts/DataContext';
 import { HajjPackage, UmrahPackage } from '../data';
 
 // --- Icon Components ---
-const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 002 2h5a2 2 0 012 2v5a2 2 0 01-2 2h-5a2 2 0 01-2-2v-5a2 2 0 00-2-2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>;
-const DurationIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
-const HotelIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M5 7h14" /></svg>;
-const FlightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>;
-const FoodIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18M3 7h18M3 11h18M3 15h18M3 19h18" /></svg>;
-const SpecialIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.293 2.293a1 1 0 010 1.414L10 16l-4 1 1-4 6.293-6.293a1 1 0 011.414 0z" /></svg>;
-const NoteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>;
-const DateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+const PriceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 002 2h5a2 2 0 012 2v5a2 2 0 01-2 2h-5a2 2 0 01-2-2v-5a2 2 0 00-2-2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>;
+const DurationIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const HotelIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M5 7h14" /></svg>;
+const FlightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>;
+const FoodIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18M3 7h18M3 11h18M3 15h18M3 19h18" /></svg>;
+const SpecialIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.293 2.293a1 1 0 010 1.414L10 16l-4 1 1-4 6.293-6.293a1 1 0 011.414 0z" /></svg>;
+const NoteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>;
+const DateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
 
 // --- Type Extensions for Filtering ---
 interface EnhancedUmrahPackage extends UmrahPackage {
@@ -20,21 +20,21 @@ interface EnhancedUmrahPackage extends UmrahPackage {
 
 // --- Skeleton Card for Loading State ---
 const SkeletonCard: React.FC = () => (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 flex flex-col h-full overflow-hidden">
-        <div className="bg-gray-300 h-48 w-full animate-pulse"></div>
-        <div className="bg-gray-100 p-4">
-            <div className="bg-gray-300 h-6 w-3/4 mx-auto rounded animate-pulse"></div>
+    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] shadow-[var(--ui-shadow)] border border-gray-700 flex flex-col h-full overflow-hidden">
+        <div className="bg-[var(--color-dark-bg)] h-48 w-full animate-pulse"></div>
+        <div className="bg-[var(--color-light-bg)] p-4">
+            <div className="bg-gray-700 h-6 w-3/4 mx-auto rounded animate-pulse"></div>
         </div>
         <div className="p-4 flex-grow space-y-4">
             {[...Array(5)].map((_, i) => (
                 <div key={i} className="space-y-2">
-                    <div className="bg-gray-300 h-4 w-1/4 rounded animate-pulse"></div>
-                    <div className="bg-gray-300 h-4 w-3/4 rounded animate-pulse"></div>
+                    <div className="bg-gray-700 h-4 w-1/4 rounded animate-pulse"></div>
+                    <div className="bg-gray-700 h-4 w-3/4 rounded animate-pulse"></div>
                 </div>
             ))}
         </div>
         <div className="p-4 mt-auto">
-            <div className="bg-gray-300 h-12 w-full rounded-lg animate-pulse"></div>
+            <div className="bg-gray-700 h-12 w-full rounded-[var(--ui-button-radius)] animate-pulse"></div>
         </div>
     </div>
 );
@@ -42,37 +42,71 @@ const SkeletonCard: React.FC = () => (
 
 // --- Hajj Card Detail Row Component ---
 const DetailRow: React.FC<{ icon: React.ReactNode; label: string; value: any; }> = ({ icon, label, value }) => (
-    <div className="flex items-start space-x-3 py-2 border-b border-gray-200 last:border-b-0">
+    <div className="flex items-start space-x-3 py-2 border-b border-gray-700 last:border-b-0">
         <div className="flex-shrink-0 pt-1">{icon}</div>
         <div className="flex-grow">
-            <p className="text-sm font-semibold text-gray-700">{label}</p>
-            <p className="text-sm text-gray-500">{String(value || '')}</p>
+            <p className="text-sm font-semibold text-[var(--color-light-text)]">{label}</p>
+            <p className="text-sm text-[var(--color-muted-text)]">{String(value || '')}</p>
+        </div>
+    </div>
+);
+
+// Helper for the new Hajj Card grid layout
+const GridDetail: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
+    <div className="flex items-start space-x-2">
+        <div className="flex-shrink-0 text-[var(--color-primary)] pt-1">{icon}</div>
+        <div>
+            <p className="text-xs font-bold text-[var(--color-muted-text)] uppercase tracking-wider">{label}</p>
+            <p className="text-sm text-[var(--color-light-text)] font-medium">{value}</p>
         </div>
     </div>
 );
 
 
-// --- Hajj Package Card Component ---
+// --- Hajj Package Card Component (NEW DESIGN) ---
 const HajjPackageCard: React.FC<{ pkg: HajjPackage }> = ({ pkg }) => (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 flex flex-col h-full text-gray-800 overflow-hidden">
-        <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
-        <div className="bg-gray-100 p-4 text-center">
-            <h3 className="text-xl font-bold font-display text-primary">{pkg.name}</h3>
+    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] shadow-[var(--ui-shadow)] border border-transparent hover:border-[var(--color-primary)] flex flex-col h-full text-[var(--color-light-text)] overflow-hidden transition-all duration-300">
+        <div className="relative">
+            <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                <h3 className="text-xl font-bold font-display text-white">{pkg.name}</h3>
+            </div>
         </div>
-        <div className="p-4 flex-grow">
-            <DetailRow icon={<PriceIcon />} label="Price" value={pkg.price} />
-            <DetailRow icon={<DurationIcon />} label="Time & Duration" value={pkg.duration} />
-            <DetailRow icon={<HotelIcon />} label="Hotel Makkah" value={pkg.hotelMakkah} />
-            <DetailRow icon={<HotelIcon />} label="Hotel Madinah" value={pkg.hotelMadinah} />
-            <DetailRow icon={<FlightIcon />} label="Flights Up" value={pkg.flightsUp} />
-            <DetailRow icon={<FlightIcon />} label="Flights Down" value={pkg.flightsDown} />
-            <DetailRow icon={<FoodIcon />} label="Food" value={pkg.food} />
-            <DetailRow icon={<SpecialIcon />} label="Special Services" value={pkg.special} />
-            <DetailRow icon={<NoteIcon />} label="Note" value={pkg.note} />
+        
+        <div className="p-6 flex-grow flex flex-col">
+            <div className="flex justify-between items-center border-b border-gray-700 pb-4 mb-4">
+                <div>
+                    <p className="text-xs font-bold text-[var(--color-muted-text)] uppercase">Price</p>
+                    <p className="text-2xl font-bold text-[var(--color-primary)]">{pkg.price}</p>
+                </div>
+                <div className="text-right">
+                    <p className="text-xs font-bold text-[var(--color-muted-text)] uppercase">Duration</p>
+                    <p className="text-lg font-semibold text-white">{pkg.duration}</p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+                <GridDetail icon={<HotelIcon />} label="Makkah Hotel" value={pkg.hotelMakkah} />
+                <GridDetail icon={<HotelIcon />} label="Madinah Hotel" value={pkg.hotelMadinah} />
+                <GridDetail icon={<FlightIcon />} label="Flights Up" value={pkg.flightsUp} />
+                <GridDetail icon={<FlightIcon />} label="Flights Down" value={pkg.flightsDown} />
+                <GridDetail icon={<FoodIcon />} label="Food" value={pkg.food} />
+                <GridDetail icon={<SpecialIcon />} label="Special" value={pkg.special} />
+            </div>
+
+            {pkg.note && (
+                <div className="mt-auto pt-4 border-t border-gray-700">
+                     <div className="flex items-start space-x-2 text-[var(--color-muted-text)]">
+                        <div className="flex-shrink-0 pt-1"><NoteIcon /></div>
+                        <p className="text-xs italic">{pkg.note}</p>
+                    </div>
+                </div>
+            )}
         </div>
-        <div className="p-4 mt-auto">
-             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Hajj - ${pkg.name}`)}`} className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
-                Book Your Hajj Journey
+
+        <div className="p-4 bg-[var(--color-dark-bg)] mt-auto">
+             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Hajj - ${pkg.name}`)}`} className="w-full text-center block bg-[var(--color-primary)] text-white font-bold py-3 px-6 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] transition-all duration-300">
+                Book Now
             </a>
         </div>
     </div>
@@ -95,8 +129,8 @@ const HajjPreRegistrationCard: React.FC = () => {
     };
 
     return (
-        <div className="bg-[#fdf9f0] rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-200 text-gray-800 col-span-1 md:col-span-2 lg:col-span-1">
-          <div className="relative bg-white h-48 flex items-center justify-center p-4">
+        <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] shadow-[var(--ui-shadow)] overflow-hidden flex flex-col h-full border border-gray-700 text-[var(--color-light-text)] col-span-1 md:col-span-2 lg:col-span-1">
+          <div className="relative bg-[var(--color-dark-bg)] h-48 flex items-center justify-center p-4">
             <img 
               src={hajjPreRegistration.image}
               alt="Hajj Pre Registration" 
@@ -104,16 +138,16 @@ const HajjPreRegistrationCard: React.FC = () => {
             />
           </div>
           <div className="p-6 flex flex-col flex-grow">
-            <h3 className="text-2xl font-bold text-green-600 mb-3 font-display">{hajjPreRegistration.title}</h3>
-            <p className="text-base text-[#5d4037] mb-2 leading-relaxed">
+            <h3 className="text-2xl font-bold text-[var(--color-secondary)] mb-3 font-display">{hajjPreRegistration.title}</h3>
+            <p className="text-base text-[var(--color-muted-text)] mb-2 leading-relaxed">
               {hajjPreRegistration.description}
             </p>
-            <p className="text-base text-[#5d4037] mb-4 leading-relaxed flex-grow">
+            <p className="text-base text-[var(--color-muted-text)] mb-4 leading-relaxed flex-grow">
              {hajjPreRegistration.subDescription}
             </p>
             
             {isClicked && (
-              <div className="text-center text-green-700 font-semibold mb-4">
+              <div className="text-center text-[var(--color-secondary)] font-semibold mb-4">
                 Thank you! Redirecting you to the inquiry form...
               </div>
             )}
@@ -121,7 +155,7 @@ const HajjPreRegistrationCard: React.FC = () => {
             <button
               onClick={handleClick}
               disabled={isClicked}
-              className="mt-auto w-full block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all duration-300 text-center shadow-md disabled:bg-gray-400 disabled:cursor-wait"
+              className="mt-auto w-full block bg-[var(--color-primary)] text-white font-bold py-3 px-6 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] transition-all duration-300 text-center shadow-md disabled:bg-gray-400 disabled:cursor-wait"
             >
               {isClicked ? 'Redirecting...' : hajjPreRegistration.buttonText}
             </button>
@@ -134,19 +168,19 @@ const KeyHighlights: React.FC = () => {
     const { appData } = useContext(DataContext);
     const { keyHighlights } = appData.pages.packages;
     return (
-    <div className="bg-light-bg rounded-xl p-6 md:p-10 mt-16 shadow-inner">
+    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] p-6 md:p-10 mt-16 shadow-inner">
         <div className="text-center">
             <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-10">{keyHighlights.title}</h3>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
                 <div className="flex flex-col items-center text-center max-w-xs">
-                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
-                    <p className="text-3xl sm:text-4xl font-bold text-primary">{keyHighlights.umrahStat}</p>
-                    <p className="text-muted-text mt-1">{keyHighlights.umrahStatLabel}</p>
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[var(--color-primary)] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.284-1.255-.758-1.658M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.284-1.255.758-1.658m0 0A5.986 5.986 0 0112 13a5.986 5.986 0 014.242 1.758m0 0a3 3 0 01-5.356-1.857m0 0a3 3 0 00-5.356-1.857m0 0A5.986 5.986 0 017 13a5.986 5.986 0 01-4.242 1.758M12 13a5 5 0 015 5v2H7v-2a5 5 0 015-5z" /></svg>
+                    <p className="text-3xl sm:text-4xl font-bold text-[var(--color-primary)]">{keyHighlights.umrahStat}</p>
+                    <p className="text-[var(--color-muted-text)] mt-1">{keyHighlights.umrahStatLabel}</p>
                 </div>
                 <div className="flex flex-col items-center text-center max-w-xs">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
-                    <p className="text-3xl sm:text-4xl font-bold text-primary">{keyHighlights.hajjStat}</p>
-                    <p className="text-muted-text mt-1">{keyHighlights.hajjStatLabel}</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[var(--color-primary)] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3" /></svg>
+                    <p className="text-3xl sm:text-4xl font-bold text-[var(--color-primary)]">{keyHighlights.hajjStat}</p>
+                    <p className="text-[var(--color-muted-text)] mt-1">{keyHighlights.hajjStatLabel}</p>
                 </div>
             </div>
         </div>
@@ -161,9 +195,9 @@ const UmrahPackageCard: React.FC<{ pkg: EnhancedUmrahPackage }> = ({ pkg }) => {
     const logo = appData.site.logoUrl || 'https://i.postimg.cc/PJS59Bqw/champion-logo-1.png';
 
     return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 flex flex-col h-full text-gray-800 overflow-hidden">
-        <div className="bg-gray-100 p-4 flex items-center justify-between">
-            <h3 className="font-bold text-lg font-display text-primary">{pkg.name}</h3>
+    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] shadow-[var(--ui-shadow)] border border-gray-700 flex flex-col h-full text-[var(--color-light-text)] overflow-hidden">
+        <div className="bg-[var(--color-dark-bg)] p-4 flex items-center justify-between">
+            <h3 className="font-bold text-lg font-display text-[var(--color-secondary)]">{pkg.name}</h3>
             <img src={logo} alt='Champion Travels & Tours Logo' className="h-10 w-auto" />
         </div>
         <img src={pkg.image} alt={pkg.name} className="w-full h-48 object-cover" />
@@ -179,7 +213,7 @@ const UmrahPackageCard: React.FC<{ pkg: EnhancedUmrahPackage }> = ({ pkg }) => {
             <DetailRow icon={<NoteIcon />} label="Note" value={pkg.note} />
         </div>
         <div className="p-4 mt-auto">
-             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Umrah - ${pkg.name}`)}`} className="w-full text-center block bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300">
+             <a href={`#contact?subject=${encodeURIComponent(`Booking Inquiry: Umrah - ${pkg.name}`)}`} className="w-full text-center block bg-[var(--color-primary)] text-white font-bold py-3 px-6 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] transition-all duration-300">
                 {pkg.buttonText}
             </a>
         </div>
@@ -192,14 +226,14 @@ const Gallery: React.FC = () => {
     const { appData } = useContext(DataContext);
     const { gallery } = appData.pages.packages;
   return (
-    <div className="bg-light-bg rounded-xl p-6 md:p-10 mt-16 shadow-inner">
+    <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] p-6 md:p-10 mt-16 shadow-inner">
       <div className="text-center mb-12">
         <h3 className="text-3xl md:text-4xl font-display font-bold text-white">{gallery.title}</h3>
-        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{gallery.description}</p>
+        <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{gallery.description}</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {gallery.images.filter(img => img.enabled).map((image, index) => (
-          <div key={index} className="overflow-hidden rounded-lg shadow-lg group aspect-square">
+          <div key={index} className="overflow-hidden rounded-[var(--ui-border-radius)] shadow-[var(--ui-shadow)] group aspect-square">
             <img
               src={image.src}
               alt={image.alt}
@@ -215,24 +249,24 @@ const Gallery: React.FC = () => {
 // --- Filter Components ---
 const FilterInput: React.FC<{ label: string, type: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string }> = ({ label, type, value, onChange, placeholder }) => (
     <div>
-        <label className="block text-sm font-medium text-muted-text mb-1">{label}</label>
+        <label className="block text-sm font-medium text-[var(--color-muted-text)] mb-1">{label}</label>
         <input
             type={type}
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-2 px-3 text-[var(--color-light-text)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
         />
     </div>
 );
 
 const FilterSelect: React.FC<{ label: string, value: string, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void, children: React.ReactNode }> = ({ label, value, onChange, children }) => (
      <div>
-        <label className="block text-sm font-medium text-muted-text mb-1">{label}</label>
+        <label className="block text-sm font-medium text-[var(--color-muted-text)] mb-1">{label}</label>
         <select
             value={value}
             onChange={onChange}
-            className="w-full bg-dark-bg border border-gray-600 rounded-md py-2 px-3 text-light-text focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-2 px-3 text-[var(--color-light-text)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
         >
             {children}
         </select>
@@ -245,9 +279,9 @@ const FilterCheckbox: React.FC<{ label: string, checked: boolean, onChange: () =
             type="checkbox"
             checked={checked}
             onChange={onChange}
-            className="h-4 w-4 rounded border-gray-500 bg-gray-700 text-primary focus:ring-primary"
+            className="h-4 w-4 rounded border-gray-500 bg-gray-700 text-[var(--color-primary)] focus:ring-[var(--color-primary)]"
         />
-        <span className="text-light-text">{label}</span>
+        <span className="text-[var(--color-light-text)]">{label}</span>
     </label>
 );
 
@@ -449,19 +483,19 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
     };
 
     return (
-        <section className="py-20 bg-dark-bg">
+        <section className="py-20 bg-[var(--color-dark-bg)]">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {showTitle && (
                     <div className="text-center mb-12">
-                        <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{homePageData.title}</h2>
-                        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{homePageData.subtitle}</p>
+                        <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-primary)]">{homePageData.title}</h2>
+                        <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{homePageData.subtitle}</p>
                     </div>
                 )}
 
                 {/* --- Hajj Packages Section --- */}
                 <div>
                     {showHajjFilters && (
-                        <div className="bg-light-bg p-6 rounded-lg mb-10 shadow-lg">
+                        <div className="bg-[var(--color-light-bg)] p-6 rounded-[var(--ui-border-radius)] mb-10 shadow-[var(--ui-shadow)]">
                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 items-end">
                                 <FilterSelect label="Sort by" value={hajjSort} onChange={e => setHajjSort(e.target.value)}>
                                     <option value="default">Default</option>
@@ -472,7 +506,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
                                 <FilterInput label="Max Price" type="number" value={hajjMaxPrice} onChange={e => setHajjMaxPrice(e.target.value)} placeholder="e.g. 1500000" />
                                 <FilterInput label="Min Duration (Days)" type="number" value={hajjMinDuration} onChange={e => setHajjMinDuration(e.target.value)} placeholder="e.g. 15" />
                                 <FilterInput label="Max Duration (Days)" type="number" value={hajjMaxDuration} onChange={e => setHajjMaxDuration(e.target.value)} placeholder="e.g. 45" />
-                                <button onClick={resetHajjFilters} className="bg-secondary text-dark-bg font-bold py-2 px-4 rounded-md hover:bg-amber-600 h-10">Reset</button>
+                                <button onClick={resetHajjFilters} className="bg-[var(--color-primary)] text-white font-bold py-2 px-4 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] h-10">Reset</button>
                             </div>
                              <div className="mt-4 pt-4 border-t border-gray-700">
                                 <h4 className="text-lg font-semibold text-white mb-2">Package Type</h4>
@@ -495,11 +529,11 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
                 {/* --- Umrah Packages Section --- */}
                 <div className="mt-20">
                     <div className="text-center mb-12">
-                        <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{packagesPageData.umrahSection.title}</h2>
-                        <p className="mt-4 text-lg text-muted-text max-w-3xl mx-auto">{packagesPageData.umrahSection.subtitle}</p>
+                        <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-primary)]">{packagesPageData.umrahSection.title}</h2>
+                        <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-3xl mx-auto">{packagesPageData.umrahSection.subtitle}</p>
                     </div>
                      {showUmrahFilters && (
-                        <div className="bg-light-bg p-6 rounded-lg mb-10 shadow-lg">
+                        <div className="bg-[var(--color-light-bg)] p-6 rounded-[var(--ui-border-radius)] mb-10 shadow-[var(--ui-shadow)]">
                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
                                 <FilterSelect label="Sort by" value={umrahSort} onChange={e => setUmrahSort(e.target.value)}>
                                     <option value="default">Default</option>
@@ -513,7 +547,7 @@ const FeaturedPackages: React.FC<FeaturedPackagesProps> = ({ showHajjFilters = f
                                     <option value="direct">Direct</option>
                                     <option value="transit">Transit</option>
                                 </FilterSelect>
-                                <button onClick={resetAllUmrahFilters} className="bg-secondary text-dark-bg font-bold py-2 px-4 rounded-md hover:bg-amber-600 h-10">Reset</button>
+                                <button onClick={resetAllUmrahFilters} className="bg-[var(--color-primary)] text-white font-bold py-2 px-4 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] h-10">Reset</button>
                             </div>
                              <div className="mt-4 pt-4 border-t border-gray-700">
                                 <h4 className="text-lg font-semibold text-white mb-2">Package Type</h4>

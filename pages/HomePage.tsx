@@ -6,6 +6,7 @@ import Contact from '../components/Contact';
 import Testimonials from '../components/Testimonials';
 import { DataContext } from '../contexts/DataContext';
 import WhyChooseChampion from '../components/WhyChooseChampion';
+import PackageFilterBar from '../components/PackageFilterBar';
 
 const HomePage: React.FC = () => {
   const { appData } = useContext(DataContext);
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Hero />
+      <PackageFilterBar />
       {home.sections.services.enabled && <Services showTitle={true} />}
       {home.sections.packages.enabled && <FeaturedPackages showHajjFilters={false} showUmrahFilters={false} showTitle={true} />}
       {home.sections.whyChooseUs.enabled && <WhyChooseChampion />}

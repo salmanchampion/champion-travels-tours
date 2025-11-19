@@ -56,6 +56,56 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const dbData = docSnap.data() as AppData;
+                
+                // --- START: NEW, ROBUST NAVIGATION PATCHING LOGIC ---
+                if (dbData.header && dbData.header.navLinks) {
+                    let navLinks = dbData.header.navLinks;
+
+                    // Step 1: Clean up old package links to avoid conflicts
+                    navLinks = navLinks.filter(link => link.href !== '#packages' && link.label !== 'Hajj & Umrah Packages');
+                    const servicesLink = navLinks.find(link => link.label === 'Services');
+                    if (servicesLink && servicesLink.subLinks) {
+                        servicesLink.subLinks = servicesLink.subLinks.filter(sub => sub.href !== '#packages');
+                    }
+
+                    // Step 2: Ensure Hajj is a dropdown
+                    const defaultHajjDropdown = defaultData.header.navLinks.find(link => link.label === 'Hajj');
+                    if (defaultHajjDropdown) {
+                        const hajjIndex = navLinks.findIndex(link => link.label === 'Hajj');
+                        if (hajjIndex !== -1) {
+                            // It exists, make sure it's a dropdown
+                            if (!navLinks[hajjIndex].subLinks) {
+                                navLinks[hajjIndex] = JSON.parse(JSON.stringify(defaultHajjDropdown));
+                            }
+                        } else {
+                            // It doesn't exist, insert it
+                            const servicesIndex = navLinks.findIndex(link => link.label === 'Services');
+                            navLinks.splice(servicesIndex !== -1 ? servicesIndex + 1 : 2, 0, JSON.parse(JSON.stringify(defaultHajjDropdown)));
+                        }
+                    }
+
+                    // Step 3: Ensure Umrah is a dropdown
+                    const defaultUmrahDropdown = defaultData.header.navLinks.find(link => link.label === 'Umrah');
+                    if (defaultUmrahDropdown) {
+                        const umrahIndex = navLinks.findIndex(link => link.label === 'Umrah');
+                        if (umrahIndex !== -1) {
+                            // It exists, make sure it's a dropdown
+                            if (!navLinks[umrahIndex].subLinks) {
+                                navLinks[umrahIndex] = JSON.parse(JSON.stringify(defaultUmrahDropdown));
+                            }
+                        } else {
+                            // It doesn't exist, insert it after Hajj
+                            const hajjIndex = navLinks.findIndex(link => link.label === 'Hajj');
+                            navLinks.splice(hajjIndex !== -1 ? hajjIndex + 1 : 3, 0, JSON.parse(JSON.stringify(defaultUmrahDropdown)));
+                        }
+                    }
+                    
+                    dbData.header.navLinks = navLinks;
+                }
+                // --- END: NEW, ROBUST NAVIGATION PATCHING LOGIC ---
+
+
+                // Other existing patches
                 const dbNavLinks = dbData.header?.navLinks;
 
                 // Patch: Ensure 'Guidelines' nav link and its sublinks are up-to-date
@@ -64,11 +114,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 if (dbNavLinks && defaultGuidelinesLink) {
                     let dbGuidelinesLink = dbNavLinks.find(link => link.label === 'Guidelines');
                     if (!dbGuidelinesLink) {
-                        // Guidelines menu is missing, add it.
                         const servicesIndex = dbNavLinks.findIndex(link => link.label === 'Services');
                         dbNavLinks.splice(servicesIndex > -1 ? servicesIndex + 1 : 1, 0, JSON.parse(JSON.stringify(defaultGuidelinesLink)));
                     } else {
-                        // Guidelines menu exists, check for missing sublinks from default.
                         dbGuidelinesLink.subLinks = dbGuidelinesLink.subLinks || [];
                         defaultGuidelinesLink.subLinks?.forEach(defaultSubLink => {
                             if (!dbGuidelinesLink.subLinks.some(dbSubLink => dbSubLink.href === defaultSubLink.href)) {
@@ -85,11 +133,35 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                         const defaultWhyChooseUsLink = defaultData.header.navLinks.find(link => link.href === '#why-choose-us');
                         if (defaultWhyChooseUsLink) {
                             const homeIndex = dbNavLinks.findIndex(link => link.href === '#home');
-                            // Insert after Home, or at the beginning if Home isn't found
                             dbNavLinks.splice(homeIndex > -1 ? homeIndex + 1 : 0, 0, JSON.parse(JSON.stringify(defaultWhyChooseUsLink)));
                         }
                     }
                 }
+
+                // Patch: Ensure new 'Services' sub-links are present
+                const defaultServicesLink = defaultData.header.navLinks.find(link => link.label === 'Services');
+                if (dbNavLinks && defaultServicesLink) {
+                    const dbServicesLink = dbNavLinks.find(link => link.label === 'Services');
+                    if (dbServicesLink) { 
+                        dbServicesLink.subLinks = dbServicesLink.subLinks || [];
+                        defaultServicesLink.subLinks?.forEach(defaultSubLink => {
+                            if (!dbServicesLink.subLinks.some(dbSubLink => dbSubLink.href === defaultSubLink.href)) {
+                                dbServicesLink.subLinks.push(JSON.parse(JSON.stringify(defaultSubLink)));
+                            }
+                        });
+                    }
+                }
+                
+                // Patch: Ensure custom pages from defaultData exist in dbData
+                if (!dbData.customPages) {
+                    dbData.customPages = [];
+                }
+                const dbCustomPageIds = dbData.customPages.map(p => p.id);
+                defaultData.customPages.forEach(defaultPage => {
+                    if (!dbCustomPageIds.includes(defaultPage.id)) {
+                        dbData.customPages.push(JSON.parse(JSON.stringify(defaultPage)));
+                    }
+                });
                 
                 setAppData(deepMerge(defaultData, dbData));
             } else {

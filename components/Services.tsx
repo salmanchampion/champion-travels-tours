@@ -17,12 +17,12 @@ const iconMap: { [key: string]: React.ReactNode } = {
 
 
 const ServiceCard: React.FC<{ icon: React.ReactNode; title: string; description: string; onClick: () => void; }> = ({ icon, title, description, onClick }) => (
-  <div onClick={onClick} className="bg-light-bg p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-lg hover:shadow-primary/20 cursor-pointer">
-    <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-white mx-auto mb-6">
+  <div onClick={onClick} className="bg-[var(--color-light-bg)] p-8 rounded-[var(--ui-border-radius)] text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-[var(--ui-shadow)] hover:shadow-[var(--color-primary)]/20 cursor-pointer border-2 border-transparent hover:border-[var(--color-primary)]">
+    <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[var(--color-dark-bg)] text-[var(--color-primary)] mx-auto mb-6">
       {icon}
     </div>
     <h3 className="text-2xl font-display font-semibold mb-3 text-white">{title}</h3>
-    <p className="text-muted-text">{description}</p>
+    <p className="text-[var(--color-muted-text)]">{description}</p>
   </div>
 );
 
@@ -38,12 +38,12 @@ const Services: React.FC<ServicesProps> = ({ showTitle = true }) => {
 
   return (
     <>
-      <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-dark-bg`}>
+      <section className={`${showTitle ? 'py-20' : 'pb-20'} bg-[var(--color-dark-bg)]`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {showTitle && (
               <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-primary">{data.title}</h2>
-              <p className="mt-4 text-lg text-muted-text max-w-2xl mx-auto">{data.subtitle}</p>
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-primary)]">{data.title}</h2>
+              <p className="mt-4 text-lg text-[var(--color-muted-text)] max-w-2xl mx-auto">{data.subtitle}</p>
               </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -63,17 +63,17 @@ const Services: React.FC<ServicesProps> = ({ showTitle = true }) => {
       {selectedService && (
         <Modal isOpen={!!selectedService} onClose={() => setSelectedService(null)}>
           <div className="flex items-start sm:items-center mb-6 flex-col sm:flex-row">
-            <div className="flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-primary text-white mr-4 mb-4 sm:mb-0">
+            <div className="flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-[var(--color-primary)] text-white mr-4 mb-4 sm:mb-0">
               {iconMap[selectedService.icon] || iconMap['Default']}
             </div>
             <div>
-              <h2 className="text-3xl font-display font-bold text-primary">{selectedService.title}</h2>
-              <p className="text-muted-text">{selectedService.description}</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--color-primary)]">{selectedService.title}</h2>
+              <p className="text-[var(--color-muted-text)]">{selectedService.description}</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-6">
             <h3 className="text-xl font-bold text-white mb-4">Key Features & Benefits:</h3>
-            <ul className="list-disc list-inside space-y-2 text-light-text">
+            <ul className="list-disc list-inside space-y-2 text-[var(--color-light-text)]">
               {selectedService.details.map((detail, index) => (
                 <li key={index}>{detail}</li>
               ))}
@@ -83,7 +83,7 @@ const Services: React.FC<ServicesProps> = ({ showTitle = true }) => {
             <a
               href={`#contact?subject=${encodeURIComponent(`Inquiry about ${selectedService.title}`)}`}
               onClick={() => setSelectedService(null)}
-              className="bg-secondary text-dark-bg font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-all duration-300 inline-block"
+              className="bg-[var(--color-primary)] text-white font-bold py-3 px-8 rounded-[var(--ui-button-radius)] hover:bg-[var(--color-primary-dark)] transition-all duration-300 inline-block"
             >
               Inquire Now
             </a>

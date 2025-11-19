@@ -37,12 +37,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       aria-modal="true"
     >
       <div
-        className="bg-light-bg rounded-lg shadow-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale"
+        className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] shadow-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-text hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-[var(--color-muted-text)] hover:text-white transition-colors"
           aria-label="Close modal"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -11,13 +11,13 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-    <div className="bg-light-bg p-6 rounded-lg flex items-start space-x-4">
-        <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white">
+    <div className="bg-[var(--color-light-bg)] p-6 rounded-[var(--ui-border-radius)] flex items-start space-x-4">
+        <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-[var(--color-primary)] text-white">
             {icon}
         </div>
         <div>
             <h3 className="text-xl font-bold text-white">{title}</h3>
-            <p className="mt-1 text-muted-text">{description}</p>
+            <p className="mt-1 text-[var(--color-muted-text)]">{description}</p>
         </div>
     </div>
 );
@@ -92,54 +92,54 @@ const FlightInquiryForm: React.FC = () => {
     };
 
     return (
-        <div className="bg-light-bg rounded-lg p-8 md:p-12 mt-16">
+        <div className="bg-[var(--color-light-bg)] rounded-[var(--ui-border-radius)] p-8 md:p-12 mt-16">
             <h3 className="text-3xl font-display font-semibold text-white mb-6 text-center">{form.title}</h3>
-            <p className="text-muted-text mb-8 text-center max-w-2xl mx-auto">{form.subtitle}</p>
+            <p className="text-[var(--color-muted-text)] mb-8 text-center max-w-2xl mx-auto">{form.subtitle}</p>
             <form onSubmit={handleSubmit} className="space-y-4 max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                 </div>
-                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Your Phone" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                 
                 <div className="pt-2">
                     <div className="flex items-center space-x-6">
-                        <label className="flex items-center space-x-2 cursor-pointer text-light-text"><input type="radio" name="tripType" value="One Way" checked={formData.tripType === 'One Way'} onChange={handleChange} className="text-primary focus:ring-primary" /><span>One Way</span></label>
-                        <label className="flex items-center space-x-2 cursor-pointer text-light-text"><input type="radio" name="tripType" value="Round Trip" checked={formData.tripType === 'Round Trip'} onChange={handleChange} className="text-primary focus:ring-primary" /><span>Round Trip</span></label>
+                        <label className="flex items-center space-x-2 cursor-pointer text-[var(--color-light-text)]"><input type="radio" name="tripType" value="One Way" checked={formData.tripType === 'One Way'} onChange={handleChange} className="text-[var(--color-primary)] focus:ring-[var(--color-primary)]" /><span>One Way</span></label>
+                        <label className="flex items-center space-x-2 cursor-pointer text-[var(--color-light-text)]"><input type="radio" name="tripType" value="Round Trip" checked={formData.tripType === 'Round Trip'} onChange={handleChange} className="text-[var(--color-primary)] focus:ring-[var(--color-primary)]" /><span>Round Trip</span></label>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="from" value={formData.from} onChange={handleChange} placeholder="From (e.g., Dhaka)" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
-                    <input type="text" name="to" value={formData.to} onChange={handleChange} placeholder="To (e.g., Jeddah)" required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                    <input type="text" name="from" value={formData.from} onChange={handleChange} placeholder="From (e.g., Dhaka)" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
+                    <input type="text" name="to" value={formData.to} onChange={handleChange} placeholder="To (e.g., Jeddah)" required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="text-xs text-muted-text">Departure Date</label>
-                        <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                        <label className="text-xs text-[var(--color-muted-text)]">Departure Date</label>
+                        <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                     </div>
                      <div>
-                        <label className="text-xs text-muted-text">Return Date</label>
-                        <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} disabled={formData.tripType === 'One Way'} className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition disabled:opacity-50" />
+                        <label className="text-xs text-[var(--color-muted-text)]">Return Date</label>
+                        <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} disabled={formData.tripType === 'One Way'} className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition disabled:opacity-50" />
                     </div>
                 </div>
 
                  <div className="grid grid-cols-3 gap-4">
                     <div>
-                        <label className="text-xs text-muted-text">Adults (12+)</label>
-                        <input type="number" name="adults" min="1" value={formData.adults} onChange={handleChange} className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                        <label className="text-xs text-[var(--color-muted-text)]">Adults (12+)</label>
+                        <input type="number" name="adults" min="1" value={formData.adults} onChange={handleChange} className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                     </div>
                     <div>
-                        <label className="text-xs text-muted-text">Children (2-11)</label>
-                        <input type="number" name="children" min="0" value={formData.children} onChange={handleChange} className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                        <label className="text-xs text-[var(--color-muted-text)]">Children (2-11)</label>
+                        <input type="number" name="children" min="0" value={formData.children} onChange={handleChange} className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                     </div>
                      <div>
-                        <label className="text-xs text-muted-text">Infants (0-2)</label>
-                        <input type="number" name="infants" min="0" value={formData.infants} onChange={handleChange} className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition" />
+                        <label className="text-xs text-[var(--color-muted-text)]">Infants (0-2)</label>
+                        <input type="number" name="infants" min="0" value={formData.infants} onChange={handleChange} className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition" />
                     </div>
                 </div>
 
-                <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Additional Message (Optional)" rows={4} className="w-full bg-dark-bg border border-gray-600 rounded-md py-3 px-4 text-light-text focus:outline-none focus:ring-2 focus:ring-primary transition"></textarea>
+                <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Additional Message (Optional)" rows={4} className="w-full bg-[var(--color-dark-bg)] border border-gray-600 rounded-[var(--ui-border-radius)] py-3 px-4 text-[var(--color-light-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition"></textarea>
                 
                 {submitStatus === 'success' && (
                   <p className="text-green-400 text-center">Thank you for your inquiry! We will contact you with flight options shortly.</p>
@@ -148,7 +148,7 @@ const FlightInquiryForm: React.FC = () => {
                   <p className="text-red-400 text-center">An error occurred. Please ensure the Google Apps Script URL is correctly set in the admin panel.</p>
                 )}
 
-                <button type="submit" disabled={isSubmitting} className="w-full bg-secondary text-dark-bg font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
+                <button type="submit" disabled={isSubmitting} className="w-full bg-[var(--color-secondary)] text-[var(--color-dark-bg)] font-bold py-3 px-6 rounded-[var(--ui-button-radius)] hover:bg-amber-600 transition-all duration-300 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed">
                     {isSubmitting ? 'Searching...' : form.buttonText}
                 </button>
             </form>
@@ -163,7 +163,7 @@ const AirTicketing: React.FC = () => {
     const visibleFeatures = features.filter(item => item.enabled);
 
     return (
-        <div className="bg-dark-bg">
+        <div className="bg-[var(--color-dark-bg)]">
             <section className="pb-20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     
